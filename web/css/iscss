@@ -1,0 +1,406 @@
+body {
+    font: normal 12px verdana,arial,tahoma;
+}
+
+html, body {
+    margin:0;
+    padding:0;
+    border:0 none;
+    overflow:hidden;
+    height:100%;
+    width:100%;
+    font-style:normal;
+    font-weight:normal;
+    font-size:11px;
+}
+
+.ext-gecko {
+	font-size:11px;
+}
+
+#class .loading-indicator{
+	font-size:12px;
+	height:18px;
+}
+
+.loading-indicator {
+    font-size:11px;
+    background-image:url('../images/loading.gif');
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+
+#main-panel .loading-indicator {
+    font:bold 13px  Tahoma, Verdana, Arial, Helvetica, sans-serif;
+    position:absolute;
+    top:35%;
+    left:43%;
+    color:#444;
+    background-image:url(../images/large-loading.gif);
+    background-repeat: no-repeat;
+    background-position:left 5px;
+    padding:10px 10px 10px 38px;
+	text-align:left;
+}
+
+#loading-mask{
+	position:absolute;
+	left:0;
+	top:0;
+    width:100%;
+    height:100%;
+    z-index:20000;
+    background-color:white;
+}
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	padding:2px;
+	z-index:20001;
+    height:auto;
+}
+#loading img {
+    margin-bottom:5px;
+}
+
+#loading .loading-indicator{
+	background:white;
+	color:#555;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+    text-align:center;
+    height:auto;
+}
+.col{
+	margin:0 250px 0 10px;
+    zoom:1;
+    padding: 10px 0;
+}
+
+.col-last {
+    width: 220px;
+    position:absolute;
+    right:10px;
+    top:10px;
+}
+
+.block{
+	margin-bottom:10px;
+}
+.block-title{
+	color: #1E4176;
+	font:normal 18px tahoma,verdana,sans-serif;
+    letter-spacing:-1px;
+    padding: 4px;
+	padding-left: 8px;
+}
+.block-body{
+	padding:8px;
+	padding-top:2px;
+}
+.block-body b{
+	color:#333333;
+	font-size:11px;
+}
+.block-body em {
+	display:block;
+	margin-top:5px;
+	font-size:11px;
+   color:gray;
+	text-align:right;
+}
+.list{
+	list-style: square;
+	padding-left:20px;
+	margin-top:5px;
+}
+
+.res-block {
+    padding-top:5px;
+    background:transparent url('../images/block-top.gif') no-repeat;
+    width:210px;
+    margin-bottom:15px;
+}
+.res-block-inner {
+    padding:6px 11px;
+    background:transparent url('../images/block-bottom.gif') no-repeat left bottom;
+}
+
+.asbi-ns-expand {
+	margin-top: 5px;
+	background: transparent url('../images/ns-expand.gif') no-repeat;
+}
+
+.asbi-ns-collapse {
+	margin-top: 5px;
+	background: transparent url('../images/ns-collapse.gif') no-repeat;
+}
+
+.res-block h3 {
+    font: bold 12px tahoma,arial,sans-serif;
+    color:#555;
+    margin-bottom:8px;
+}
+
+.res-block ul {
+    list-style-type: disc;
+    margin-left:15px;
+    font: normal 12px tahoma,arial,sans-serif;
+    color:#555;
+}
+
+.res-block ul li {
+    margin:0 0 5px 3px;
+}
+
+.hide-inherited .inherited {
+    display:none;
+}
+
+#main-panel .x-tab-panel-body {
+    background:#fff url(../images/text-bg.gif) repeat-x 0 0;
+}
+
+#main-panel .x-panel-body, #doc-body .body-wrap {
+    background:transparent !important;
+}
+.icon-cls {
+    background-image: url('../images/class.gif') !important;
+}
+.icon-using {
+    background-image: url('../images/Using.gif') !important;
+}
+.icon-suspended {
+    background-image: url('../images/Suspended.gif') !important;
+}
+.icon-leading-out {
+    background-image: url('../images/icon-leading-out.gif') !important;
+}
+.icon-event {
+    background-image: url('../images/event.gif') !important;
+}
+.icon-config {
+    background-image: url('../images/config.gif') !important;
+}
+.icon-prop {
+    background-image: url('../images/prop.gif') !important;
+}
+.icon-out {
+    background-image: url('../images/out.gif') !important;
+}
+.icon-examine {
+    background-image: url('../images/examine.gif') !important;
+}
+.icon-audit {
+    background-image: url('../images/audit.gif') !important;
+}
+.icon-refresh {
+    background-image: url('../images/refresh.gif') !important;
+}
+.icon-checkin-apply {
+    background-image: url('../images/checkin-apply.gif') !important;
+}
+.icon-checkin-cofirm {
+    background-image: url('../images/checkin-cofirm.gif') !important;
+}
+.icon-preview {
+    background-image: url('../images/preview.gif') !important;
+}
+.icon-update {
+    background-image: url('../images/icon-update.gif') !important;
+}
+.icon-off {
+    background-image: url('../images/off.png') !important;
+}
+.icon-user {
+    background-image: url('../images/user.gif') !important;
+}
+.icon-information {
+    background-image: url('../images/information.gif') !important;
+}
+.icon-method {
+    background-image: url('../images/method.gif') !important;
+}
+.icon-cmp {
+    background-image: url('../images/cmp.gif') !important;
+}
+.icon-pkg {
+    background-image: url('../images/pkg.gif') !important;
+}
+.icon-fav {
+    background-image: url('../images/fav.gif') !important;
+}
+.icon-static {
+    background-image: url('../images/static.gif') !important;
+}
+.icon-docs {
+    background-image: url('../images/docs.gif') !important;
+}
+.icon-expand-all {
+    background-image: url('../images/expand-all.gif') !important;
+}
+.icon-collapse-all {
+    background-image: url('../images/collapse-all.gif') !important;
+}
+.icon-expand-members {
+    background-image: url('../images/expand-members.gif') !important;
+}
+.icon-hide-inherited {
+    background-image: url('../images/hide-inherited.gif') !important;
+}
+
+#legend li {
+	line-height:16px;
+}
+.item-icon {
+	vertical-align:top;
+	width:16px;
+	height:16px;
+	margin-right:6px;
+}
+.ext-ie .item-icon {
+	vertical-align:middle;
+}
+h3.home-title {
+	margin:5px 0;
+	font:bold 13px tahoma,arial,sans-serif;
+	color:#444;
+}
+
+.inner-link .item-icon, .bookmark .item-icon{
+	margin-right:3px;
+}
+.inner-link, .bookmark {
+	margin-left:10px;
+}
+
+.brick-icon {
+    background-image: url('../images/brick.png') !important;
+}
+
+.icon-printer {
+    background-image: url('../images/printer.gif') !important;
+}
+
+.icon-add {
+    background-image: url('../images/drop-add.gif') !important;
+}
+
+.icon-remove {
+    background-image: url('../images/drop-no.gif') !important;
+}
+
+.icon-commit {
+    background-image: url('../images/drop-yes.gif') !important;
+}
+
+.icon-excel {
+    background-image: url('../images/excel-up.png') !important;
+}
+
+.x-panel-body p {
+    margin:1px;
+}
+
+.x-form-file-wrap {
+    position: relative;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file {
+	position: absolute;
+	right: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity: 0);
+	opacity: 0;
+	z-index: 2;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file-btn {
+	position: absolute;
+	right: 0;
+	z-index: 1;
+}
+.x-form-file-wrap .x-form-file-text {
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    color: #777;
+}
+
+.search-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    padding:3px 10px 3px 10px;
+    border:1px solid #fff;
+    border-bottom:1px solid #eeeeee;
+    white-space:normal;
+    color:#555;
+}
+.search-item h3 {
+    display:block;
+    font:inherit;
+    font-weight:bold;
+    color:#222;
+}
+
+.search-item h3 span {
+    float: right;
+    font-weight:normal;
+    margin:0 0 5px 5px;
+    width:100px;
+    display:block;
+    clear:none;
+}
+
+.asbi-grid-row-contract-created .x-grid3-cell-inner {
+    font-weight:bold;
+    color: darkblue;
+}
+
+.asbi-grid-row-contract-waiting .x-grid3-cell-inner {
+    font-weight:bold;
+    color: brown;
+}
+.asbi-grid-row-contract-audited .x-grid3-cell-inner {
+    font-weight:bold;
+}
+.asbi-grid-row-contract-audit-failed .x-grid3-cell-inner {
+    font-weight:bold;
+    color: red;
+}
+.asbi-grid-row-contract-executing .x-grid3-cell-inner {
+    color: green;
+}
+.asbi-grid-row-contract-financial-confirmed .x-grid3-cell-inner {
+    font-weight:bold;
+    color: green;
+}
+.asbi-grid-row-contract-deleted .x-grid3-cell-inner {
+    font-weight:bold;
+}
+.asbi-grid-row-contract-finished .x-grid3-cell-inner {
+    font-weight:bold;
+    color: gray;
+}
+.asbi-grid-row-contract-mixed .x-grid3-cell-inner {
+	color: yellow;
+}
+.asbi-grid-row-contract-unknown .x-grid3-cell-inner {
+	color: indigo;
+}
+
+
+.asbi-info-table-header {
+	background-color:#DDDDDD;
+	font:bold 11px;
+	font-size:11px;
+}
+
+.asbi-info-table-cell {
+	font:normal 11px;
+	font-size:11px;
+}

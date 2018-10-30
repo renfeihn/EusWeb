@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="byName">
+	
+	<!-- 电容产品基础资料CRUD -->
+	<bean id="capacitorService" class="com.is.eus.service.basic.impl.CapacitorServiceImpl" parent="observableServiceBase"/>
+	<bean id="usageTypeService" class="com.is.eus.service.basic.impl.UsageTypeServiceImpl" parent="observableServiceBase"/>
+	<bean id="errorLevelService" class="com.is.eus.service.basic.impl.ErrorLevelServiceImpl" parent="observableServiceBase"/>
+	<bean id="humidityService" class="com.is.eus.service.basic.impl.HumidityServiceImpl" parent="observableServiceBase"/>
+	<bean id="productCodeService" class="com.is.eus.service.basic.impl.ProductCodeServiceImpl" parent="observableServiceBase"/>
+	<bean id="unitService" class="com.is.eus.service.basic.impl.UnitServiceImpl" parent="observableServiceBase"/>
+	<bean id="productTypeService" class="com.is.eus.service.basic.impl.ProductTypeServiceImpl" parent="observableServiceBase"/>
+	<bean id="storageLocationService" class="com.is.eus.service.basic.impl.StorageLocationServiceImpl" parent="observableServiceBase"/>
+	<bean id="provinceService" class="com.is.eus.service.basic.impl.ProvinceServiceImpl" parent="observableServiceBase">
+		<property name="searchService" ref="searchService"/> 
+	</bean>
+
+	<bean id="cityService" class="com.is.eus.service.basic.impl.CityServiceImpl" parent="observableServiceBase"/>
+	<bean id="companyService" class="com.is.eus.service.basic.impl.CompanyServiceImpl" parent="observableServiceBase"/>
+	<bean id="contractService" class="com.is.eus.service.biz.impl.ContractServiceImpl" parent="observableServiceBase">
+		<property name="events" value="ScheduleFromContract,StorageResourceFromContract,RollbackStorageResourceFromContract" />
+		<property name="listeners">
+			<map>
+				<entry key="ScheduleFromContract,StorageResourceFromContract,RollbackStorageResourceFromContract">
+					<set>
+						<ref bean="scheduleService" local="scheduleService"/>
+						<ref bean="storageResourceService" local="storageResourceService"/>
+					</set>
+				</entry>
+			</map>			
+		</property>
+	</bean>
+
+	<bean id="storageResourceService" class="com.is.eus.service.biz.impl.StorageResourceServiceImpl" parent="observableServiceBase"/>
+
+	<bean id="scheduleService" class="com.is.eus.service.biz.impl.ScheduleServiceImpl" parent="observableServiceBase">
+		<property name="storageResourceService" ref="storageResourceService"/>
+	</bean>
+	
+	<bean id="storageService" class="com.is.eus.service.biz.impl.StorageServiceImpl" parent="observableServiceBase"/>
+	<bean id="storageItemService" class="com.is.eus.service.biz.impl.StorageItemServiceImpl" parent="observableServiceBase"/>
+	<bean id="storageViewService" class="com.is.eus.service.biz.impl.StorageViewServiceImpl" parent="observableServiceBase"/>
+	
+	<bean id="inWarehouseService" class="com.is.eus.service.biz.impl.InWarehouseServiceImpl" parent="observableServiceBase">
+		<property name="events" value="Storage_FromInWarehouse,Storage_FromOutWarehouse" />
+		<property name="listeners">
+			<map>
+				<entry key="Storage_FromInWarehouse,Storage_FromOutWarehouse">
+					<set>		
+						<ref bean="storageService" local="storageService"/>
+						<ref bean="storageResourceService" local="storageResourceService"/>
+						<ref bean="storageItemService" local="storageItemService"/>
+					</set>
+				</entry>
+			</map>
+		</property>	
+	</bean>
+
+	<bean id="storageIncomingService" class="com.is.eus.service.biz.impl.StorageIncomingServiceImpl" parent="observableServiceBase">
+		<property name="events" value="Schedule_FromStorageIncoming,Storage_FromStorageIncoming,StorageItem_FromStorageIncoming,Schedule_RollBack_FromStorageIncoming,StorageResource_FromStorageIncoming"/>
+		<property name="listeners">
+			<map>
+				<entry key="Schedule_FromStorageIncoming,Storage_FromStorageIncoming,StorageItem_FromStorageIncoming,Schedule_RollBack_FromStorageIncoming,StorageResource_FromStorageIncoming">
+					<set>
+						<ref bean="scheduleService" local="scheduleService"/>
+						<ref bean="storageService" local="storageService"/>
+						<ref bean="storageItemService" local="storageItemService"/>
+						<ref bean="storageResourceService" local="storageResourceService"/> 
+					</set>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="storageOutcomingService" class="com.is.eus.service.biz.impl.StorageOutcomingServiceImpl" parent="observableServiceBase">
+		<property name="events" value="Update_Contract_And_Storage_FromStorageOutcoming,Update_Contract_FromStorageOutcoming_AduitSuccess,RollBack_Contract_And_Storage_FromStorageOutcoming" />
+		<property name="listeners">
+			<map>
+				<entry key="Update_Contract_And_Storage_FromStorageOutcoming,Update_Contract_FromStorageOutcoming_AduitSuccess,RollBack_Contract_And_Storage_FromStorageOutcoming">
+					<set>
+					    <ref bean="contractService" local="contractService"/>
+						<ref bean="storageService" local="storageService"/>
+						<ref bean="storageItemService" local="storageItemService"/>
+					</set>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+</beans>

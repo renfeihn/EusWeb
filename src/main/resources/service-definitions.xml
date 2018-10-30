@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="byName">
+	<!-- default-autowire="autodetect"-->
+
+	<!--
+		权限控制服务 
+	 -->
+	<bean id="dataAccessControlService" class="com.is.eus.service.support.DataAccessControlServiceImpl" init-method="init">
+		<property name="configuration" ref="dataAccessConfiguration"/>
+	</bean>
+	
+	<!--
+		系统功能 管理服务
+	 -->
+	<bean id="systemFunctionsService" class="com.is.eus.service.support.SystemFunctionsServiceImpl">
+		<property name="systemFunctionsDao" ref="systemFunctionsDao"/>
+	</bean>
+	
+	<!--
+		联机分析服务 
+	 -->
+	<!-- OLAP service.
+	<bean id="olapService" class="com.is.eus.service.support.OlapServiceImpl">
+		<property name="olapManager" ref="olapManager"/>
+	</bean> -->
+ 
+	<bean id="entityService" class="com.is.eus.service.support.EntityServiceImpl">
+		<property name="entityDao" ref="entityDao"/>
+	</bean>
+	<!-- 搜索服务. -->
+	<bean id="searchService" class="com.is.eus.service.support.SearchServiceImpl" init-method="init">
+		<property name="searchDao" ref="searchDao"/>
+		<property name="mapping">
+			<map>
+				<!--需要与相应的HBM中的find语句中的字段对应-->				
+				<entry key="Company" value="c.name,c.contract,c.delegatee,c.code,c.address,c.commAddress"/>
+				<entry key="Capacitor" value="cap.productCombination"/>
+				<entry key="Contract" value="company.name,contractNo"/>
+				<entry key="Schedule" value="scheduleNo,product.productCombination,contractNo"/>				
+				<entry key="StorageOutcoming" value="socNo,contract.contractNo,contract.company.name"/>
+				<entry key="Employee" value="code,name,position.name,tel,position.level.name,position.level.code,position.department.name,position.department.corporation.name"/>
+				<entry key="Position" value="code,name,level.name"/>
+				<entry key="Corporation" value="code,name,shortname,address,tel,manager,mobil"/>
+				<entry key="Category" value="code,name,supplier.name"/>
+				<entry key="User" value="name,employee.name,employee.position.name,employee.position.department.name,employee.position.level.name,employee.code"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="preferenceService" class="com.is.eus.service.support.PreferenceServiceImpl" init-method="init">
+		<property name="searchService" ref="searchService"/>
+	</bean>
+	
+	<!-- Observable Service Base. -->
+	<bean id="observableServiceBase" abstract="true" class="com.is.eus.service.support.ObservableServiceBase">
+		<property name="entityService" ref="entityService"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>
+		
+	<!-- 编码 -->
+	<bean id="sequenceService" class="com.is.eus.service.support.SequenceServiceImpl" init-method="init">
+		<property name="entityService" ref="entityService"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>
+		
+	<!-- User. -->
+	<bean id="userService" class="com.is.eus.service.support.UserServiceImpl">
+		<property name="dataAccessControlService" ref="dataAccessControlService"/>
+	</bean>
+	
+	<!--基础数据 -->
+	<bean id="basicInfoService" class="com.is.eus.service.support.BasicInfoServiceImpl" init-method="init">
+		<property name="mapping">
+			<map>
+				<entry key="Level" value="com.is.eus.pojo.system.Level"/>
+				<entry key="StorageLocation" value="com.is.eus.pojo.basic.StorageLocation"/>
+				<entry key="ErrorLevel" value="com.is.eus.pojo.basic.ErrorLevel"/>
+				<entry key="Humidity" value="com.is.eus.pojo.basic.Humidity"/>
+				<entry key="ProductCode" value="com.is.eus.pojo.basic.ProductCode"/>
+				<entry key="ProductType" value="com.is.eus.pojo.basic.ProductType"/>
+				<entry key="Unit" value="com.is.eus.pojo.basic.Unit"/>
+				<entry key="UsageType" value="com.is.eus.pojo.basic.UsageType"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+</beans>

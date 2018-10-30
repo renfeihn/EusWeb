@@ -1,0 +1,21 @@
+<html>
+	<head>
+	<script type="text/javascript">
+		function validate() {
+			var text = document.getElementById('json-text').value;
+			try {
+				eval("var json = " + text + ";");
+				alert('good formed.');
+			} catch (e) {
+				alert(e.description);
+				alert('bad json string.');
+			}
+		};
+	</script>
+	</head>
+	<body>
+		<textarea rows="20" cols="100" id="json-text"></textarea>
+		<br/>
+		<input type="button" value="validate" onclick="validate();"></input>
+	</body>
+</html>

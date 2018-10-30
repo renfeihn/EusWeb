@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.Product" table="Product">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="productCombination" column="productCombination" type="string"/>
+    	<property name="productCombinationPrint" column="productCombinationPrint" type="string"/>
+    	<many-to-one name="productCode" column="productCode" class="com.is.eus.pojo.basic.ProductCode"/>    	
+    	<property name="productName" column="productName" not-null="true" type="string"/>
+    	<many-to-one name="productType" column="productType" not-null="true" class="com.is.eus.pojo.basic.ProductType"/>    	    	
+    	<many-to-one name="unit" column="unit" not-null="true" class="com.is.eus.pojo.basic.Unit"/>    	
+    	<many-to-one name="usageType" column="usageType" class="com.is.eus.pojo.basic.UsageType"/>    	
+    	<property name="price" type="float">
+    	  <column name="price" sql-type="decimal(10,2)"/>
+    	</property>
+    	<property name="protocol" column="protocol" type="string"/>
+    	<property name="project" column="project" type="string"/>
+    	<property name="standard" column="Standard" type="string"/>    	
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="createTime" column="createTime" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<joined-subclass name="com.is.eus.pojo.basic.Capacitor" table="Capacitor">
+	    	<key column="id"/>
+	    	<many-to-one name="humidity" column="humidity" class="com.is.eus.pojo.basic.Humidity"/>    	
+	    	<many-to-one name="errorLevel" column="errorLevel" class="com.is.eus.pojo.basic.ErrorLevel"/>    	
+	    	<property name="voltage" column="voltage" type="string"/>
+	    	<property name="capacity" column="capacity" type="string"/>
+	    	<property name="zgf" column="zgf" type="string"/>
+	    	<property name="xxgf" column="xxgf" type="string"/>
+	    	<property name="fzxs" column="fzxs" type="string"/>
+	    	<property name="wxcc" column="wxcc" type="string"/>
+	    	
+		   	<query name="find">
+	    		<![CDATA[
+		    		from Capacitor cap    		
+		    		left join fetch cap.productCode
+		    		left join fetch cap.unit
+		    		left join fetch cap.usageType
+		    		left join fetch cap.productType
+		    		left join fetch cap.humidity
+		    		left join fetch cap.errorLevel
+		    		order by cap.productName asc
+	    		]]>
+	    	</query>
+	    	
+		   	<query name="count">
+	    		<![CDATA[
+		    		select count(id) from Capacitor cap
+	    		]]>
+	    	</query>
+	    	
+	    	<query name="get">
+	    		<![CDATA[
+		    		from Capacitor cap
+		    		left join fetch cap.updater		    		
+		    		left join fetch cap.productCode
+		    		left join fetch cap.unit
+		    		left join fetch cap.usageType
+		    		left join fetch cap.productType
+		    		left join fetch cap.humidity
+		    		left join fetch cap.errorLevel
+		    		where cap.id = ?
+	    		]]>
+	    	</query>
+	    	
+	    	<query name="getProductCombinationForAdd">
+	    		<![CDATA[
+		    		from Capacitor cap
+		    		where cap.productCombination = ?
+	    		]]>
+	    	</query>
+	    	
+	    	<query name="getProductCombinationForUpdate">
+	    		<![CDATA[
+		    		from Capacitor cap
+		    		where cap.productCombination = ? and cap.id <> ?
+	    		]]>
+	    	</query>
+	    	
+    	</joined-subclass>
+    	
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.contract.ContractItem" table="ContractItem">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="contractItemNo" column="contractItemNo" type="int"/>    
+    	<property name="amount" column="amount" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" type="int"/>
+    	<property name="checkingAmount" column="checkingAmount" type="int"/>
+    	<property name="price" type="float">
+    		<column name="price" sql-type="decimal(10,2)"/>
+    	</property>
+    	<property name="originalPrice" type="float">
+    		<column name="originalPrice" sql-type="decimal(10,2)"/>
+    	</property>
+    	<property name="duration" column="duration" type="int"/>
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="subTotal" type="float">
+    		<column name="subTotal" sql-type="decimal(10,2)"/>
+    	</property>
+    	<many-to-one name="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<many-to-one name="contract" not-null="true" class="com.is.eus.pojo.contract.Contract"/>	
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<query name="queryContractItem">
+	   		<![CDATA[
+	   			from ContractItem c  			
+	   			join fetch c.creator as creator
+	    		join fetch c.contract as ct
+	    		join fetch ct.company as co
+	    		join fetch c.product as p
+	    		left join fetch p.humidity h
+	    		left join fetch p.errorLevel e
+	    		left join fetch p.productCode pc
+	    		left join fetch p.productType pt
+	    		left join fetch p.usageType ut
+	    		left join fetch p.unit u
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="query">
+	   		<![CDATA[
+	   			select c.contract.id from ContractItem c  			
+	   			join c.creator as creator
+	    		join c.contract as ct
+	    		join ct.company as co
+	    		join c.product as p
+	    		left join p.humidity h
+	    		left join p.errorLevel e
+	    		left join p.productCode pc
+	    		left join p.productType pt
+	    		left join p.usageType ut
+	    		left join p.unit u
+	    		group by c.contract.id
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="printContractItem">
+	   		<![CDATA[
+	   			from ContractItem c  			
+	    		join fetch c.contract as ct
+	    		join fetch ct.company as co
+	    		join fetch c.product as p
+	    		left join fetch p.humidity h
+	    		left join fetch p.errorLevel e
+	    		left join fetch p.productCode pc
+	    		left join fetch p.productType pt
+	    		left join fetch p.usageType ut
+	    		left join fetch p.unit u
+	    		where ct.id = ?
+	    		order by contractItemNo asc
+	   		]]>
+	   	</query>
+	   	
+   	</class>
+</hibernate-mapping>

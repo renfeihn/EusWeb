@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.schedule.ScheduleSummeryView" table="ScheduleSummeryView">
+    	<id name="id" type="string" length="64" column="id" />
+   
+    	<property name="amount" column="amount" not-null="true" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" not-null="true" type="int"/>
+    	<property name="restAmount" column="restAmount" not-null="true" type="int"/>
+
+    	<many-to-one name="product" column="product" class="com.is.eus.pojo.basic.Product"/>    	
+    	
+	   	
+	   	<query name="queryScheduleSummeryView">
+	   		<![CDATA[
+	   			from ScheduleSummeryView s
+	   			left join fetch s.product p
+	   			left join fetch p.productCode pc	   			
+	   			left join fetch p.humidity h
+	   			left join fetch p.errorLevel e
+	   			left join fetch p.productType  pt
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit u
+	   			order by p.productCombination asc
+	   		]]>
+	   	</query>	   		   	  	
+   	</class>
+</hibernate-mapping>

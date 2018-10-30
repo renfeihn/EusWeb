@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.InWarehouse" table="InWarehouse">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="flag" column="flag"  type="int"/>
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="productionDate" column="productionDate" type="date"/>
+ 		<many-to-one name="product" column="product" class="com.is.eus.pojo.basic.Product"/>
+		<many-to-one name="storageLocation" column="storageLocation"  class="com.is.eus.pojo.basic.StorageLocation"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<query name="find">
+	   		<![CDATA[
+	   			from InWarehouse iw  			
+	   			join fetch iw.creator as creator
+	    		left join fetch iw.updater
+	    		left join fetch iw.product as product
+	    		left join fetch iw.storageLocation		    		
+		    	left join fetch product.productCode pc
+		    	left join fetch product.unit u
+		    	left join fetch product.usageType ut
+		    	left join fetch product.productType pt
+		    	left join fetch product.humidity h
+		    	left join fetch product.errorLevel e
+	   		]]>				
+	   	</query>
+	   	
+    	<query name="query">
+	   		<![CDATA[
+	   			from InWarehouse iw  			
+	   			join fetch iw.creator as creator
+	    		left join fetch iw.updater
+	    		left join fetch iw.product as product
+	    		left join fetch iw.storageLocation		    		
+		    	left join fetch product.productCode pc
+		    	left join fetch product.unit u
+		    	left join fetch product.usageType ut
+		    	left join fetch product.productType pt
+		    	left join fetch product.humidity h
+		    	left join fetch product.errorLevel e
+	   		]]>				
+	   	</query>
+	   	
+    	<query name="findStorage">
+	   		<![CDATA[
+	   			from InWarehouse iw  			
+	   			join fetch iw.creator
+	    		left join fetch iw.updater
+	    		join fetch iw.product as p
+	    		join fetch iw.storageLocation as sl
+	    		where iw.status = 0 and p.id = ? and sl.id = ? 
+	   		]]>
+	   	</query>
+	   	
+    	
+   	</class>
+</hibernate-mapping>

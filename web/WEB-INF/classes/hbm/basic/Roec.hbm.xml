@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.Roec" table="roec">
+    	<id name="id" type="string" column="ID"/>
+    	<property name="CPBH" column="CPBH" type="string"/>
+		<property name="CPMC" column="CPMC" type="string"/>
+	   	<property name="CPXH" column="CPXH" type="string"/>
+		<property name="CPGG" column="CPGG" type="string"/>    	
+    	<property name="WDXSZB" column="WDXSZB" type="string"/>
+		<property name="WCDJ" column="WCDJ" type="string"/>
+		<property name="DH" column="DH" type="string"/>
+	   	<property name="JP" column="JP" type="string"/>
+		<property name="DR" column="DR" type="string"/>
+		 <property name="CPDJ" type="float">
+    		<column name="CPDJ" sql-type="decimal(16,2)"/>
+    	</property>
+	   	<query name="find">
+	   		<![CDATA[
+	   			from Roec
+	   			order by id asc	   			
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

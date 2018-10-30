@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.Company" table="Company">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+		<property name="code" column="code" type="string"/>
+		<property name="name" column="name" not-null="true" type="string"/>
+		<property name="address" column="address" type="string"/>
+		<property name="commAddress" column="commAddress" type="string"/>
+		<property name="bank" column="bank" type="string"/>
+		<property name="contract" column="contract" type="string"/>
+		<property name="account" column="account" type="string"/>
+		<property name="tax" column="tax" type="string"/>
+		<property name="zipCode" column="zipCode" type="string"/>
+		<property name="tele" column="tele" type="string"/>
+		<property name="delegatee" column="delegatee" type="string"/>
+		<property name="email" column="email" type="string"/>
+		<property name="fax" column="fax" type="string"/>
+		<property name="memo" column="memo" type="string"/>
+	   	<many-to-one name="province" not-null="true" class="com.is.eus.pojo.basic.Province"/>
+    	<many-to-one name="city" not-null="true" class="com.is.eus.pojo.basic.City"/>   	
+    	<property name="status" column="status" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+
+	   	<query name="find">
+	   		<![CDATA[
+	   			from Company c
+	   			join fetch c.creator as creator
+	    		left join fetch c.updater 
+	   			left join fetch c.province p
+	   			left join fetch c.city ci
+	   			order by c.code asc	   			
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="count">
+	    		<![CDATA[
+		    		select count(id) from Company c
+	    		]]>
+	    </query>
+   		
+   		<query name="get">
+	   		<![CDATA[
+	   			from Company c
+	   			join fetch c.creator
+	    		left join fetch c.updater
+	   			left join fetch c.province
+	   			left join fetch c.city	   			
+	    		where c.id = ?  
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.schedule.ScheduleView" table="ScheduleView">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="scheduleNo" column="scheduleNo" type="string"/>
+    	<property name="contractNo" column="contractNo" type="string"/>
+    	<property name="amount" column="amount" not-null="true" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" not-null="true" type="int"/>
+    	<property name="q1" column="q1" type="int"/>
+    	<property name="q2" column="q2" type="int"/>
+    	<property name="q3" column="q3" type="int"/>
+    	<property name="q4" column="q4" type="int"/>
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="scheduleType" column="scheduleType" type="int"/>    	
+    	<property name="scheduleDate" column="scheduleDate" not-null="true" type="date"/>	
+    	<many-to-one name="product" column="product" class="com.is.eus.pojo.basic.Product"/>    	
+		<many-to-one name="company" column="company" class="com.is.eus.pojo.basic.Company"/>
+		<property name="contractDate" column="contractDate" not-null="true" type="date"/>
+		    
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/> 
+        
+	   	<query name="querySchedule">
+	   		<![CDATA[
+	   			from ScheduleView s
+	   			join fetch s.creator as creator
+	   			left join fetch s.product p
+	   			left join fetch p.productCode pc	   			
+	   			left join fetch p.humidity h
+	   			left join fetch p.errorLevel e
+	   			left join fetch p.productType  pt
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit u
+	   			left join fetch s.company c
+	   			order by p.productCombination asc
+	   		]]>
+	   	</query>	   	
+	   	  	
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.contract.ContractView" table="ContractView">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="contractNo" column="contractNo" not-null="true" type="string"/>
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="totalFinishedAmount" column="totalFinishedAmount"  type="int"/>
+    	<property name="totalCheckingAmount" column="totalCheckingAmount"  type="int"/>
+    	<property name="totalSum" type="float">
+    		<column name="TotalSum" sql-type="decimal(10,2)"/>
+    	</property>
+    	<many-to-one name="company" column="company" class="com.is.eus.pojo.basic.Company"/>
+    	<property name="contractDate" column="contractDate" not-null="true" type="date"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<set name="items" inverse="true" cascade="all,delete-orphan">
+    		<key column="contract"/>
+    		<one-to-many class="com.is.eus.pojo.contract.ContractItemView"/>
+    	</set>
+    	
+    	<query name="get">
+	   		<![CDATA[
+	   			from ContractView c  			
+	    		join fetch c.items as items
+	    		join fetch c.company as company
+	    		join fetch items.product as p
+	    		left join fetch p.humidity
+	    		left join fetch p.errorLevel
+	    		left join fetch p.productCode
+	    		left join fetch p.productType
+	    		left join fetch p.unit
+	    		where c.id = ?
+	   		]]>
+	   	</query>	   			
+    	
+   	</class>
+</hibernate-mapping>

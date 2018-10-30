@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.VRoec" table="vroec">
+    	<id name="productName" type="string" column="productName"/>
+    	<property name="count" type="int" column="count"/>
+	   	<query name="find">
+	   		<![CDATA[
+	   			from VRoec  			
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

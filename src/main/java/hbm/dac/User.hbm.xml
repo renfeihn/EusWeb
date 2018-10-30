@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.dac.User" table="UserInfo">
+    	<id name="id" type="string" length="64" column="userid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="name" column="name" unique="true" not-null="true" type="string"/>
+    	<property name="password" column="password" type="string"/>
+    	<property name="secret" column="secret" type="string"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<many-to-one name="employee" column="employeeid" cascade="all" not-null="true" unique="true" class="com.is.eus.pojo.system.Employee"/>
+    	<set name="roles" table="UserRoles" cascade="all">
+    		<key column="userid"/>
+    		<many-to-many column="roleid" class="com.is.eus.pojo.dac.Role"/>
+    	</set>
+    	<query name="getByName">
+    		<![CDATA[
+	    		from User usr
+	    		left join fetch usr.roles role
+	    		left join fetch role.functions
+	    		left join fetch role.datas
+	    		where usr.name = ?
+    		]]>
+    	</query>
+    	<query name="get">
+    		<![CDATA[
+	    		from User usr
+	    		left join fetch usr.employee
+	    		left join fetch usr.roles rl
+	    		left join fetch rl.functions
+	    		left join fetch rl.datas 
+	    		where usr.id = ?
+    		]]>
+    	</query>
+    	<query name="find">
+    		<![CDATA[
+	    		from User usr
+	    		left join fetch usr.roles rl
+	    		left join fetch rl.functions
+	    		left join fetch rl.datas
+	    		join fetch usr.employee emp
+	    		join fetch emp.position pos
+	    		join fetch pos.level
+	    		join fetch pos.department
+    		]]>
+    	</query>
+		<query name="usersOfRoleFunction">
+			<![CDATA[
+				from User usr
+	    		left join fetch usr.roles rl
+	    		left join fetch rl.functions func
+				where func.functionId = ? 
+			]]>
+		</query>
+		<query name="usersOfPosition">
+			<![CDATA[
+				from User usr where usr.employee.position.name = ?
+			]]>
+		</query>
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<!-- 公司 -->
+    <class name="com.is.eus.pojo.system.Corporation" table="CompanyInfo">
+    	<id name="id" type="string" length="64" column="corpid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" unique="true" not-null="true" type="string"/>
+    	<property name="factory" column="factorycode" type="string"/>
+    	<property name="name" column="companyname" type="string"/>
+    	<property name="shortname" column="companysc" type="string"/>
+    	<property name="address" column="address" type="string"/>
+    	<property name="tel" column="tel" type="string"/>
+    	<property name="manager" column="managerid" type="string"/>
+    	<property name="mobil" column="mp" type="string"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+		<query name="list">
+			<![CDATA[
+			from Corporation where status <> 2
+			]]>
+		</query>
+   	</class>
+</hibernate-mapping>

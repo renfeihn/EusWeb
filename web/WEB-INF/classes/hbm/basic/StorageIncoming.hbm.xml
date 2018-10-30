@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageIncoming" table="StorageIncoming">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="sicNo" column="sicNo" not-null="true" type="string"/>
+    	<property name="sicDate" column="sicDate"  type="date"/>
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+ 		<many-to-one name="sicChecker" column="sicChecker" class="com.is.eus.pojo.system.Employee"/>
+		<many-to-one name="sicManager" column="sicManager"  class="com.is.eus.pojo.system.Employee"/>    	
+    	<property name="sicChecker_createTime" column="sicChecker_createTime" type="timestamp"/>
+    	<property name="sicManager_createTime" column="sicManager_createTime" type="timestamp"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<set name="items" cascade="all,delete-orphan">
+    		<key column="sic"/>
+    		<one-to-many class="com.is.eus.pojo.storage.StorageIncomingItem"/>
+    	</set>
+    	
+    	<query name="find">
+	   		<![CDATA[
+	   			from StorageIncoming s  			
+	   			join fetch s.creator as creator
+	    		left join fetch s.updater
+	    		order by s.createTime desc  
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="get">
+	   		<![CDATA[
+	   			from StorageIncoming s  			
+	    		left join fetch s.items as items
+	    		left join fetch items.product as p
+	    		left join fetch items.storageLocation
+	    		left join fetch items.schedule
+	    		left join fetch p.humidity
+	    		left join fetch p.errorLevel
+	    		left join fetch p.productCode
+	    		left join fetch p.productType
+	    		left join fetch p.unit 
+	    		where s.id = ?
+	    		order by items.sicItemNo asc
+	   		]]>
+	   	</query>   	
+    	
+   	</class>
+</hibernate-mapping>

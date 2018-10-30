@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="autodetect">
+    <!--
+    	============================== Hibernate Session Factory ========================= 
+    -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="eusDataSource"/>
+		</property>
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:hbm</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<!-- 
+				<prop key="hibernate.use_outer_join">true</prop>
+				 -->
+				<prop key="hibernate.jdbc.batch_size">5</prop>
+				<prop key="hibernate.connection.pool_size">2</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<!--<prop key="hibernate.hbm2ddl.auto">update</prop>-->
+				<prop key="jdbc.fetch_size">100</prop>   
+				<prop key="jdbc.batch_size">50</prop> 
+			</props>
+		</property>
+
+	</bean>
+
+	<!--
+		================================ Hibernate Transaction Manager =================== 
+	-->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory"/>
+		</property>
+	</bean>
+	
+	<!-- spring 1.x style configuration for transaction management. -->
+	<!-- 
+	<bean id="baseTransaction" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+	     abstract="true">
+	   <property name="transactionManager" ref="transactionManager"/>
+	   <property name="proxyTargetClass" value="true"/>
+	   <property name="transactionAttributes">
+	       <props>
+	           <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+	           <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+	           <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+	           <prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
+	           <prop key="save*">PROPAGATION_REQUIRED</prop>
+	           <prop key="add*">PROPAGATION_REQUIRED</prop>
+	           <prop key="update*">PROPAGATION_REQUIRED</prop>
+	           <prop key="remove*">PROPAGATION_REQUIRED</prop>
+	       </props>
+	   </property>
+    </bean>
+     -->
+     
+     <!-- Spring 2.x style aop configurations. -->
+    <aop:config>
+		<aop:pointcut id="serviceMethods" expression="execution(* com.is.eus.service.*.*(..))"/>
+		<aop:pointcut id="clsysBasicServiceMethods" expression="execution(* com.is.eus.service.baisc.ui.*.*(..))"/>
+		<aop:pointcut id="clsysBizServiceMethods" expression="execution(* com.is.eus.service.biz.ui.*.*(..))"/>	
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="clsysBasicServiceMethods"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="clsysBizServiceMethods"/>
+	</aop:config>
+
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+			<!-- 
+			<tx:method name="someOtherBusinessMethod" propagation="REQUIRES_NEW"/>
+			<tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+			 -->
+		</tx:attributes>
+	</tx:advice>
+</beans>

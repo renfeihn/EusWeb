@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageView" table="storageView">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="advancedAmount" column="advancedAmount"  type="int"/>
+    	<property name="restAmount" column="restAmount"  type="int"/>
+ 		<many-to-one name="product" column="product" class="com.is.eus.pojo.basic.Product"/>
+	   	
+    	<query name="queryStorage">
+	   		<![CDATA[
+	   			from StorageView s  			
+	    		left join fetch s.product as product
+		    	left join fetch product.productCode pc
+		    	left join fetch product.unit u
+		    	left join fetch product.usageType ut
+		    	left join fetch product.productType pt
+		    	left join fetch product.humidity h
+		    	left join fetch product.errorLevel e
+		    	order by product.productCombination
+	   		]]>				
+	   	</query>	   	
+
+   	</class>
+</hibernate-mapping>

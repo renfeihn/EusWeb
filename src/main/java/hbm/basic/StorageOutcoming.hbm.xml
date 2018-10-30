@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageOutcoming" table="StorageOutcoming">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    
+    	<property name="socNo" column="socNo" type="string"/>
+    	<property name="socDate" column="socDate"  type="date"/>
+    	<property name="printDate" column="printDate" type="string"/>
+		<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="totalSum" type="float">
+    		<column name="totalSum" sql-type="decimal(10,2)"/>
+    	</property>
+
+    	<property name="totalSumWithoutTax" type="float">
+    		<column name="totalSumWithoutTax" sql-type="decimal(10,2)"/>
+    	</property>
+    
+    	<property name="totalTaxAmount" type="float">
+    		<column name="totalTaxAmount" sql-type="decimal(10,2)"/>
+    	</property>
+	
+    	<many-to-one name="contract" column="contract" not-null="true" class="com.is.eus.pojo.contract.Contract"/>
+ 		<many-to-one name="socChecker" column="socChecker" class="com.is.eus.pojo.system.Employee"/>
+    	<property name="socChecker_createTime" column="socChecker_createTime" type="timestamp"/>
+    	
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<set name="socItems" inverse="true" cascade="all,delete-orphan">
+    		<key column="soc"/>
+    		<one-to-many class="com.is.eus.pojo.storage.StorageOutcomingItem"/>
+    	</set>
+    	
+    	<query name="find">
+	   		<![CDATA[
+	   			from StorageOutcoming s  			
+	   			join fetch s.creator as creator
+	    		left join fetch s.updater
+	    		left join fetch s.contract as contract
+	    		left join fetch contract.company
+	    		order by s.createTime desc  
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="findByContract">
+	   		<![CDATA[
+	   			from StorageOutcoming s  			
+	   			join fetch s.creator as creator
+	    		left join fetch s.updater
+	    		left join fetch s.contract as c
+	    		left join fetch c.company
+	    		where c.id = ?
+	    		order by s.createTime desc  
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="get">
+	   		<![CDATA[
+	   			from StorageOutcoming s  			
+	    		left join fetch s.socItems as items
+	    		left join fetch items.product as p
+	    		left join fetch items.storageLocation
+	    		left join fetch items.contractItem ci
+	    		left join fetch ci.contract
+	    		left join fetch p.humidity
+	    		left join fetch p.errorLevel
+	    		left join fetch p.productCode
+	    		left join fetch p.productType
+	    		left join fetch p.unit 
+	    		where s.id = ?
+	    		order by items.socItemNo asc
+	   		]]>
+	   	</query>
+	   	
+    	
+   	</class>
+</hibernate-mapping>

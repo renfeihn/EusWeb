@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="byName">
+
+	<!--
+		================ 配置事务代理 ======================= 
+	-->
+	<!-- 
+	<bean id="baseTransactionProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="transactionManager"/>
+		<property name="proxyTargetClass" value="true"/>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="userTarget" class="com.is.eus.XXX">
+		<property name="sessionFactory">
+			<ref local="sessionFactory"/>
+		</property>
+	</bean>
+	<bean id="user" parent="baseTransactionProxy">
+		<property name="target" ref="userTarget"/>
+	</bean>
+	 -->
+	 <!--
+	 	=============== DAO DEFINITIONS =====================	 	 
+	 -->
+	<bean id="xmlSystemFunctionProvider" class="com.is.eus.dao.support.XmlSystemFunctionProvider" init-method="init">
+		<property name="xmlFilePath">
+			<value>system-functions.xml</value>
+		</property>
+	</bean>
+	
+	<!-- 
+	<bean id="xmlDACConfigurationProvider" class="com.is.eus.dac.support.XmlConfigurationProvider" init-method="init">
+		<property name="configFilePath">
+			<value>dac.xml</value>		
+		</property>
+	</bean>
+	
+	<bean id="dataAccessConfiguration" class="com.is.eus.dac.Configuration" init-method="load">
+		<property name="provider" ref="xmlDACConfigurationProvider"/>
+	</bean>
+	 -->
+	<!--
+		系统功能DAO 
+	 -->
+	<bean id="systemFunctionsDao" class="com.is.eus.dao.support.SystemFunctionsDaoImpl">
+		<property name="provider" ref="xmlSystemFunctionProvider"/>
+	</bean>
+	
+	<bean id="dataAccessControlDao" class="com.is.eus.dao.support.hibernate.DataAccessControlDaoHibernateImpl"/>
+	<bean id="entityDao" class="com.is.eus.dao.support.hibernate.EntityDaoHibernateImpl"/>
+	<bean id="searchDao" class="com.is.eus.dao.support.hibernate.SearchDaoHibernateImpl">
+		<property name="state" value="state"/>
+		<property name="status" value="status"/>
+		<property name="accessMapping">
+			<map>
+				<entry key="Private" value="creator.id = ?"/>
+				<entry key="Group" value="creator.position.department.id = (select position.department.id from Employee emp where emp.id = ?)"/>
+				<entry key="corporation" value="creator.department.corporation.id = (select position.department.corporation.id from Employee emp where employee.id = ?)"/>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- data access control provider. -->
+	<bean id="dacConfigDBProvider" class="com.is.eus.dac.support.DbConfigurationProvider">
+		<property name="dataAccessControlDao" ref="dataAccessControlDao"/>
+	</bean>
+	<!-- data access control configuration. -->
+	<bean id="dataAccessConfiguration" class="com.is.eus.dac.Configuration">
+		<property name="provider" ref="dacConfigDBProvider"/>
+	</bean>
+</beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.contract.ContractItemOwnedSummeryView" table="ContractItemOwnedSummeryView">
+    	<id name="id" type="string" length="64" column="id"/>
+    	<many-to-one name="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<property name="productCombination" column="productCombination" type="string"/>
+    	<property name="amount" column="amount" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" type="int"/>
+    	<property name="checkingAmount" column="checkingAmount" type="int"/>
+		<property name="unfinishedAmount" column="unfinishedAmount"  type="int"/>
+    	<property name="restAmount" column="restAmount"  type="int"/>
+    	<property name="ownedAmount" column="ownedAmount"  type="int"/>
+    	
+    	<query name="query">
+	   		<![CDATA[
+	   			from ContractItemOwnedSummeryView s  			
+	    		left join fetch s.product as product
+		    	left join fetch product.productCode pc
+		    	left join fetch product.unit u
+		    	left join fetch product.usageType ut
+		    	left join fetch product.productType pt
+		    	left join fetch product.humidity h
+		    	left join fetch product.errorLevel e
+		    	order by product.productCombination
+	   		]]>				
+	   	</query>	   	
+
+   	</class>
+</hibernate-mapping>

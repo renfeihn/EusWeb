@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+
+<struts>
+	<!-- 
+	<include file="struts-olap.xml"/>
+	 -->
+	 
+	<package name="default" extends="struts-default,jasperreports-default">
+		<result-types>
+			<result-type name="loginValidationResult" class="com.is.eus.web.action.system.LoginValidationResult" />
+		</result-types>
+		<default-action-ref name="index"/>
+		<global-results>
+			<result name="openflashchart">/jsonhelper.jsp</result>
+			<result name="extgrid">/jsonhelper.jsp</result>
+			<result name="success">/jsonhelper.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="json">/jsonhelper.jsp</result>
+			<result name="login">/main.jsp</result>
+		</global-results>
+
+		<action name="index">
+			<result>/main.jsp</result>
+		</action>
+	
+		<action name="login" class="loginAction" method="login">
+			<result name="success">/main.jsp</result>
+			<result name="error">/login.jsp</result>
+			<result name="input" type="redirect">/login.jsp</result>
+		</action>
+				
+		<action name="loginValidation" class="loginValidation" method="validation">
+			<result name="success" type="loginValidationResult"/>
+		</action>
+		
+		<action name="modifyPassword" class="modifyPasswordAction" method="modifyPassword"/>
+		<action name="logout" class="logoutAction" method="logout">
+			<result name="success">/login.jsp</result>
+		</action>
+		
+		<!-- 基础信息维护updateBasic -->
+		<action name="*Basic" class="basicInfoAction" method="{1}"/>
+		
+		<!-- 雇员 -->
+		<action name="*Employee" class="employeeAction" method="{1}"/>
+		<!-- 职务-->
+		<action name="*Position" class="positionAction" method="{1}"/>
+		<!-- 机构-->
+		<action name="*Corporation" class="corporationAction" method="{1}"/>
+		<!-- 部门 -->
+		<action name="*Department" class="departmentAction" method="{1}"/>
+		<!-- system functions. -->
+		<action name="categoryFunctions" class="systemFunctionAction" method="functions"/>
+		<!-- function categories. -->
+		<action name="functionCategories" class="systemFunctionAction" method="categories"/>
+		<!-- roles administrations -->
+		<action name="systemFunctions" class="systemFunctionAction" method="systemFunctions"/>
+		<!-- Roles. -->
+		<action name="*Role" class="rolesAction" method="{1}"/>
+		<action name="getRoleFunctions" class="rolesAction" method="getRoleFunctions"/>
+		<action name="getRoleDataAccess" class="rolesAction" method="getRoleDataAccess"/>
+		<action name="updateRoleDataAccess" class="rolesAction" method="updateRoleDataAccess"/>
+		<!-- Users. -->
+		<action name="*User" class="usersAction" method="{1}"/>
+		<action name="getCurrentEmployee" class="usersAction" method="getCurrentEmployee"/>
+		<!-- Data access control. -->
+		<action name="*DataAccess" class="dataAccessAction" method="{1}"/>
+		<!-- Preferences. -->
+		<action name="*Preference" class="preferenceAction" method="{1}"/>
+		
+		<!-- CLSYS ACTION-->
+		<action name="*Capacitor" class="capacitorAction" method="{1}"/>
+		<action name="*ProductCode" class="productCodeAction" method="{1}"/>
+		<action name="*Humidity" class="humidityAction" method="{1}"/>
+		<action name="*ErrorLevel" class="errorLevelAction" method="{1}"/>
+		<action name="*Unit" class="unitAction" method="{1}"/>
+		<action name="*StorageLocation" class="storageLocationAction" method="{1}"/>
+		<action name="*UsageType" class="usageTypeAction" method="{1}"/>
+		<action name="*ProductType" class="productTypeAction" method="{1}"/>
+		<action name="*City" class="cityAction" method="{1}"/>
+		<action name="*Province" class="provinceAction" method="{1}"/>
+		<action name="*Company" class="companyAction" method="{1}"/>
+		<action name="*Contract" class="contractAction" method="{1}"/>
+		<action name="*ContractItem" class="contractItemAction" method="{1}"/>
+		<action name="*ContractItemOwnedSummeryView" class="contractItemOwnedSummeryViewAction" method="{1}"/>
+		
+		<action name="*ContractView" class="contractViewAction" method="{1}"/>
+		<action name="*Schedule" class="scheduleAction" method="{1}"/>
+		<action name="*ScheduleView" class="scheduleViewAction" method="{1}"/>
+		<action name="*ScheduleSummeryView" class="scheduleSummeryViewAction" method="{1}"/>
+		<action name="*StorageIncoming" class="storageIncomingAction" method="{1}"/>
+		<action name="*StorageIncomingItem" class="storageIncomingItemAction" method="{1}"/>
+		<action name="*StorageOutcoming" class="storageOutcomingAction" method="{1}"/>
+		<action name="*StorageOutcomingItem" class="storageOutcomingItemAction" method="{1}"/>
+		<action name="*StorageItem" class="storageItemAction" method="{1}" /> 
+		<action name="*Storage" class="storageAction" method="{1}" />
+		<action name="*StorageView" class="storageViewAction" method="{1}" />
+		<action name="*SCSSummeryView" class="SCSSummeryViewAction" method="{1}" />
+		<action name="*StorageResource" class="storageResourceAction" method="{1}" />
+		<action name="*StorageResourceView" class="storageResourceViewAction" method="{1}" />    
+		<action name="*InWarehouse" class="inWarehouseAction" method="{1}"/>
+        
+        <!-- CLSYS Print ACTION-->
+        <action name="getReportSchedule" class="scheduleAction" method="getReport">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+	            <param name="inputName">inputStream</param>
+	            <param name="bufferSize">4096</param>
+            </result>
+        </action> 
+        
+        <action name="printStorageItem" class="storageItemAction" method="print">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+	            <param name="inputName">inputStream</param>
+	            <param name="bufferSize">4096</param>
+            </result>
+        </action>
+        
+       <action name="printStorage" class="storageAction" method="print">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+	            <param name="inputName">inputStream</param>
+	            <param name="bufferSize">4096</param>
+            </result>
+        </action>
+          	 					
+	</package>
+</struts>

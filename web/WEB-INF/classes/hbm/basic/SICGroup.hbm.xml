@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.SICGroup" table="SICGroup">
+    	<id name="product" type="string" column="product"/>
+    	<property name="amount" type="int" column="amount"/>
+	   	<query name="find">
+	   		<![CDATA[
+	   			from SICGroup  			
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.system.Preference" table="Preference">
+    	<id name="id" type="string" length="64" column="preferenceid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" not-null="true" type="string"/>
+    	<property name="name" column="name" not-null="true" type="string"/>
+    	<property name="value" column="value" type="string"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="status" column="status" type="int"/>
+		<query name="list">
+			<![CDATA[
+				from Preference prf
+				where prf.status <> 2 and prf.state = 0
+			]]>
+		</query>
+   	</class>
+</hibernate-mapping>

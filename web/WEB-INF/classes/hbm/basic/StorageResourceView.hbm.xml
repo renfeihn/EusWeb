@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageResourceView" table="StorageResourceView">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="amount" column="amount"  type="int"/>
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="advancedAmount" column="advancedAmount"  type="int"/>
+    	<property name="restAmount" column="restAmount"  type="int"/>
+    	<property name="varAmount" column="varAmount"  type="int"/>
+
+ 		<many-to-one name="product" column="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+   
+       	<query name="query">
+	   		<![CDATA[
+	   			from StorageResourceView s
+	    		left join fetch s.product as product	    		
+		    	left join fetch product.productCode pc
+		    	left join fetch product.unit u
+		    	left join fetch product.usageType ut
+		    	left join fetch product.productType pt
+		    	left join fetch product.humidity h
+		    	left join fetch product.errorLevel e
+	   		]]>
+	   	</query>
+	   	  	
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageOutcomingItem" table="StorageOutcomingItem">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id> 	
+    	
+    	<property name="socItemNo" column="socItemNo" type="int"/>
+    	
+    	<property name="amount" column="amount" type="int"/>
+    	<property name="tax" column="tax" type="int"/>
+    	
+    	<property name="price" type="float">
+    		<column name="price" sql-type="decimal(10,2)"/>
+    	</property>
+    	
+    	<property name="priceWithoutTax" type="double">
+    	    <column name="priceWithoutTax" sql-type="decimal(10,2)"/>
+    	</property>	
+    	
+    	<property name="subTotal" type="float">
+    		<column name="subTotal" sql-type="decimal(10,2)"/>
+    	</property>
+
+    	<property name="subTotalWithoutTax" type="float">
+    		<column name="subTotalWithoutTax" sql-type="decimal(10,2)"/>
+    	</property>
+    	
+    	<property name="TaxAmount" type="float">
+    		<column name="TaxAmount" sql-type="decimal(10,2)"/>
+    	</property>	
+    	
+    	<property name="memo" column="memo" type="string"/> 
+    	
+    	<many-to-one name="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<many-to-one name="storageLocation"  not-null="true" class="com.is.eus.pojo.basic.StorageLocation"/>
+    	<many-to-one name="contractItem"  not-null="true" class="com.is.eus.pojo.contract.ContractItem"/>
+    	
+    	<many-to-one name="soc" not-null="true" class="com.is.eus.pojo.storage.StorageOutcoming"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+      	<query name="queryStorageOutcomingItem">
+	   		<![CDATA[
+	   			from StorageOutcomingItem s  			
+	   			join fetch s.creator as creator
+	   			join fetch s.soc sc
+	    		join fetch s.contractItem as ci
+	    		join fetch ci.contract as co
+	    		join fetch co.company as cp
+	    		join fetch s.product as p
+	    		left join fetch p.humidity h
+	    		left join fetch p.errorLevel e
+	    		left join fetch p.productCode pc
+	    		left join fetch p.productType pt
+	    		left join fetch p.usageType ut
+	    		left join fetch p.unit u
+	    		order by sc.socNo desc
+	   		]]>
+	   	</query>  	
+   	</class>
+</hibernate-mapping>

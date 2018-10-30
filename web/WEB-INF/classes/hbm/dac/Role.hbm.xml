@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.dac.Role" table="Role">
+    	<id name="id" type="string" length="64" column="roleid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" type="string"/>
+    	<property name="name" column="name" type="string" />
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="description" column="description" type="string"/>
+    	<set name="users" table="UserRoles" inverse="true">
+    		<key column="roleid"/>
+    		<many-to-many column="userid" class="com.is.eus.pojo.dac.User"/>
+    	</set>
+    	<set name="functions" inverse="true" cascade="all,delete-orphan">
+    		<key column="roleid"/>
+    		<one-to-many class="com.is.eus.pojo.dac.RoleFunction"/>
+    	</set>
+    	<set name="datas" batch-size="3" inverse="true" cascade="all,delete-orphan">
+    		<key column="roleid"/>
+    		<one-to-many class="com.is.eus.pojo.dac.RoleDataAccess"/>
+    	</set>
+    	<query name="get">
+    		<![CDATA[
+	    		from Role rl
+	    		left join fetch rl.functions
+	    		left join fetch rl.datas
+	    		where rl.id = ?
+    		]]>
+    	</query>
+   	</class>
+</hibernate-mapping>

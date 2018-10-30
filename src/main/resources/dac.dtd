@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT dac (roles?, groups?)>
+<!ATTLIST dac
+	name CDATA #REQUIRED
+	extends CDATA #IMPLIED
+>
+
+<!ELEMENT roles (role)+>
+<!ATTLIST roles>
+
+<!ELEMENT role (#PCDATA|access)*>
+<!ATTLIST role
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+	description CDATA #IMPLIED
+>
+
+<!ELEMENT access (#PCDATA)*>
+<!ATTLIST access
+	name CDATA #IMPLIED
+>
+
+<!ELEMENT groups (group)+>
+<!ATTLIST groups>
+
+<!ELEMENT group (users)*>
+<!ATTLIST group
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+	role-ref CDATA #REQUIRED
+>
+
+<!ELEMENT users (user)*>
+<!ATTLIST users
+	id CDATA #IMPLIED
+	name CDATA #IMPLIED
+>
+
+<!ELEMENT user (#PCDATA)*>
+<!ATTLIST user
+	id CDATA #REQUIRED
+>

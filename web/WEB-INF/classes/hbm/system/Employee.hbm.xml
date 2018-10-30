@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.system.Employee" table="Employee">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" type="string" not-null="true" unique="true"/>
+    	<property name="name" column="name" type="string" not-null="true"/>
+    	
+    	<property name="birthday" column="birthday" type="date"/>
+    	<property name="sex" column="sex" type="string"/>
+    	<property name="tel" column="tel" type="string"/>
+    	
+    	<property name="status" column="status" type="int"/>
+    	<many-to-one name="position" class="com.is.eus.pojo.system.Position"/>
+		<many-to-one name="user" column="urs" class="com.is.eus.pojo.dac.User"/>
+		<query name="get">
+			<![CDATA[
+				from Employee emp
+				join fetch emp.position pos
+				join fetch pos.department dept
+				join fetch dept.corporation
+				join fetch pos.level
+				where emp.id = ?
+			]]>
+		</query>
+		<query name="find">
+			<![CDATA[
+				from Employee emp
+				join fetch emp.position pos
+				join fetch pos.department dept
+				join fetch dept.corporation
+				join fetch pos.level
+				]]>
+		</query>
+   	</class>
+</hibernate-mapping>

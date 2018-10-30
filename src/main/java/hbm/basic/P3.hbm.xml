@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.P3" table="temp3">
+    	<id name="id" type="string" length="64" column="id"/>
+       	<property name="zgf" column="zgf" type="string"/>
+    	<property name="productCode" column="productCode" type="string"/>
+    	<property name="pc" column="pc" type="string"/>
+       	<property name="fzxs" column="fzxs" type="string"/>
+		<property name="voltage" column="voltage" type="string"/>    	
+    	<property name="capacity" column="capacity" type="string"/>
+		<property name="price" column="price" type="float"/>
+
+		<query name="find">
+	   		<![CDATA[
+	   			from P3
+	   			order by id asc	   			
+	   		]]>
+	   	</query>
+	   	
+   	</class>
+</hibernate-mapping>

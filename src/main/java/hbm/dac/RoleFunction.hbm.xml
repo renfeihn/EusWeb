@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.dac.RoleFunction" table="RoleFunction">
+    	<id name="id" type="string" length="64" column="rfid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="functionId" column="functionid" type="string"/>
+    	<property name="name" column="name" type="string" />
+    	<many-to-one name="role" column="roleid" not-null="true"/>
+   	</class>
+</hibernate-mapping>

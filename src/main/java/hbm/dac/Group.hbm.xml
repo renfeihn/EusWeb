@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.dac.Group" table="UserGroup">
+    	<id name="id" type="string" length="64" column="groupid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="name" column="name" unique="true" not-null="true" type="string"/>
+    	<property name="description" column="description" type="string"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<many-to-one name="role" column="roleid" cascade="all" unique="true" class="com.is.eus.pojo.dac.Role"/>
+    	<set name="departments" table="GroupDepartments">
+    		<key column="groupid"/>
+    		<many-to-many column="departmentid" class="com.is.eus.pojo.system.Department"/>
+    	</set>
+    	<set name="users" table="GroupUsers">
+    		<key column="groupid"/>
+    		<many-to-many column="userid" class="com.is.eus.pojo.dac.User"/>
+    	</set>
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.basic.IOView" table="IOView">
+    	<id name="product" type="string" column="product"/>
+    	<property name="inAmount" type="int" column="inAmount"/>
+    	<property name="outAmount" type="int" column="outAmount"/>
+    	<property name="amount" type="int" column="amount"/>
+
+	   	<query name="find">
+	   		<![CDATA[
+	   			from IOView  			
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

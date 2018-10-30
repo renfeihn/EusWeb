@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="GBK"?>
+<system-functions>	
+	<category id="Management" title="销售管理">
+		<function id="InventoryManage" title="基本信息管理">
+		    <function id="CompanyInfoMan" title="厂商信息" url="management/basic/company.jsp"/>
+			<function id="CapacitorInfoMan" title="产品信息" url="management/basic/capacitor.jsp"/>
+		</function>
+		<function id="ContractManagement" title="合同管理">
+			<function id="ContractApplication" title="合同申请" url="management/contract/contract.jsp"/>
+			<function id="ContractAduit" title="合同审核" url="management/contract/contractAduit.jsp"/>
+			<function id="ContractTerminate" title="合同终止" url="management/contract/contractTerminate.jsp"/>
+		</function>
+		<function id="ScheduleManagement" title="计划管理">
+			<function id="ScheduleApplication" title="计划申请" url="management/schedule/schedule.jsp"/>
+			<function id="ScheduleAduit" title="计划审核" url="management/schedule/scheduleAduit.jsp"/>
+			<function id="ScheduleTerminate" title="计划终止" url="management/schedule/scheduleTerminate.jsp"/>			
+		</function>
+		<function id="ScheduleStorageSIncomingervices" title="入库业务">
+			<function id="ScheduleStorageIncomingApplication" title="产品入库" url="management/storageincoming/scheduleSIC.jsp"/>
+			<function id="ScheduleFinishedStorageIncomingApplication" title="超计划入库" url="management/storageincoming/scheduleFinishedSIC.jsp"/>
+		</function>
+		<!--  
+		<function id="StorageSIncomingervices" title="入库业务">
+			<function id="StorageIncomingApplication" title="入库申请" url="management/storageincoming/StorageIncoming.jsp"/>
+			<function id="StorageIncomingCheckerAudit" title="入库检验" url="management/storageincoming/StorageIncomingCheckerAduit.jsp"/>
+			<function id="StorageIncomingManagerAudit" title="成品检验" url="management/storageincoming/StorageIncomingManagerAduit.jsp"/>
+		</function>
+		-->
+		<function id="StorageOutcomingServices" title="出库业务">
+			<function id="StorageOutcomingApplication" title="出库申请" url="management/storageoutcoming/StorageOutcoming.jsp"/>
+			<function id="StorageOutcomingAudit" title="出库审核" url="management/storageoutcoming/StorageOutcomingAduit.jsp"/>		
+		</function>
+		<function id="WarehouseManagement" title="库存管理">
+			<function id="InWarehouse" title="直接入库" url="management/warehouse/InWarehouse.jsp"/>		
+			<function id="OutWarehouse" title="直接出库" url="management/warehouse/OutWarehouse.jsp"/>
+			<function id="WarehouseList" title="库存总览" url="management/warehouse/WarehouseList.jsp"/>
+			<function id="WarehouseItem" title="库存明细" url="management/warehouse/WarehouseItem.jsp"/>
+		</function>
+		<function id="SearchingManagement" title="综合查询">
+			<function id="ContractSearch" title="合同查询" url="management/search/contractSearch.jsp"/>		
+			<function id="ContractItemSearch" title="合同明细查询" url="management/search/contractItemSearch.jsp"/>		
+			<function id="ContractSummeryViewSearch" title="合同对库欠交汇总" url="management/search/contractSummeryViewSearch.jsp"/>
+			<function id="ScheduleSearch" title="计划查询" url="management/search/scheduleSearch.jsp"/>
+			<function id="ScheduleSummeryViewSearch" title="计划欠交汇总" url="management/search/scheduleSummeryViewSearch.jsp"/>
+			<function id="StorageIncomingItemSearch" title="入库查询" url="management/search/storageIncomingItemSearch.jsp"/>
+			<function id="StorageOutcomingItemSearch" title="出库明细" url="management/search/storageOutcomingItemSearch.jsp"/>			
+			<function id="WarehouseSearch" title="直接出入库查询" url="management/search/warehouseSearch.jsp"/>
+			<function id="StorageResourceSearch" title="库存资源查询" url="management/search/storageResourceSearch.jsp"/>
+			<function id="SCSSummeryViewSearch" title="资源汇总查询" url="management/search/SCSSummeryViewSearch.jsp"/>	
+		</function>	
+		<function id="PrivateManagement" title="个人设置">
+			<function id="PasswordModification" title="密码修改" url="management/private/passwordModification.jsp"/>
+		</function>
+			
+	</category>
+
+	<category id="SystemAdministration" title="系统管理">
+		<function id="BasicInfo" title="基础信息">
+			<function id="basic" url="management/basic/basic.jsp" title="基本信息"/>	
+			<function id="position" url="management/basic/position.jsp" title="职务信息"/>
+			<function id="department" url="management/basic/department.jsp" title="部门信息"/>
+			<function id="corporation" url="management/basic/corporation.jsp" title="机构信息"/>	
+		</function>
+ 		<function id="UsersAndGroups" title="用户和组">
+			<function id="employee" url="admin/employee.jsp" title="员工信息"/>
+			<function id="Users" title="用户" url="admin/users.jsp"/>
+			<function id="Role" title="角色" url="admin/roles.jsp"/>
+		</function>
+		<function id="SystemConfig" title="系统配置">
+			<function id="SystemPreferences" title="参数设置" url="admin/preference.jsp"/>
+		</function>
+	</category>
+</system-functions>

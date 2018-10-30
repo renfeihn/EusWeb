@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="autodetect">
+	
+	<!--
+		========================= ASPECT CONFIGURATION ========================
+	-->
+	<!-- 
+	<aop:config>
+		<aop:advisor
+			pointcut="execution(* com.is.eus.web.action.SalesReportAction.*report(..))"
+			advice-ref="sampleAdvisor" />
+	</aop:config>
+	 -->
+	 <!--
+	 	====================== ADVISORS & ADVICES ========================
+	 -->
+	 <!-- 
+	<bean id="dataAccessCheck" class="com.is.eus.aop.advisors.DataAccessCheckAdvisor"></bean>
+	<bean id="systemLogger" class="com.is.eus.aop.advisors.SystemLogAdvisor">
+		<property name="systemLogService" ref="systemLogServiceImpl"/>
+	</bean>
+	 -->
+	<!--
+		 ===================== PointCuts =================================
+	-->
+	<!-- 
+	<aop:config>
+		<aop:advisor
+			pointcut="execution(* com.is.eus.service.*.*(..))"
+			advice-ref="systemLogger" />
+	</aop:config>
+	<aop:config>
+		<aop:advisor
+			pointcut="execution(* com.is.eus.service.*.*(..))"
+			advice-ref="dataAccessCheck" />
+	</aop:config>
+	<aop:config>
+		<aop:advisor
+			pointcut="execution(* com.is.eus.service.BasicInfoService.add(..))"
+			advice-ref="systemLogger" />
+	</aop:config>
+	 -->
+	<!--
+		========================== Transaction Manager ==========================
+	<tx:advice id="txAdvice">
+		<tx:attributes>
+			<tx:method name="insert*"/>
+			<tx:method name="update*"/>
+			<tx:method name="*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	-->
+</beans>

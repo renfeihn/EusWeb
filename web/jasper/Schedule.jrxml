@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="680" pageHeight="396" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="610" leftMargin="42" rightMargin="28" topMargin="34" bottomMargin="21" isFloatColumnFooter="true">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="title" vAlign="Middle" pattern="" fontName="宋体" fontSize="20" isItalic="false" isUnderline="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="cellCenterNoBorder" hAlign="Center" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="cellleftNoBorder" hAlign="Left" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="cellRightNoBorder" hAlign="Right" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="cellCenterHasBorder" hAlign="Center" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true">
+		<pen lineWidth="0.5" lineColor="#000000"/>
+	</style>
+	<style name="cellleftHasBorder" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="cellRightHasBorder" hAlign="Right" vAlign="Middle" lineSpacing="Single" fontName="宋体" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="C:\WINDOWS\Fonts\SIMKAI.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<parameter name="Title" class="java.lang.String"/>
+	<parameter name="Duration" class="java.lang.String">
+		<parameterDescription><![CDATA[纳税人名称]]></parameterDescription>
+	</parameter>
+	<field name="PC" class="java.lang.String"/>
+	<field name="Amount" class="java.lang.String"/>
+	<field name="FinishedAmount" class="java.lang.String"/>
+	<field name="UnfinishedAmount" class="java.lang.String"/>
+	<field name="ItemNo" class="java.lang.String"/>
+	<field name="Q1" class="java.lang.String"/>
+	<field name="Q2" class="java.lang.String"/>
+	<field name="Q3" class="java.lang.String"/>
+	<field name="Q4" class="java.lang.String"/>
+	<field name="Memo" class="java.lang.String"/>
+	<pageHeader>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="610" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="536" y="-14" width="58" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="华文宋体" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["第"+$V{PAGE_NUMBER}+"页 共"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="594" y="-14" width="16" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="华文宋体" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER} + "页"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="16" width="610" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="10" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Duration}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="215" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[计划数量]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="486" y="0" width="124" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[备注]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="0" width="188" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[产品名称及型号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="27" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[序号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[已交数量]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[欠交数量]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="374" y="0" width="112" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[交货期]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17">
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Amount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="486" y="0" width="124" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Memo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="27" y="0" width="188" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="27" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ItemNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="268" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FinishedAmount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="321" y="0" width="53" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{UnfinishedAmount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="374" y="0" width="112" height="17"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="华文宋体" size="12" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Q1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17">
+			<staticText>
+				<reportElement x="402" y="0" width="170" height="17"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="华文宋体" size="10" isBold="true" pdfFontName="STSong" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[审核人:               制表人:               ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

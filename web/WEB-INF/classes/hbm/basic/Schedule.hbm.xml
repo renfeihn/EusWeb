@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.schedule.Schedule" table="Schedule">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="scheduleNo" column="scheduleNo" type="string"/>
+    	<property name="contractNo" column="contractNo" type="string"/>
+    	<property name="amount" column="amount" not-null="true" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" not-null="true" type="int"/>
+    	<property name="q1" column="q1" type="int"/>
+    	<property name="q2" column="q2" type="int"/>
+    	<property name="q3" column="q3" type="int"/>
+    	<property name="q4" column="q4" type="int"/>
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="scheduleType" column="scheduleType" type="int"/>    	
+    	<property name="scheduleDate" column="scheduleDate" not-null="true" type="date"/>	
+    	<many-to-one name="product" column="product" class="com.is.eus.pojo.basic.Product"/>    	
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/> 
+        
+        <query name="find">
+	   		<![CDATA[
+	   			from Schedule s
+	   			join fetch s.creator as creator
+	    		left join fetch s.updater
+	   			left join fetch s.product as product
+	   			left join fetch product.productType	   				
+				order by s.scheduleNo asc
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="querySchedule">
+	   		<![CDATA[
+	   			from Schedule s
+	   			join fetch s.creator as creator
+	   			left join fetch s.product p
+	   			left join fetch p.productCode pc	   			
+	   			left join fetch p.humidity h
+	   			left join fetch p.errorLevel e
+	   			left join fetch p.productType  pt
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit u
+	   			order by s.scheduleNo asc
+	   		]]>
+	   	</query>	   	
+	   	
+	   	<query name="findUnfinished">
+	   		<![CDATA[
+	   			from Schedule s
+	   			join fetch s.creator as creator
+	    		left join fetch s.updater
+	   			left join fetch s.product p
+	   			left join fetch p.productCode	   			
+	   			left join fetch p.humidity
+	   			left join fetch p.errorLevel
+	   			left join fetch p.productType 
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit 	
+	   			where finishedAmount <> amount		
+				order by s.scheduleNo asc
+	   		]]>
+	   	</query>
+	   		
+    	<query name="get">
+	   		<![CDATA[
+	   			from Schedule s
+	   			join fetch s.creator
+	    		left join fetch s.updater	   			
+	   			left join fetch s.product p
+	   			left join fetch p.productType 
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit 			
+	    		where s.id = ?  
+	    		order by s.scheduleNo desc
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="findProduct">
+	   		<![CDATA[
+	   			from Schedule s
+	   			join fetch s.creator
+	    		left join fetch s.updater	   			
+	   			left join fetch s.product p
+	   			left join fetch p.productCode	   			
+	   			left join fetch p.humidity
+	   			left join fetch p.errorLevel
+	   			left join fetch p.productType 
+	   			left join fetch p.usageType ut
+	   			left join fetch p.unit 		   			 			
+	    		where s.status = 0 and s.state in (0,1) and p.id = ?
+	    		order by s.scheduleNo asc
+	   		]]>
+	   	</query>
+	   	  	
+   	</class>
+</hibernate-mapping>

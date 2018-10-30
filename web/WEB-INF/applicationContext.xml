@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"
+	default-autowire="byName">
+
+<!-- 
+	<import resource="classpath:datasource.xml"/>
+	<import resource="classpath:spring-hibernate.xml"/>
+ -->
+	<import resource="classpath:datasource.xml"/>
+	<import resource="classpath:spring-hibernate.xml"/>
+	<import resource="classpath:dao-definitions.xml"/>
+	<!-- 
+	<import resource="classpath:dac-definitions.xml"/>
+	<import resource="classpath:aop-definitions.xml"/>
+	 -->
+	<import resource="classpath:service-definitions.xml"/>
+	<import resource="classpath:lcsys-definitions.xml"/>
+	<!-- 
+	<import resource="classpath:analyzer.xml"/>
+	 -->
+	<!--
+		========================= GENERAL DEFINITIONS =========================
+	-->
+	<!--
+		========================= BUSINESS OBJECT DEFINITIONS ========================
+	-->
+	<!--
+		========================= ACTION INTERCEPTOR DEFINITIONS ================ 
+	-->
+	<!--
+		========================= ACTION CONFIGURATION =========================== 
+	-->
+	<bean id="baseAction" class="com.is.eus.web.action.AbstractSessionAwareAction" abstract="true">
+		<property name="dataAccessControlService" ref="dataAccessControlService"/>
+	</bean>
+	
+	<bean id="abstractEntityAction" class="com.is.eus.web.action.EntityAction" abstract="true" parent="baseAction"/>
+	<bean id="entityBaseAction" class="com.is.eus.web.action.EntityBaseAction" abstract="true" parent="abstractEntityAction">
+		<property name="entityService" ref="entityService"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>	
+	<!-- login & logout. -->
+	<bean id="loginAction" class="com.is.eus.web.action.system.LoginAction" scope="request" parent="baseAction"/>
+	<bean id="modifyPasswordAction" class="com.is.eus.web.action.admin.UserAction" scope="request" parent="baseAction"/>		
+	<bean id="loginValidation" class="com.is.eus.web.action.system.LoginValidation" scope="request"/>
+	<bean id="logoutAction" class="com.is.eus.web.action.system.LogoutAction" scope="request" parent="baseAction"/>
+	
+	<bean id="systemFunctionAction" class="com.is.eus.web.action.system.SystemFunctionAction" scope="request" parent="baseAction">
+		<property name="systemFunctionsService" ref="systemFunctionsService"/>
+	</bean>
+	
+	<!-- Data Access. -->
+	<bean id="dataAccessAction" class="com.is.eus.web.action.system.DataAccessAction" scope="request" parent="baseAction"/>
+	
+	<!-- roles administrations. -->
+	<bean id="rolesAction" class="com.is.eus.web.action.admin.RolesAction" scope="request" parent="entityBaseAction"/>
+	
+	<!-- All actions only extends entity base start here.  -->
+	<bean id="employeeAction" class="com.is.eus.web.action.management.basic.EmployeeAction" scope="request" parent="entityBaseAction"/>
+	<bean id="positionAction" class="com.is.eus.web.action.management.basic.PositionAction" scope="request" parent="entityBaseAction"/>
+	<bean id="corporationAction" class="com.is.eus.web.action.management.basic.CorporationAction" scope="request" parent="entityBaseAction"/>
+	<bean id="departmentAction" class="com.is.eus.web.action.management.basic.DepartmentAction" scope="request" parent="entityBaseAction"/>
+
+	<!-- 用户 -->
+	<bean id="usersAction" class="com.is.eus.web.action.admin.UserAction" parent="entityBaseAction">
+		<property name="userService" ref="userService"/>
+	</bean>
+	<!-- 系统配置 -->
+	<bean id="preferenceAction" class="com.is.eus.web.action.system.PreferenceAction" parent="baseAction">
+		<property name="entityService" ref="entityService"/>
+		<property name="sequenceService" ref="sequenceService"/>
+	</bean>
+	
+	<bean id="basicInfoAction" class="com.is.eus.web.action.management.basic.BasicInfoAction" scope="request" parent="abstractEntityAction">
+		<property name="basicInfoService" ref="basicInfoService"/>
+	</bean>
+	
+	<!--
+		========================= REMOTE EXPORTER DEFINITIONS ========================
+	-->
+	<!-- CLSYS BEANS -->
+	<!-- Capacitor Action Bean -->
+	<!-- 电容产品 -->
+	<bean id="capacitorAction" class="com.is.eus.web.action.management.basic.CapacitorAction" scope="request" parent="entityBaseAction">
+		<property name="capacitorService" ref="capacitorService"/>
+	</bean>
+	<!-- 产品代号 -->
+	<bean id="productCodeAction" class="com.is.eus.web.action.management.basic.ProductCodeAction" scope="request" parent="entityBaseAction">
+		<property name="productCodeService" ref="productCodeService"/>
+	</bean>
+	
+	<!-- 湿度系数指示 -->
+	<bean id="humidityAction" class="com.is.eus.web.action.management.basic.HumidityAction" scope="request" parent="entityBaseAction">
+		<property name="humidityService" ref="humidityService"/>
+	</bean>
+	
+	<!-- 误差等级 -->
+	<bean id="errorLevelAction" class="com.is.eus.web.action.management.basic.ErrorLevelAction" scope="request" parent="entityBaseAction">
+		<property name="errorLevelService" ref="errorLevelService"/>
+	</bean>
+		
+	<!-- 单位 -->	
+	<bean id="unitAction" class="com.is.eus.web.action.management.basic.UnitAction" scope="request" parent="entityBaseAction">
+		<property name="unitService" ref="unitService"/>
+	</bean>
+		
+	<!-- 产品用途 -->	
+	<bean id="usageTypeAction" class="com.is.eus.web.action.management.basic.UsageTypeAction" scope="request" parent="entityBaseAction">
+		<property name="usageTypeService" ref="usageTypeService"/>
+	</bean>
+
+	<!-- 产品类型 -->	
+	<bean id="productTypeAction" class="com.is.eus.web.action.management.basic.ProductTypeAction" scope="request" parent="entityBaseAction">
+		<property name="productTypeService" ref="productTypeService"/>
+	</bean>
+
+	<!-- 库位 -->	
+	<bean id="storageLocationAction" class="com.is.eus.web.action.management.basic.StorageLocationAction" scope="request" parent="entityBaseAction">
+		<property name="storageLocationService" ref="storageLocationService"/>
+	</bean>
+	
+	<!-- 省信息 -->	
+	<bean id="provinceAction" class="com.is.eus.web.action.management.basic.ProvinceAction" scope="request" parent="entityBaseAction">
+		<property name="provinceService" ref="provinceService"/>
+	</bean>
+
+	<!-- 市信息 -->	
+	<bean id="cityAction" class="com.is.eus.web.action.management.basic.CityAction" scope="request" parent="entityBaseAction">
+		<property name="cityService" ref="cityService"/>
+	</bean>
+
+	<!-- 厂商信息 -->	
+	<bean id="companyAction" class="com.is.eus.web.action.management.basic.CompanyAction" scope="request" parent="entityBaseAction">
+		<property name="companyService" ref="companyService"/>
+	</bean>	
+	
+	<!-- 合同管理 -->
+	<bean id="contractAction" class="com.is.eus.web.action.management.biz.contractAction" scope="request" parent="entityBaseAction">
+		<property name="contractService" ref="contractService"/>
+	</bean>	
+	
+	<!-- 合同条目查询-->
+	<bean id="contractItemAction" class="com.is.eus.web.action.management.biz.contractItemAction" scope="request" parent="entityBaseAction"/>
+	<!-- 合同联合库存视图-->
+	<bean id="contractViewAction" class="com.is.eus.web.action.management.biz.contractViewAction" scope="request" parent="entityBaseAction"/>
+	<!-- 合同欠交汇总视图-->
+	<bean id="contractItemOwnedSummeryViewAction" class="com.is.eus.web.action.management.biz.contractItemOwnedSummeryViewAction" scope="request" parent="entityBaseAction">
+		<property name="contractService" ref="contractService"/>
+	</bean>
+	<!-- 计划管理 -->
+	<bean id="scheduleAction" class="com.is.eus.web.action.management.biz.scheduleAction" scope="request" parent="entityBaseAction">
+		<property name="scheduleService" ref="scheduleService"/>
+	</bean>
+	<bean id="scheduleSummeryViewAction" class="com.is.eus.web.action.management.biz.scheduleSummeryViewAction" scope="request" parent="entityBaseAction">
+		<property name="scheduleService" ref="scheduleService"/>
+	</bean>
+	<bean id="scheduleViewAction" class="com.is.eus.web.action.management.biz.scheduleViewAction" scope="request" parent="entityBaseAction">
+		<property name="scheduleService" ref="scheduleService"/>
+	</bean>
+	
+	<!-- 所有欠交汇总 -->
+	<bean id="SCSSummeryViewAction" class="com.is.eus.web.action.management.biz.SCSSummeryViewAction" scope="request" parent="entityBaseAction"/>
+	
+	<!-- 入库 -->
+	<bean id="storageIncomingAction" class="com.is.eus.web.action.management.biz.storageIncomingAction" scope="request" parent="entityBaseAction">
+		<property name="storageIncomingService" ref="storageIncomingService"/>
+	</bean>
+	<bean id="storageIncomingItemAction" class="com.is.eus.web.action.management.biz.storageIncomingItemAction" scope="request" parent="entityBaseAction"/>
+
+	<!-- 出库 -->
+	<bean id="storageOutcomingAction" class="com.is.eus.web.action.management.biz.storageOutcomingAction" scope="request" parent="entityBaseAction">
+		<property name="storageOutcomingService" ref="storageOutcomingService"/>
+	</bean>
+	<bean id="storageOutcomingItemAction" class="com.is.eus.web.action.management.biz.storageOutcomingItemAction" scope="request" parent="entityBaseAction"/>
+	
+	<!-- 库存 -->
+	<bean id="storageAction" class="com.is.eus.web.action.management.biz.storageAction" scope="request" parent="entityBaseAction">
+  		<property name="storageService" ref="storageService" /> 
+  	</bean>
+  	
+	<!-- 库存视图 -->
+	<bean id="storageViewAction" class="com.is.eus.web.action.management.biz.storageViewAction" scope="request" parent="entityBaseAction">
+  		<property name="storageViewService" ref="storageViewService" /> 
+  	</bean>
+  	
+  	<!-- 库存资源 -->
+	<bean id="storageResourceAction" class="com.is.eus.web.action.management.biz.storageResourceAction" scope="request" parent="entityBaseAction">
+  		<property name="storageResourceService" ref="storageResourceService" /> 
+  	</bean>
+  	
+  	<!-- 库存资源视图 -->
+	<bean id="storageResourceViewAction" class="com.is.eus.web.action.management.biz.storageResourceViewAction" scope="request" parent="entityBaseAction"/>
+  	
+  	<!-- 库存明细 -->
+	<bean id="storageItemAction" class="com.is.eus.web.action.management.biz.storageItemAction" scope="request" parent="entityBaseAction">
+  		<property name="storageItemService" ref="storageItemService" /> 
+  	</bean>
+  	
+  	<!-- 直接入库出库-->
+	<bean id="inWarehouseAction" class="com.is.eus.web.action.management.biz.inWarehouseAction" scope="request" parent="entityBaseAction">
+		<property name="inWarehouseService" ref="inWarehouseService"/>
+	</bean>
+		
+</beans>

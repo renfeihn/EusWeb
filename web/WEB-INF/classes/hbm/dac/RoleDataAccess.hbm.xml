@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.dac.RoleDataAccess" table="RoleDataAccess">
+    	<id name="id" type="string" length="64" column="rdaid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" type="string"/>
+    	<property name="name" column="name" type="string" />
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="category" column="category" type="string"/>
+    	<many-to-one name="role" column="roleid" not-null="true"/>
+   	</class>
+</hibernate-mapping>

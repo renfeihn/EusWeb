@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- 
+<!DOCTYPE dac PUBLIC "-//Triwin Consulting/DTD Data Access Configuration 1.0//EN" "dac.dtd">
+ -->
+<dac name="4sservice">
+	<!-- 定义角色 -->
+	<roles>
+		<role id="admin" name="管理">
+			<access name="all">**/**</access>
+		</role>
+		<role id="4s" name="4s">
+			<access name="all">*</access>
+		</role>
+		<role id="demo" name="演示角色">
+			<access name="all">*</access>
+		</role>
+		<role id="all" name="all">
+		</role>
+		<role id="storage" name="storage"></role>
+	</roles>
+	<!-- 定义组 -->
+	<groups>
+		<group id="admingroup" name="管理员组" description="系统管理员" role-ref="admin">
+			<!-- 定义单个或者多个用户属于一个组 -->
+			<users>
+				<user id="3">admin</user>
+			</users>
+		</group>
+		<group id="4sgroup" name="4s组" description="4S店" role-ref="4s">
+			<!-- 定义部门属于一个组 -->
+			<users id="4s-department-id" name="4s部门">
+			</users>
+		</group>
+		<group id="demo" name="演示组" description="演示用户组，具备所有系统功能全权限。" role-ref="demo">
+			<!-- 定义一个包括部门和单独配置用户的组 -->
+			<users id="somecompany" name="Company Consulting Developers">
+			</users>
+			<user id="2">demo</user>
+			<user id="1">zhoup</user>
+		</group>
+		<group id="storage-group" description="库存管理组" role-ref="storage">
+			<user id="2">storage</user>
+		</group>
+	</groups>
+</dac>

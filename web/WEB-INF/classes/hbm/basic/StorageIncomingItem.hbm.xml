@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.storage.StorageIncomingItem" table="StorageIncomingItem">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="sicItemNo" column="sicItemNo" type="int"/>
+    	<property name="productionDate" column="productionDate" type="date"/>
+    	<property name="amount" column="amount" type="int"/>
+    	<property name="jobCmdNo" column="jobCmdNo" type="string"/>
+    	<many-to-one name="schedule" not-null="true" class="com.is.eus.pojo.schedule.Schedule"/>
+    	<many-to-one name="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<many-to-one name="storageLocation" not-null="true" class="com.is.eus.pojo.basic.StorageLocation"/>    	
+    	<many-to-one name="sic" not-null="true" class="com.is.eus.pojo.storage.StorageIncoming"/>	    	
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<query name="queryStorageIncomingItem">
+	   		<![CDATA[
+	   			from StorageIncomingItem s  			
+	   			join fetch s.creator as creator
+	    		join fetch s.schedule as sc
+	    		join fetch s.product as p
+	    		left join fetch p.humidity h
+	    		left join fetch p.errorLevel e
+	    		left join fetch p.productCode pc
+	    		left join fetch p.productType pt
+	    		left join fetch p.usageType ut
+	    		left join fetch p.unit u
+	   		]]>
+	   	</query>
+   	</class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.contract.ContractItemView" table="ContractItemView">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="contractItemNo" column="contractItemNo" type="int"/>    
+    	<property name="amount" column="amount" type="int"/>
+    	<property name="finishedAmount" column="finishedAmount" type="int"/>
+    	<property name="checkingAmount" column="checkingAmount" type="int"/>
+		<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="advancedAmount" column="advancedAmount"  type="int"/>
+    	<property name="restAmount" column="restAmount"  type="int"/>
+    	<property name="varAmount" column="varAmount"  type="int"/>
+
+    	<property name="price" type="float">
+    		<column name="price" sql-type="decimal(10,2)"/>
+    	</property>
+    	<property name="originalPrice" type="float">
+    		<column name="originalPrice" sql-type="decimal(10,2)"/>
+    	</property>
+    	<property name="duration" column="duration" type="int"/>
+    	<property name="memo" column="memo" type="string"/>
+    	<property name="subTotal" type="float">
+    		<column name="subTotal" sql-type="decimal(10,2)"/>
+    	</property>
+    	<many-to-one name="product" not-null="true" class="com.is.eus.pojo.basic.Product"/>
+    	<many-to-one name="contract" not-null="true" class="com.is.eus.pojo.contract.ContractView"/>	
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+   	</class>
+</hibernate-mapping>

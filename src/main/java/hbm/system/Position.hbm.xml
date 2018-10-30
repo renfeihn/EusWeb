@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.system.Position" table="baseDeptposition">
+    	<id name="id" type="string" length="64" column="positionid">
+    		<generator class="guid"/>
+    	</id>
+    	<property name="code" column="code" unique="true" not-null="true" type="string"/>
+    	<property name="name" column="name" type="string"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<many-to-one name="department" column="deptid" class="com.is.eus.pojo.system.Department"/>
+    	<many-to-one name="level" column="levelid" class="com.is.eus.pojo.system.Level"/>
+   	</class>
+</hibernate-mapping>

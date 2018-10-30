@@ -1,0 +1,347 @@
+
+#class .loading-indicator{
+	font-size:12px;
+	height:18px;
+}
+
+.loading-indicator {
+    font-size:11px;
+    background-image:url('../images/loading.gif');
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+
+#main-panel .loading-indicator {
+    font:bold 13px  Tahoma, Verdana, Arial, Helvetica, sans-serif;
+    position:absolute;
+    top:35%;
+    left:43%;
+    color:#444;
+    background-image:url(../images/large-loading.gif);
+    background-repeat: no-repeat;
+    background-position:left 5px;
+    padding:10px 10px 10px 38px;
+	text-align:left;
+}
+
+#loading-mask{
+	position:absolute;
+	left:0;
+	top:0;
+    width:100%;
+    height:100%;
+    z-index:20000;
+    background-color:white;
+}
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	padding:2px;
+	z-index:20001;
+    height:auto;
+}
+#loading img {
+    margin-bottom:5px;
+}
+
+#loading .loading-indicator{
+	background:white;
+	color:#555;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+    text-align:center;
+    height:auto;
+}
+
+.asbi-ns-expand {
+	margin-top: 5px;
+	background: transparent url('../images/ns-expand.gif') no-repeat;
+}
+
+.asbi-ns-collapse {
+	margin-top: 5px;
+	background: transparent url('../images/ns-collapse.gif') no-repeat;
+}
+
+.res-block h3 {
+    font: bold 12px tahoma,arial,sans-serif;
+    color:#555;
+    margin-bottom:8px;
+}
+
+.res-block ul {
+    list-style-type: disc;
+    margin-left:15px;
+    font: normal 12px tahoma,arial,sans-serif;
+    color:#555;
+}
+
+.res-block ul li {
+    margin:0 0 5px 3px;
+}
+
+.hide-inherited .inherited {
+    display:none;
+}
+
+
+.icon-cls {
+    background-image: url('../images/class.gif') !important;
+}
+.icon-using {
+    background-image: url('../images/Using.gif') !important;
+}
+.icon-suspended {
+    background-image: url('../images/Suspended.gif') !important;
+}
+.icon-leading-out {
+    background-image: url('../images/icon-leading-out.gif') !important;
+}
+.icon-event {
+    background-image: url('../images/event.gif') !important;
+}
+.icon-config {
+    background-image: url('../images/config.gif') !important;
+}
+.icon-prop {
+    background-image: url('../images/prop.gif') !important;
+}
+.icon-out {
+    background-image: url('../images/out.gif') !important;
+}
+.icon-examine {
+    background-image: url('../images/examine.gif') !important;
+}
+.icon-audit {
+    background-image: url('../images/audit.gif') !important;
+}
+.icon-refresh {
+    background-image: url('../images/refresh.gif') !important;
+}
+.icon-checkin-apply {
+    background-image: url('../images/checkin-apply.gif') !important;
+}
+.icon-checkin-cofirm {
+    background-image: url('../images/checkin-cofirm.gif') !important;
+}
+.icon-preview {
+    background-image: url('../images/preview.gif') !important;
+}
+.icon-update {
+    background-image: url('../images/icon-update.gif') !important;
+}
+.icon-off {
+    background-image: url('../images/off.png') !important;
+}
+.icon-user {
+    background-image: url('../images/user.gif') !important;
+}
+.icon-information {
+    background-image: url('../images/information.gif') !important;
+}
+.icon-method {
+    background-image: url('../images/method.gif') !important;
+}
+.icon-cmp {
+    background-image: url('../images/cmp.gif') !important;
+}
+.icon-pkg {
+    background-image: url('../images/pkg.gif') !important;
+}
+.icon-fav {
+    background-image: url('../images/fav.gif') !important;
+}
+.icon-static {
+    background-image: url('../images/static.gif') !important;
+}
+.icon-docs {
+    background-image: url('../images/docs.gif') !important;
+}
+.icon-expand-all {
+    background-image: url('../images/expand-all.gif') !important;
+}
+.icon-collapse-all {
+    background-image: url('../images/collapse-all.gif') !important;
+}
+.icon-expand-members {
+    background-image: url('../images/expand-members.gif') !important;
+}
+.icon-hide-inherited {
+    background-image: url('../images/hide-inherited.gif') !important;
+}
+.brick-icon {
+    background-image: url('../images/brick.png') !important;
+}
+
+.icon-printer {
+    background-image: url('../images/printer.gif') !important;
+}
+
+.icon-add {
+    background-image: url('../images/drop-add.gif') !important;
+}
+
+.icon-remove {
+    background-image: url('../images/drop-no.gif') !important;
+}
+
+.icon-commit {
+    background-image: url('../images/drop-yes.gif') !important;
+}
+
+.icon-excel {
+    background-image: url('../images/excel-up.png') !important;
+}
+
+.icon-contacts {
+	background-image: url('../images/group.png') !important;
+}
+
+.icon-customer-info {
+	background-image: url('../images/tickets.png') !important;
+}
+
+.search-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    padding:3px 10px 3px 10px;
+    border:1px solid #fff;
+    border-bottom:1px solid #eeeeee;
+    white-space:normal;
+    color:#555;
+}
+
+.search-item h3 {
+    display:block;
+    font:inherit;
+    font-weight:bold;
+    color:#222;
+}
+
+.search-item h3 span {
+    float: right;
+    font-weight:normal;
+    margin:0 0 5px 5px;
+    width:100px;
+    display:block;
+    clear:none;
+}
+
+.asbi-grid-row-contract-created .x-grid3-cell-inner {
+    font-weight:bold;
+    color: darkblue;
+}
+
+.asbi-grid-row-contract-waiting .x-grid3-cell-inner {
+    font-weight:bold;
+    color: brown;
+}
+.asbi-grid-row-contract-audited .x-grid3-cell-inner {
+    font-weight:bold;
+}
+.asbi-grid-row-contract-audit-failed .x-grid3-cell-inner {
+    font-weight:bold;
+    color: red;
+}
+.asbi-grid-row-contract-executing .x-grid3-cell-inner {
+    color: green;
+}
+.asbi-grid-row-contract-financial-confirmed .x-grid3-cell-inner {
+    font-weight:bold;
+    color: green;
+}
+.asbi-grid-row-contract-deleted .x-grid3-cell-inner {
+    font-weight:bold;
+}
+.asbi-grid-row-contract-finished .x-grid3-cell-inner {
+    font-weight:bold;
+    color: gray;
+}
+.asbi-grid-row-contract-mixed .x-grid3-cell-inner {
+	color: yellow;
+}
+.asbi-grid-row-contract-unknown .x-grid3-cell-inner {
+	color: indigo;
+}
+
+.asbi-grid-row-promotion .x-grid3-cell-inner {
+    color: green;
+}
+
+.asbi-grid-row-activity .x-grid3-cell-inner {
+    color: orange;
+}
+
+.asbi-info-table-header {
+	background-color:#DDDDDD;
+	font:bold 11px;
+	font-size:11px;
+}
+
+.asbi-info-table-cell {
+	font:normal 11px;
+	font-size:11px;
+}
+
+.add-btn {
+    background-image: url(../images/add.png) !important;
+}
+.del-btn  {
+    background-image: url(../images/cross.gif) !important;
+}
+.calendar-right {
+    background-image: url(../js/ext-3.1/resources/images/default/shared/right-btn.gif) !important;
+}
+.calendar-left {
+	background-image: url(../js/ext-3.1/resources/images/default/shared/left-btn.gif) !important;
+}
+.calendar {
+	background-image: url(../js/ext-3.1/resources/images/default/shared/calendar.gif) !important;
+	/*background-image: url(../images/calendar256.png) !important;*/
+}
+.forum {
+	background-image: url(../images/messages.png) !important;
+}
+.message {
+	background-image: url(../images/message.png) !important;
+}
+.subscription {
+	background-image: url(../images/rss.gif) !important;
+}
+.logout {
+	background-image: url(../images/off.png) !important;
+}
+.worklog {
+	background-image: url(../images/log.png) !important;
+}
+.chart {
+	background-image: url(../images/chart.gif) !important;
+}
+.shortcut {
+	background-image: url(../images/shortcut.png) !important;
+}
+.find {
+	background-image: url(../images/find.png) !important;
+}
+.contact,.user {
+	background-image: url(../images/user.png) !important;
+}
+.contacts {
+	background-image: url(../images/contacts.gif) !important;
+}
+.mostcontacted {
+	background-image: url(../images/user_suit.png) !important;
+}
+.goto {
+	background-image: url(../images/greater_than.png) !important;
+}
+.addcontact {
+	background-image: url(../images/user_add.png) !important;
+}
+.annoucement {
+	background-image: url(../images/article.gif) !important;
+}

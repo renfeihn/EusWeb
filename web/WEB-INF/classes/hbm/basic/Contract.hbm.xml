@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.is.eus.pojo.contract.Contract" table="Contract">
+    	<id name="id" type="string" length="64" column="id">
+    		<generator class="guid"/>
+    	</id>	
+    	<property name="contractNo" column="contractNo" not-null="true" type="string"/>
+    	<property name="totalAmount" column="totalAmount"  type="int"/>
+    	<property name="totalFinishedAmount" column="totalFinishedAmount"  type="int"/>
+    	<property name="totalCheckingAmount" column="totalCheckingAmount"  type="int"/>
+    	<property name="totalSum" type="float">
+    		<column name="TotalSum" sql-type="decimal(10,2)"/>
+    	</property>
+    	<many-to-one name="company" column="company" class="com.is.eus.pojo.basic.Company"/>
+    	<property name="contractDate" column="contractDate" not-null="true" type="date"/>
+    	<property name="status" column="status" type="int"/>
+    	<property name="state" column="state" type="int"/>
+    	<property name="createTime" column="createTime" not-null="true" type="timestamp"/>
+    	<property name="updateTime" column="updateTime" type="timestamp"/>
+    	<many-to-one name="creator" not-null="true" class="com.is.eus.pojo.system.Employee"/>
+    	<many-to-one name="updater" class="com.is.eus.pojo.system.Employee"/>
+    	
+    	<set name="items" inverse="true" cascade="all,delete-orphan">
+    		<key column="contract"/>
+    		<one-to-many class="com.is.eus.pojo.contract.ContractItem"/>
+    	</set>
+    	
+    	<query name="find">
+	   		<![CDATA[
+	   			from Contract c  			
+	   			join fetch c.creator as creator
+	    		left join fetch c.updater
+	    		left join fetch c.company as company
+	    		join fetch c.items as items
+	    		join fetch items.product as p
+	    		left join fetch p.humidity as humidity
+	    		left join fetch p.errorLevel as errorLevel
+	    		left join fetch p.productCode as productCode
+	    		left join fetch p.productType as productType
+	    		order by c.createTime asc  
+	   		]]>
+	   	</query>
+	   	
+	   	 <query name="queryCountForSoc">
+	   		<![CDATA[
+	   			select distinct c from Contract c  			
+	   			join c.creator as creator
+	    		left join c.updater
+	    		left join c.company as company
+	    		join c.items as items
+	    		join items.product as p
+	    		left join p.humidity as h
+	    		left join p.errorLevel as e
+	    		left join p.productCode as pc
+	    		left join p.productType as pt
+	    		order by c.createTime asc  
+	   		]]>
+	   	</query>
+	   	
+	   	<query name="queryForSoc">
+	   		<![CDATA[
+	   			from Contract c  			
+	   			join fetch c.creator as creator
+	    		left join fetch c.updater
+	    		left join fetch c.company as company
+	    		join fetch c.items as items
+	    		join fetch items.product as p
+	    		left join fetch p.humidity as h
+	    		left join fetch p.errorLevel as e
+	    		left join fetch p.productCode as pc
+	    		left join fetch p.productType as pt
+	    		order by c.createTime asc  
+	   		]]>
+	   	</query>
+	   	
+    	<query name="queryContract">
+	   		<![CDATA[
+	   			from Contract c  			
+	   			join fetch c.creator as creator
+	    		left join fetch c.updater
+	    		left join fetch c.company co
+	    		left join fetch co.province p
+	    		left join fetch co.city ci
+	   		]]>
+	   	</query>	
+	   	
+    	<query name="get">
+	   		<![CDATA[
+	   			from Contract c  			
+	    		join fetch c.items as items
+	    		join fetch c.company as company
+	    		join fetch items.product as p
+	    		left join fetch p.humidity
+	    		left join fetch p.errorLevel
+	    		left join fetch p.productCode
+	    		left join fetch p.productType
+	    		left join fetch p.unit
+	    		where c.id = ?
+	   		]]>
+    	</query>
+    	
+    	<query name="printContract">
+	   		<![CDATA[
+	   			from Contract c  			
+	   			join fetch c.creator as creator
+	    		left join fetch c.updater
+	    		left join fetch c.company co
+	    		left join fetch co.province p
+	    		left join fetch co.city ci
+	    		order by c.createTime asc
+	   		]]>	   		
+	   	</query>	   			
+    	
+   	</class>
+</hibernate-mapping>

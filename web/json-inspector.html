@@ -1,0 +1,51 @@
+<html>
+<head>
+<script type="text/javascript">
+function inspect(obj) {
+	if (obj == undefined) return;
+	document.write('<table border="1">');
+	if (typeof obj == 'string' || typeof obj == 'number' || typeof obj == 'boolean') {
+		document.write('<tr><td>' + obj + '</td></tr>');
+	} else {
+		for (var attr in obj) {
+			if (!attr) continue;
+			if (typeof attr == 'object') {
+				inspect(attr);
+			} else if (typeof attr == 'string') {
+				var value = obj[attr];
+				if (value == undefined) return;
+				if (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean') {
+					document.write('<tr><td>' + attr + '</td><td>' + value + '</td></tr>');
+				} else if (typeof value == 'object') {
+					document.write('<tr><td>' + attr + '</td>');
+					document.write('<td>');
+					if (value.length) {
+						for (var i = 0; i < value.length; i++) {
+							inspect(value[i]);
+						}
+					} else {
+						inspect(value);
+					}
+					document.write('</td>');
+				}
+			}
+		}
+	}
+	document.write('</table>');
+};
+</script>
+</head>
+<body>
+<script type="text/javascript">
+function inspectTextarea(id) {
+	var jsonText =  document.getElementById(id).value;
+	eval('var json = ' + jsonText + ';');
+	inspect(json);
+};
+
+</script>
+		<textarea rows="20" cols="100" id="json-text"></textarea>
+		<br/>
+		<input type="button" value="inspect" onclick="inspectTextarea('json-text');"></input>
+</body>
+</html>
