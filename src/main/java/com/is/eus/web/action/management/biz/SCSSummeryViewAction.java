@@ -28,10 +28,15 @@ public class SCSSummeryViewAction extends EntityBaseAction {
     private String humidity;
     private String usageType;
     private String varAmount;
+    private String srAmount;
     private String minAmount;
     private String maxAmount;
 
     public SCSSummeryViewAction() {
+    }
+
+    public void setSrAmount(String srAmount) {
+        this.srAmount = srAmount;
     }
 
     public void setProductCombination(String productCombination) {
@@ -169,6 +174,27 @@ public class SCSSummeryViewAction extends EntityBaseAction {
                 if(StringUtils.isEmpty(this.minAmount) && StringUtils.isEmpty(this.maxAmount)) {
                     strClause.append(strHQL);
                 }
+            }
+        }
+
+        if(!StringUtils.isEmpty(this.srAmount)) {
+            String strSymbol = "";
+            int iVar = Integer.parseInt(this.srAmount);
+            if(iVar > 0) {
+                if(iVar == 1) {
+                    strSymbol = "=";
+                }
+
+                if(iVar == 2) {
+                    strSymbol = ">";
+                }
+
+                if(iVar == 3) {
+                    strSymbol = "<";
+                }
+
+                strHQL = "s.srAmount " + strSymbol + " 0 " + strConnection;
+                strClause.append(strHQL);
             }
         }
 

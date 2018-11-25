@@ -6,7 +6,7 @@
   Ext.onReady(function(){
 
   	Ext.QuickTips.init();
-	
+
 	var cbVarAmount = {
 		xtype: 'combo',
 		id: 'cbVarAmount',
@@ -30,6 +30,31 @@
 		forceSelection: true,
 		editable: true
 	};
+
+    var srAmount1 = {
+          xtype: 'combo',
+          id: 'srAmount1',
+          emptyText: '',
+          fieldLabel:'资源数',
+          store: new Ext.data.ArrayStore({
+              fields: [ 'id', 'name' ],
+              data: [
+                  ['0','全部'],
+                  ['1','等于0'],
+                  ['2','大于0'],
+                  ['3','小于0']
+              ]
+          }),
+          mode: 'local',
+          triggerAction: 'all',
+          displayField: 'name',
+          valueField: 'id',
+          width: 220,
+          selectOnFocus: true,
+          forceSelection: true,
+          editable: true
+    };
+
 	
 	var SCSSummerySearchStore = new Ext.data.JsonStore({
 		autoDestroy:true,
@@ -253,7 +278,7 @@
 		frame: false,
 		border: false,
 		defaultType: 'textfield',
-		items:[cbProductCodeForSCSSummeryViewSearch,cbErrorLevelForSCSSummeryViewSearch,txtVoltageForSCSSummeryViewSearch,txtProductCombinationForSCSSummeryViewSearch,txtMinForSCSSummeryViewSearch,cbVarAmount]		
+		items:[cbProductCodeForSCSSummeryViewSearch,cbErrorLevelForSCSSummeryViewSearch,txtVoltageForSCSSummeryViewSearch,txtProductCombinationForSCSSummeryViewSearch,txtMinForSCSSummeryViewSearch,cbVarAmount,srAmount1]
 	};
 	
 	var col2 = {
@@ -359,7 +384,8 @@
  						capacity:Ext.getCmp('txtCapacityForSCSSummeryViewSearch').getValue(),
  						productType:Ext.getCmp('cbProductTypeForSCSSummeryViewSearch').getValue(),
  						humidity:Ext.getCmp('cbHumidityForSCSSummeryViewSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForSCSSummeryViewSearch').getValue()
+ 						usageType:Ext.getCmp('cbUsageTypeForSCSSummeryViewSearch').getValue(),
+ 						srAmount:Ext.getCmp('srAmount1').getValue()
  		 	 	};
  				attributes.start = 0;
  				SCSSummeryViewSearchStore.reload({params:attributes});
