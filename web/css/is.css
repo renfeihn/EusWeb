@@ -190,6 +190,10 @@
     background-image: url('../images/drop-no.gif') !important;
 }
 
+.icon-down {
+    background-image: url('../images/drop-down.gif') !important;
+}
+
 .icon-commit {
     background-image: url('../images/drop-yes.gif') !important;
 }
