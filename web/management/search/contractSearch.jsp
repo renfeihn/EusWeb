@@ -1,597 +1,659 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>∫œÕ¨≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ÂêàÂêåÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	  
-	var contractSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'queryContract.action',
-	  	totalProperty:'results',
-	  	root:'ContractList',
-	  	baseParams:{status:['Using'],start:0,limit:25},
-	  	idProperty:'id',
-		fields:['id','contractNo','contractDate','items','status','state','createTime',
-	  		  	'totalFinishedAmount','totalCheckingAmount','totalAmount','totalSum',
-	  	        {name:'company',mapping:'company.name'},
-	  	        {name:'empName',mapping:'creator.name'},
-	  	        {name:'empCode',mapping:'creator.code'}],
-	  	sortInfo: {field: 'createTime',direction: 'ASC'}	
-  	});
+            Ext.QuickTips.init();
 
-	var contractGetItemsStore = new Ext.data.JsonStore({
-  		url:'getContract.action',
-  		root:'Contract',
-		fields: ['id','items']
-  	});
+            var contractSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'queryContract.action',
+                totalProperty: 'results',
+                root: 'ContractList',
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id', 'contractNo', 'contractDate', 'items', 'status', 'state', 'createTime',
+                    'totalFinishedAmount', 'totalCheckingAmount', 'totalAmount', 'totalSum',
+                    {name: 'company', mapping: 'company.name'},
+                    {name: 'empName', mapping: 'creator.name'},
+                    {name: 'empCode', mapping: 'creator.code'}],
+                sortInfo: {field: 'createTime', direction: 'ASC'}
+            });
 
-  	var contractSearchItemsStore = new Ext.data.JsonStore({
-  		autoDestroy:true,
-  		root:'items',
-  		fields:['id','amount','price','originalPrice','subTotal','finishedAmount','checkingAmount',
-  		      	{name:'contractItemNo', type:'int'},
-	  	        {name:'productCombination',mapping:'product.productCombination'}],
- 		sortInfo: {field:'contractItemNo',direction:'ASC'} 
-  	});
-  		
-	var provinceStoreForContractSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findProvince.action',
-		autoLoad:{status:['Using']},
-		baseParams:{status:['Using']},
-		root:'ProvinceList',
-		fields:['id','name']
-	});
-	
-	var provinceItemStoreForContractSearch = new Ext.data.JsonStore({
-		url:'getProvince.action',
-		root:'Province',
-		fields:['id','cities']
-	});
-	
-	var cityStoreForContractSearch = new Ext.data.JsonStore({
-		root:'cities',
-		fields:['id','name']
-	});
-	
-	var companyStoreForContractSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'getCompany.action',
-		baseParams:{status:'Using'},
-		root:'Company',
-		fields:['id','code','name','address','commAddress',
-		        'bank','contract','account','tax',
-		        'zipCode','tele','delegatee','email','fax','memo']
-	});
-	
-	var txtCodeForContractSearch = {
-		xtype:'textfield',
-		id:'txtCodeForContractSearch',
-		fieldLabel:'≥ß…Ã±‡∫≈',
-		width:220,
-		name:'txtCodeForContractSearch'
-	};
+            var contractGetItemsStore = new Ext.data.JsonStore({
+                url: 'getContract.action',
+                root: 'Contract',
+                fields: ['id', 'items']
+            });
 
-	var txtNameForContractSearch = {
-		xtype:'textfield',
-		id:'txtNameForContractSearch',
-		fieldLabel:'≥ß…Ã√˚≥∆',
-		width:220,
-		name:'txtNameForContractSearch'
-	};	
-	
-	var txtAddressForContractSearch = {
-		xtype:'textfield',
-		id:'txtAddressForContractSearch',
-		fieldLabel:'≥ß…Ãµÿ÷∑',
-		width:220,
-		name:'txtAddressForContractSearch'
-	};
-	
-	var txtCommAddressForContractSearch = {
-		xtype:'textfield',
-		id:'txtCommAddressForContractSearch',
-		fieldLabel:'Õ®—∂µÿ÷∑',
-		width:220,
-		name:'txtCommAddressForContractSearch'
-	};
-	
-	var txtBankForContractSearch = {
-		xtype:'textfield',
-		id:'txtBankForContractSearch',
-		fieldLabel:'ø™ªß“¯––',
-		width:220,
-		name:'txtBankForContractSearch'
-	};
-	
-	var txtContractForContractSearch = {
-		xtype:'textfield',
-		id:'txtContractForContractSearch',
-		fieldLabel:'∫œÕ¨∫≈',
-		width:220,
-		name:'txtContractForContractSearch'
-	};
-	
-	var txtAccountForContractSearch = {
-		xtype:'textfield',
-		id:'txtAccountForContractSearch',
-		fieldLabel:'’ ∫≈',
-		width:220,
-		name:'txtAccountForContractSearch'
-	};
-	
-	var txtTaxForContractSearch = {
-		xtype:'textfield',
-		id:'txtTaxForContractSearch',
-		fieldLabel:'À∞∫≈',
-		width:220,
-		name:'txtTaxForContractSearch'
-	};
-	
-	var txtZipCodeForContractSearch = {
-		xtype:'textfield',
-		id:'txtZipCodeForContractSearch',
-		fieldLabel:'” ±‡',
-		width:220,
-		name:'txtZipCodeForContractSearch'
-	};
-	
-	var txtTeleForContractSearch = {
-		xtype:'textfield',
-		id:'txtTeleForContractSearch',
-		fieldLabel:'µÁª∞∫≈¬Î',
-		width:220,
-		name:'txtTeleForContractSearch'
-	};
-	
-	var txtDelegateeForContractSearch = {
-		xtype:'textfield',
-		id:'txtDelegateeForContractSearch',
-		fieldLabel:'¥˙±Ì»À',
-		width:220,
-		name:'txtDelegateeForContractSearch'
-	};
-	
-	var txtEmailForContractSearch = {
-		xtype:'textfield',
-		id:'txtEmailForContractSearch',
-		fieldLabel:'µÁ◊”” º˛',
-		width:220,
-		name:'txtEmailForContractSearch'
-	};
-	
-	var txtFaxForContractSearch = {
-		xtype:'textfield',
-		id:'txtFaxForContractSearch',
-		fieldLabel:'¥´’Ê∫≈¬Î',
-		width:220,
-		name:'txtFaxForContractSearch'
-	};
-	
-	var txtMemoForContractSearch = {
-		xtype:'textfield',
-		id:'txtMemoForContractSearch',
-		fieldLabel:'±∏◊¢',
-		width:220,
-		name:'txtMemoForContractSearch'
-	};
-	
-	var loadCityHandler = function(combo,record,index){
-		provinceItemStoreForContractSearch.removeAll();
-		cityStoreForContractSearch.removeAll();
-		Ext.getCmp('cbCityForContractSearch').setValue(null);	
-		var id = Ext.getCmp('cbProvinceForContractSearch').getValue();
+            var contractSearchItemsStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                root: 'items',
+                fields: ['id', 'amount', 'price', 'originalPrice', 'subTotal', 'finishedAmount', 'checkingAmount',
+                    {name: 'contractItemNo', type: 'int'},
+                    {name: 'productCombination', mapping: 'product.productCombination'}],
+                sortInfo: {field: 'contractItemNo', direction: 'ASC'}
+            });
 
-		if (id){
-			provinceItemStoreForContractSearch.load({					
-				params:{'id':id},
-				callback:function(r,o,s){
-					var rc = provinceItemStoreForContractSearch.getAt(0);
-					if (rc){
-						cityStoreForContractSearch.loadData(rc.json);
-					}
-				},
-				scope:this
-			});
-		}
-	};
-	
-	/*»Áπ˚Õ®π˝ ‰»Î∏ƒ±‰ °£¨≤¢«“√ª”–—°÷–µƒ«Èøˆœ¬£¨–Ë“™Ω´ –µƒ–≈œ¢»´≤ø«Âø’*/
-	var blurHandle = function(field){
-		var isEmptyProvince = Ext.isEmpty(Ext.getCmp('cbProvinceForContractSearch').getValue());
-		if (isEmptyProvince) {
-			provinceItemStoreForContractSearch.removeAll();
-			cityStoreForContractSearch.removeAll();
-		}
-	};
-	
-	var cbProvinceForContractSearch = {
-		xtype:'combo',
-		store:provinceStoreForContractSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò',
-		fieldLabel:'À˘‘⁄ °',
-		selectOnFocus:true,
-		id:'cbProvinceForContractSearch',
-		valueField:'id',
-		listeners:{'select':loadCityHandler,'blur':blurHandle,scope:this},
-		width:220
-	};	
-	
-	var focusHandler= function(field) {
-		var isEmptyProvince = Ext.isEmpty(Ext.getCmp('cbProvinceForContractSearch').getValue());
-		if (cityStoreForContractSearch.getCount()<1){
-			if (isEmptyProvince){
-				clsys.message.info('«Îœ»—°‘ÒÀ˘‘⁄ °');
-			}			
-		}
-	};
-	
-	var cbCityForContractSearch = {
-		xtype:'combo',
-		store:cityStoreForContractSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò',
-		fieldLabel:'À˘‘⁄ –',
-		selectOnFocus:true,
-		id:'cbCityForContractSearch',
-		valueField:'id',
-		listeners:{'focus':focusHandler,scope:this},
-		width:220
-	};	
+            var provinceStoreForContractSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findProvince.action',
+                autoLoad: {status: ['Using']},
+                baseParams: {status: ['Using']},
+                root: 'ProvinceList',
+                fields: ['id', 'name']
+            });
 
-	var txtContractForContractSearchDateStart = {
-		xtype:'datefield',
-		id:'txtContractForContractSearchDateStart',
-		fieldLabel:'Ωªªı»’∆⁄(ø™ º)',
-		width:220,
-		name:'txtContractForContractSearchDateStart'	
-	};
-	
-	var txtContractForContractSearchDateEnd = {
-		xtype:'datefield',
-		id:'txtContractForContractSearchDateEnd',
-		fieldLabel:'Ωªªı»’∆⁄(Ω· ¯)',
-		width:220,
-		name:'txtContractForContractSearchDateEnd'	
-	};
-	
-	var txtContractForContractSearchSavedDateStart = {
-		xtype:'datefield',
-		id:'txtContractForContractSearchSavedDateStart',
-		fieldLabel:'±£¥Ê»’∆⁄(ø™ º)',
-		width:220,
-		name:'txtContractForContractSearchSavedDateStart'	
-	};
-	
-	var txtContractForContractSearchSavedDateEnd = {
-		xtype:'datefield',
-		id:'txtContractForContractSearchSavedDateEnd',
-		fieldLabel:'±£¥Ê»’∆⁄(Ω· ¯)',
-		width:220,
-		name:'txtContractForContractSearchSavedDateEnd'	
-	};
-	
-	var txtContractForContractSearchMin = {
-		xtype:'numberfield',
-		id:'txtContractForContractSearchMin',
-		fieldLabel:'Ω∂Ó∑∂Œß(◊Ó–°)',
-		width:220,
-		allowDecimals: true, // ‘ –Ì–° ˝µ„ 
-		allowNegative: false, // ‘ –Ì∏∫ ˝ 
-		minValue:0.00,
-		allowBlank:false,
-		name:'txtContractForContractSearchMin'		
-	};
-	
-	var txtContractForContractSearchMax = {
-		xtype:'numberfield',
-		id:'txtContractForContractSearchMax',
-		fieldLabel:'Ω∂Ó∑∂Œß(◊Ó¥Û)',
-		width:220,
-		allowDecimals: true, // ‘ –Ì–° ˝µ„ 
-		allowNegative: false, // ‘ –Ì∏∫ ˝ 
-		minValue:0.00,
-		allowBlank:false,
-		name:'txtContractForContractSearchMax'		
-	};
-	
-	var cbContractState = {
-		xtype: 'combo',
-		id: 'cbContractState',
-		emptyText: '«Î—°‘Ò∫œÕ¨◊¥Ã¨',
-		fieldLabel:'∫œÕ¨◊¥Ã¨',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					[ '', '»´≤ø◊¥Ã¨' ],
-					['Saved','“—±£¥Ê'],
-					['WaitForAduilt','¥˝…Û∫À'],
-					['AduitFailed','…Û∫À ß∞‹'],
-					['None','Œ¥ÕÍ≥…'],
-					['Part','≤ø∑÷ÕÍ≥…'],
-					['Complete','»´≤øÕÍ≥…'],
-					['Terminated','÷’÷π']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};
-	
-	var cbContractStatus = {
-		xtype: 'combo',
-		id: 'cbContractStatus',
-		emptyText: '«Î—°‘Ò∫œÕ¨ «∑Ò◊˜∑œ',
-		fieldLabel:' «∑Ò◊˜∑œ',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					[ '', '»´≤ø' ],
-					['Using','”––ß'],
-					['Deleted','◊˜∑œ']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};	
-	
-	var col1 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[txtNameForContractSearch,cbProvinceForContractSearch,txtAddressForContractSearch,txtCommAddressForContractSearch,txtBankForContractSearch,txtContractForContractSearch,txtContractForContractSearchDateStart,txtContractForContractSearchDateEnd,cbContractStatus,txtContractForContractSearchMin]		
-	};
-	
-	var col2 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[txtCodeForContractSearch,cbCityForContractSearch,txtTaxForContractSearch,txtZipCodeForContractSearch,txtTeleForContractSearch,txtDelegateeForContractSearch,txtContractForContractSearchSavedDateStart,txtContractForContractSearchSavedDateEnd,cbContractState,txtContractForContractSearchMax]		
-	};
+            var provinceItemStoreForContractSearch = new Ext.data.JsonStore({
+                url: 'getProvince.action',
+                root: 'Province',
+                fields: ['id', 'cities']
+            });
 
-	var showItems = function(sm){
-		Ext.getCmp('contract-search-showitems-button').setDisabled(sm.getCount() < 1);
-		contractGetItemsStore.removeAll();
-		contractSearchItemsStore.removeAll();
+            var cityStoreForContractSearch = new Ext.data.JsonStore({
+                root: 'cities',
+                fields: ['id', 'name']
+            });
 
-		/*»Áπ˚œÍœ∏ ˝æ›µƒGridPanel «“˛≤ÿµƒ£¨‘Ú≤ªΩ¯––œ∏Ω⁄–≈œ¢≤È—Ø*/
-		if (Ext.getCmp('contractSearchItems-grid').hidden) return;
+            var companyStoreForContractSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'getCompany.action',
+                baseParams: {status: 'Using'},
+                root: 'Company',
+                fields: ['id', 'code', 'name', 'address', 'commAddress',
+                    'bank', 'contract', 'account', 'tax',
+                    'zipCode', 'tele', 'delegatee', 'email', 'fax', 'memo']
+            });
 
-		if (sm.getCount() > 0) {
-			var record = sm.getSelected();
-			if (record) {
-				var id = record.get('id');
-				contractGetItemsStore.reload({
-					params:{'id':id},
-					callback:function(r,o,s){
-						var rc = contractGetItemsStore.getAt(0);
-						if (rc) {
-							contractSearchItemsStore.loadData(rc.json);
-						}
-					},
-					scope:this
-				});
+            var txtCodeForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtCodeForContractSearch',
+                fieldLabel: 'ÂéÇÂïÜÁºñÂè∑',
+                width: 220,
+                name: 'txtCodeForContractSearch'
+            };
 
-			}
-		}		
-	};
+            var txtNameForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtNameForContractSearch',
+                fieldLabel: 'ÂéÇÂïÜÂêçÁß∞',
+                width: 220,
+                name: 'txtNameForContractSearch'
+            };
 
-	var btnShowItems = {
-		text: 'œÍœ∏–≈œ¢',
-		id: 'contract-search-showitems-button',
-		iconCls: 'icon-preview',
-		enableToggle: true,
-		disabled: true,
-		scope: this,
-		toggleHandler: function(btn, pressed) {
-			var preview = Ext.getCmp('contractSearchItems-grid');
-			if (pressed) {
-				preview.show();
-				showItems(Ext.getCmp('contractSearch-grid').getSelectionModel());
-			} else {
-				preview.hide();
-			}
-			contractSearchPanel.doLayout();			
-		}
-	};
-	
-	var contractSearchItemsGrid = {
-		xtype:'grid',
-		id:'contractSearchItems-grid',
-		anchor:'100% 35%',
-		store:contractSearchItemsStore,
-		stripeRows:true,
-		autoScroll:true,
-		hidden:true,
-		loadMask:true,
-		border:false,
-		frame:true,
-		renderTo:'contractSearchItemsPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'–Ú∫≈',width:30,dataIndex:'contractItemNo'},
-				{header:'≤˙∆∑√˚≥∆º∞–Õ∫≈',width:250,dataIndex:'productCombination'},
-				{header:'∫œÕ¨ ˝¡ø',width:70,dataIndex:'amount'},
-				{header:'ÕÍ≥… ˝¡ø',width:40,dataIndex:'finishedAmount'},	
-				{header:'…Û∫À ˝¡ø',width:40,dataIndex:'checkingAmount'},
-				{header:'∫œÕ¨º€∏Ò',width:70,dataIndex:'price'},
-				{header:'‘≠ ºº€∏Ò',width:70,dataIndex:'originalPrice'},
-				{header:'Ω∂Ó–°º∆',width:70,dataIndex:'subTotal'}				
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true}),
-		tbar: ['<b>‘§¿¿</b>', {
-			iconCls: 'icon-remove',
-			text: 'πÿ±’‘§¿¿',
-			handler: function() {
-				Ext.getCmp('contract-search-showitems-button').toggle();
-			}
-		}]
-	};
-	
-	var contractSearchGrid = {
-		xtype:'grid',
-		id:'contractSearch-grid',
-		anchor:'100% 65%',
-		store:contractSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		border:false,
-		frame:true,
-		renderTo:'contractSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'∫œÕ¨∫≈',width:120,dataIndex:'contractNo'},
-				{header:'±£¥Ê ±º‰',width:120,dataIndex:'createTime',hidden:true},
-				{header:'∫œÕ¨≥ß…Ã',width:150,dataIndex:'company'},
-				{header:' ˝¡ø◊‹º∆',width:50,dataIndex:'totalAmount'},
-				{header:'ÕÍ≥…◊‹º∆',width:50,dataIndex:'totalFinishedAmount'},	
-				{header:'…Û∫À◊‹º∆',width:50,dataIndex:'totalCheckingAmount'},
-				{header:'Ω∂Ó◊‹º∆',width:50,dataIndex:'totalSum'},
-				{header:'Ωªªı∆⁄',width:80,dataIndex:'contractDate'},
-				{header:'»À‘±±‡∫≈',width:70,dataIndex:'empCode',hidden:true},
-				{header:'–’√˚',width:50,dataIndex:'empName',hidden:true},
-				{header:'”––ß',width:50,dataIndex:'status',renderer:clsys.grid.columnrender.ContractDeletedRender},
-			    {header:'◊¥Ã¨',width:50,renderer:clsys.grid.columnrender.ScheduleStatusRender,dataIndex:'state'}													
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
+            var txtAddressForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtAddressForContractSearch',
+                fieldLabel: 'ÂéÇÂïÜÂú∞ÂùÄ',
+                width: 220,
+                name: 'txtAddressForContractSearch'
+            };
 
-	 var contractQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'contractQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
-						companyName:Ext.getCmp('txtNameForContractSearch').getValue(),
-						companyCode:Ext.getCmp('txtCodeForContractSearch').getValue(),
-						companyAddress:Ext.getCmp('txtAddressForContractSearch').getValue(),
-						companyCommAddress:Ext.getCmp('txtCommAddressForContractSearch').getValue(),
-						companyBank:Ext.getCmp('txtBankForContractSearch').getValue(),
-						companyTax:Ext.getCmp('txtTaxForContractSearch').getValue(),
-						companyZipCode:Ext.getCmp('txtZipCodeForContractSearch').getValue(),
-						companyTele:Ext.getCmp('txtTeleForContractSearch').getValue(),
-						companyDelegatee:Ext.getCmp('txtDelegateeForContractSearch').getValue(),
-						companyProvince:Ext.getCmp('cbProvinceForContractSearch').getValue(),
-						companyCity:Ext.getCmp('cbCityForContractSearch').getValue(),
-						contractNo:Ext.getCmp('txtContractForContractSearch').getValue(), 		 				
- 						contractDateStart:Ext.getCmp('txtContractForContractSearchDateStart').getValue(),
- 						contractDateEnd:Ext.getCmp('txtContractForContractSearchDateEnd').getValue(),
- 						status:Ext.getCmp('cbContractStatus').getValue(),
- 						states:Ext.getCmp('cbContractState').getValue(),
- 						contractSavedDateStart:Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue(),
- 						contractSavedDateEnd:Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue(),
- 						min:Ext.getCmp('txtContractForContractSearchMin').getValue(),
- 						max:Ext.getCmp('txtContractForContractSearchMax').getValue() 						
- 		 	 	};
- 				attributes.start = 0;
- 				contractSearchStore.reload({params:attributes});
-  			}
-		},{
-			text:'¥Ú”°',
-			iconCls:'icon-printer',
-			handler:function(){
-	   			var url = 'printContract.action';
- 				var params = {
-						companyName:Ext.getCmp('txtNameForContractSearch').getValue(),
-						companyCode:Ext.getCmp('txtCodeForContractSearch').getValue(),
-						companyAddress:Ext.getCmp('txtAddressForContractSearch').getValue(),
-						companyCommAddress:Ext.getCmp('txtCommAddressForContractSearch').getValue(),
-						companyBank:Ext.getCmp('txtBankForContractSearch').getValue(),
-						companyTax:Ext.getCmp('txtTaxForContractSearch').getValue(),
-						companyZipCode:Ext.getCmp('txtZipCodeForContractSearch').getValue(),
-						companyTele:Ext.getCmp('txtTeleForContractSearch').getValue(),
-						companyDelegatee:Ext.getCmp('txtDelegateeForContractSearch').getValue(),
-						companyProvince:Ext.getCmp('cbProvinceForContractSearch').getValue(),
-						companyCity:Ext.getCmp('cbCityForContractSearch').getValue(),
-						contractNo:Ext.getCmp('txtContractForContractSearch').getValue(), 		 				
- 						contractDateStart:Ext.getCmp('txtContractForContractSearchDateStart').getValue(),
- 						contractDateEnd:Ext.getCmp('txtContractForContractSearchDateEnd').getValue(),
- 						status:Ext.getCmp('cbContractStatus').getValue(),
- 						states:Ext.getCmp('cbContractState').getValue(),
- 						contractSavedDateStart:Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue(),
- 						contractSavedDateEnd:Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue(),
- 						min:Ext.getCmp('txtContractForContractSearchMin').getValue(),
- 						max:Ext.getCmp('txtContractForContractSearchMax').getValue() 	
- 		 	 	};
+            var txtCommAddressForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtCommAddressForContractSearch',
+                fieldLabel: 'ÈÄöËÆØÂú∞ÂùÄ',
+                width: 220,
+                name: 'txtCommAddressForContractSearch'
+            };
 
- 		 	 	var strUrl = Ext.urlEncode(params);
- 				window.open(url + '?' + strUrl);
-	   			params.start = 0;
-	   			contractSearchStore.reload({params:params});
-			},
-			scope:this	
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {contractQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				contractSearchStore.reload();
-			},
-			scope:this
-		},btnShowItems]
-     });
-     		   
-	var contractSearchPanel = Ext.getCmp('ContractSearch-mainpanel');
-	contractSearchPanel.add(contractQueryConditionPanel,contractSearchGrid,contractSearchItemsGrid);
-	clsys.form.Util.PagingToolbar(contractSearchStore, contractSearchPanel.tbar, 'contractSearch-paging');
-	contractSearchPanel.doLayout();
+            var txtBankForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtBankForContractSearch',
+                fieldLabel: 'ÂºÄÊà∑Èì∂Ë°å',
+                width: 220,
+                name: 'txtBankForContractSearch'
+            };
 
-	Ext.getCmp('contractSearch-grid').getSelectionModel().on('selectionchange', function(sm) {
-		showItems(sm);
-	});	
-  	
-  });
-</script>
+            var txtContractForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtContractForContractSearch',
+                fieldLabel: 'ÂêàÂêåÂè∑',
+                width: 220,
+                name: 'txtContractForContractSearch'
+            };
+
+            var txtAccountForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtAccountForContractSearch',
+                fieldLabel: 'Â∏êÂè∑',
+                width: 220,
+                name: 'txtAccountForContractSearch'
+            };
+
+            var txtTaxForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtTaxForContractSearch',
+                fieldLabel: 'Á®éÂè∑',
+                width: 220,
+                name: 'txtTaxForContractSearch'
+            };
+
+            var txtZipCodeForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtZipCodeForContractSearch',
+                fieldLabel: 'ÈÇÆÁºñ',
+                width: 220,
+                name: 'txtZipCodeForContractSearch'
+            };
+
+            var txtTeleForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtTeleForContractSearch',
+                fieldLabel: 'ÁîµËØùÂè∑Á†Å',
+                width: 220,
+                name: 'txtTeleForContractSearch'
+            };
+
+            var txtDelegateeForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtDelegateeForContractSearch',
+                fieldLabel: '‰ª£Ë°®‰∫∫',
+                width: 220,
+                name: 'txtDelegateeForContractSearch'
+            };
+
+            var txtEmailForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtEmailForContractSearch',
+                fieldLabel: 'ÁîµÂ≠êÈÇÆ‰ª∂',
+                width: 220,
+                name: 'txtEmailForContractSearch'
+            };
+
+            var txtFaxForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtFaxForContractSearch',
+                fieldLabel: '‰º†ÁúüÂè∑Á†Å',
+                width: 220,
+                name: 'txtFaxForContractSearch'
+            };
+
+            var txtMemoForContractSearch = {
+                xtype: 'textfield',
+                id: 'txtMemoForContractSearch',
+                fieldLabel: 'Â§áÊ≥®',
+                width: 220,
+                name: 'txtMemoForContractSearch'
+            };
+
+            var loadCityHandler = function (combo, record, index) {
+                provinceItemStoreForContractSearch.removeAll();
+                cityStoreForContractSearch.removeAll();
+                Ext.getCmp('cbCityForContractSearch').setValue(null);
+                var id = Ext.getCmp('cbProvinceForContractSearch').getValue();
+
+                if (id) {
+                    provinceItemStoreForContractSearch.load({
+                        params: {'id': id},
+                        callback: function (r, o, s) {
+                            var rc = provinceItemStoreForContractSearch.getAt(0);
+                            if (rc) {
+                                cityStoreForContractSearch.loadData(rc.json);
+                            }
+                        },
+                        scope: this
+                    });
+                }
+            };
+
+            /*Â¶ÇÊûúÈÄöËøáËæìÂÖ•ÊîπÂèòÁúÅÔºåÂπ∂‰∏îÊ≤°ÊúâÈÄâ‰∏≠ÁöÑÊÉÖÂÜµ‰∏ãÔºåÈúÄË¶ÅÂ∞ÜÂ∏ÇÁöÑ‰ø°ÊÅØÂÖ®ÈÉ®Ê∏ÖÁ©∫*/
+            var blurHandle = function (field) {
+                var isEmptyProvince = Ext.isEmpty(Ext.getCmp('cbProvinceForContractSearch').getValue());
+                if (isEmptyProvince) {
+                    provinceItemStoreForContractSearch.removeAll();
+                    cityStoreForContractSearch.removeAll();
+                }
+            };
+
+            var cbProvinceForContractSearch = {
+                xtype: 'combo',
+                store: provinceStoreForContractSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©',
+                fieldLabel: 'ÊâÄÂú®ÁúÅ',
+                selectOnFocus: true,
+                id: 'cbProvinceForContractSearch',
+                valueField: 'id',
+                listeners: {'select': loadCityHandler, 'blur': blurHandle, scope: this},
+                width: 220
+            };
+
+            var focusHandler = function (field) {
+                var isEmptyProvince = Ext.isEmpty(Ext.getCmp('cbProvinceForContractSearch').getValue());
+                if (cityStoreForContractSearch.getCount() < 1) {
+                    if (isEmptyProvince) {
+                        clsys.message.info('ËØ∑ÂÖàÈÄâÊã©ÊâÄÂú®ÁúÅ');
+                    }
+                }
+            };
+
+            var cbCityForContractSearch = {
+                xtype: 'combo',
+                store: cityStoreForContractSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©',
+                fieldLabel: 'ÊâÄÂú®Â∏Ç',
+                selectOnFocus: true,
+                id: 'cbCityForContractSearch',
+                valueField: 'id',
+                listeners: {'focus': focusHandler, scope: this},
+                width: 220
+            };
+
+            var txtContractForContractSearchDateStart = {
+                xtype: 'datefield',
+                id: 'txtContractForContractSearchDateStart',
+                fieldLabel: '‰∫§Ë¥ßÊó•Êúü(ÂºÄÂßã)',
+                width: 220,
+                name: 'txtContractForContractSearchDateStart'
+            };
+
+            var txtContractForContractSearchDateEnd = {
+                xtype: 'datefield',
+                id: 'txtContractForContractSearchDateEnd',
+                fieldLabel: '‰∫§Ë¥ßÊó•Êúü(ÁªìÊùü)',
+                width: 220,
+                name: 'txtContractForContractSearchDateEnd'
+            };
+
+            var txtContractForContractSearchSavedDateStart = {
+                xtype: 'datefield',
+                id: 'txtContractForContractSearchSavedDateStart',
+                fieldLabel: '‰øùÂ≠òÊó•Êúü(ÂºÄÂßã)',
+                width: 220,
+                name: 'txtContractForContractSearchSavedDateStart'
+            };
+
+            var txtContractForContractSearchSavedDateEnd = {
+                xtype: 'datefield',
+                id: 'txtContractForContractSearchSavedDateEnd',
+                fieldLabel: '‰øùÂ≠òÊó•Êúü(ÁªìÊùü)',
+                width: 220,
+                name: 'txtContractForContractSearchSavedDateEnd'
+            };
+
+            var txtContractForContractSearchMin = {
+                xtype: 'numberfield',
+                id: 'txtContractForContractSearchMin',
+                fieldLabel: 'ÈáëÈ¢ùËåÉÂõ¥(ÊúÄÂ∞è)',
+                width: 220,
+                allowDecimals: true, // ÂÖÅËÆ∏Â∞èÊï∞ÁÇπ
+                allowNegative: false, // ÂÖÅËÆ∏Ë¥üÊï∞
+                minValue: 0.00,
+                allowBlank: false,
+                name: 'txtContractForContractSearchMin'
+            };
+
+            var txtContractForContractSearchMax = {
+                xtype: 'numberfield',
+                id: 'txtContractForContractSearchMax',
+                fieldLabel: 'ÈáëÈ¢ùËåÉÂõ¥(ÊúÄÂ§ß)',
+                width: 220,
+                allowDecimals: true, // ÂÖÅËÆ∏Â∞èÊï∞ÁÇπ
+                allowNegative: false, // ÂÖÅËÆ∏Ë¥üÊï∞
+                minValue: 0.00,
+                allowBlank: false,
+                name: 'txtContractForContractSearchMax'
+            };
+
+            var cbContractState = {
+                xtype: 'combo',
+                id: 'cbContractState',
+                emptyText: 'ËØ∑ÈÄâÊã©ÂêàÂêåÁä∂ÊÄÅ',
+                fieldLabel: 'ÂêàÂêåÁä∂ÊÄÅ',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'ÂÖ®ÈÉ®Áä∂ÊÄÅ'],
+                        ['Saved', 'Â∑≤‰øùÂ≠ò'],
+                        ['WaitForAduilt', 'ÂæÖÂÆ°Ê†∏'],
+                        ['AduitFailed', 'ÂÆ°Ê†∏Â§±Ë¥•'],
+                        ['None', 'Êú™ÂÆåÊàê'],
+                        ['Part', 'ÈÉ®ÂàÜÂÆåÊàê'],
+                        ['Complete', 'ÂÖ®ÈÉ®ÂÆåÊàê'],
+                        ['Terminated', 'ÁªàÊ≠¢']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
+
+            var cbContractStatus = {
+                xtype: 'combo',
+                id: 'cbContractStatus',
+                emptyText: 'ËØ∑ÈÄâÊã©ÂêàÂêåÊòØÂê¶‰ΩúÂ∫ü',
+                fieldLabel: 'ÊòØÂê¶‰ΩúÂ∫ü',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'ÂÖ®ÈÉ®'],
+                        ['Using', 'ÊúâÊïà'],
+                        ['Deleted', '‰ΩúÂ∫ü']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
+
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtNameForContractSearch, cbProvinceForContractSearch, txtAddressForContractSearch, txtCommAddressForContractSearch, txtBankForContractSearch, txtContractForContractSearch, txtContractForContractSearchDateStart, txtContractForContractSearchDateEnd, cbContractStatus, txtContractForContractSearchMin]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtCodeForContractSearch, cbCityForContractSearch, txtTaxForContractSearch, txtZipCodeForContractSearch, txtTeleForContractSearch, txtDelegateeForContractSearch, txtContractForContractSearchSavedDateStart, txtContractForContractSearchSavedDateEnd, cbContractState, txtContractForContractSearchMax]
+            };
+
+            var showItems = function (sm) {
+                Ext.getCmp('contract-search-showitems-button').setDisabled(sm.getCount() < 1);
+                contractGetItemsStore.removeAll();
+                contractSearchItemsStore.removeAll();
+
+                /*Â¶ÇÊûúËØ¶ÁªÜÊï∞ÊçÆÁöÑGridPanelÊòØÈöêËóèÁöÑÔºåÂàô‰∏çËøõË°åÁªÜËäÇ‰ø°ÊÅØÊü•ËØ¢*/
+                if (Ext.getCmp('contractSearchItems-grid').hidden) return;
+
+                if (sm.getCount() > 0) {
+                    var record = sm.getSelected();
+                    if (record) {
+                        var id = record.get('id');
+                        contractGetItemsStore.reload({
+                            params: {'id': id},
+                            callback: function (r, o, s) {
+                                var rc = contractGetItemsStore.getAt(0);
+                                if (rc) {
+                                    contractSearchItemsStore.loadData(rc.json);
+                                }
+                            },
+                            scope: this
+                        });
+
+                    }
+                }
+            };
+
+            var btnShowItems = {
+                text: 'ËØ¶ÁªÜ‰ø°ÊÅØ',
+                id: 'contract-search-showitems-button',
+                iconCls: 'icon-preview',
+                enableToggle: true,
+                disabled: true,
+                scope: this,
+                toggleHandler: function (btn, pressed) {
+                    var preview = Ext.getCmp('contractSearchItems-grid');
+                    if (pressed) {
+                        preview.show();
+                        showItems(Ext.getCmp('contractSearch-grid').getSelectionModel());
+                    } else {
+                        preview.hide();
+                    }
+                    contractSearchPanel.doLayout();
+                }
+            };
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        companyName: encodeURI(Ext.getCmp('txtNameForContractSearch').getValue()),
+                        companyCode: encodeURI(Ext.getCmp('txtCodeForContractSearch').getValue()),
+                        companyAddress: encodeURI(Ext.getCmp('txtAddressForContractSearch').getValue()),
+                        companyCommAddress: encodeURI(Ext.getCmp('txtCommAddressForContractSearch').getValue()),
+                        companyBank: encodeURI(Ext.getCmp('txtBankForContractSearch').getValue()),
+                        companyTax: encodeURI(Ext.getCmp('txtTaxForContractSearch').getValue()),
+                        companyZipCode: encodeURI(Ext.getCmp('txtZipCodeForContractSearch').getValue()),
+                        companyTele: encodeURI(Ext.getCmp('txtTeleForContractSearch').getValue()),
+                        companyDelegatee: encodeURI(Ext.getCmp('txtDelegateeForContractSearch').getValue()),
+                        companyProvince: encodeURI(Ext.getCmp('cbProvinceForContractSearch').getValue()),
+                        companyCity: encodeURI(Ext.getCmp('cbCityForContractSearch').getValue()),
+                        contractNo: encodeURI(Ext.getCmp('txtContractForContractSearch').getValue()),
+                        contractDateStart: encodeURI(Ext.getCmp('txtContractForContractSearchDateStart').getValue()),
+                        contractDateEnd: encodeURI(Ext.getCmp('txtContractForContractSearchDateEnd').getValue()),
+                        status: encodeURI(Ext.getCmp('cbContractStatus').getValue()),
+                        states: encodeURI(Ext.getCmp('cbContractState').getValue()),
+                        contractSavedDateStart: encodeURI(Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue()),
+                        contractSavedDateEnd: encodeURI(Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue()),
+                        min: encodeURI(Ext.getCmp('txtContractForContractSearchMin').getValue()),
+                        max: encodeURI(Ext.getCmp('txtContractForContractSearchMax').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getcontractAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm'),
+                        params: attributes
+                    });
+                }
+            };
+            var contractSearchItemsGrid = {
+                xtype: 'grid',
+                id: 'contractSearchItems-grid',
+                anchor: '100% 35%',
+                store: contractSearchItemsStore,
+                stripeRows: true,
+                autoScroll: true,
+                hidden: true,
+                loadMask: true,
+                border: false,
+                frame: true,
+                renderTo: 'contractSearchItemsPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'Â∫èÂè∑', width: 30, dataIndex: 'contractItemNo'},
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', width: 250, dataIndex: 'productCombination'},
+                        {header: 'ÂêàÂêåÊï∞Èáè', width: 70, dataIndex: 'amount'},
+                        {header: 'ÂÆåÊàêÊï∞Èáè', width: 40, dataIndex: 'finishedAmount'},
+                        {header: 'ÂÆ°Ê†∏Êï∞Èáè', width: 40, dataIndex: 'checkingAmount'},
+                        {header: 'ÂêàÂêå‰ª∑Ê†º', width: 70, dataIndex: 'price'},
+                        {header: 'ÂéüÂßã‰ª∑Ê†º', width: 70, dataIndex: 'originalPrice'},
+                        {header: 'ÈáëÈ¢ùÂ∞èËÆ°', width: 70, dataIndex: 'subTotal'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+                tbar: ['<b>È¢ÑËßà</b>', {
+                    iconCls: 'icon-remove',
+                    text: 'ÂÖ≥Èó≠È¢ÑËßà',
+                    handler: function () {
+                        Ext.getCmp('contract-search-showitems-button').toggle();
+                    }
+                }]
+            };
+
+            var contractSearchGrid = {
+                xtype: 'grid',
+                id: 'contractSearch-grid',
+                anchor: '100% 65%',
+                store: contractSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                border: false,
+                frame: true,
+                renderTo: 'contractSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'ÂêàÂêåÂè∑', width: 120, dataIndex: 'contractNo'},
+                        {header: '‰øùÂ≠òÊó∂Èó¥', width: 120, dataIndex: 'createTime', hidden: true},
+                        {header: 'ÂêàÂêåÂéÇÂïÜ', width: 150, dataIndex: 'company'},
+                        {header: 'Êï∞ÈáèÊÄªËÆ°', width: 50, dataIndex: 'totalAmount'},
+                        {header: 'ÂÆåÊàêÊÄªËÆ°', width: 50, dataIndex: 'totalFinishedAmount'},
+                        {header: 'ÂÆ°Ê†∏ÊÄªËÆ°', width: 50, dataIndex: 'totalCheckingAmount'},
+                        {header: 'ÈáëÈ¢ùÊÄªËÆ°', width: 50, dataIndex: 'totalSum'},
+                        {header: '‰∫§Ë¥ßÊúü', width: 80, dataIndex: 'contractDate'},
+                        {header: '‰∫∫ÂëòÁºñÂè∑', width: 70, dataIndex: 'empCode', hidden: true},
+                        {header: 'ÂßìÂêç', width: 50, dataIndex: 'empName', hidden: true},
+                        {
+                            header: 'ÊúâÊïà',
+                            width: 50,
+                            dataIndex: 'status',
+                            renderer: clsys.grid.columnrender.ContractDeletedRender
+                        },
+                        {
+                            header: 'Áä∂ÊÄÅ',
+                            width: 50,
+                            renderer: clsys.grid.columnrender.ScheduleStatusRender,
+                            dataIndex: 'state'
+                        }
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+            var contractQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'contractQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            companyName: Ext.getCmp('txtNameForContractSearch').getValue(),
+                            companyCode: Ext.getCmp('txtCodeForContractSearch').getValue(),
+                            companyAddress: Ext.getCmp('txtAddressForContractSearch').getValue(),
+                            companyCommAddress: Ext.getCmp('txtCommAddressForContractSearch').getValue(),
+                            companyBank: Ext.getCmp('txtBankForContractSearch').getValue(),
+                            companyTax: Ext.getCmp('txtTaxForContractSearch').getValue(),
+                            companyZipCode: Ext.getCmp('txtZipCodeForContractSearch').getValue(),
+                            companyTele: Ext.getCmp('txtTeleForContractSearch').getValue(),
+                            companyDelegatee: Ext.getCmp('txtDelegateeForContractSearch').getValue(),
+                            companyProvince: Ext.getCmp('cbProvinceForContractSearch').getValue(),
+                            companyCity: Ext.getCmp('cbCityForContractSearch').getValue(),
+                            contractNo: Ext.getCmp('txtContractForContractSearch').getValue(),
+                            contractDateStart: Ext.getCmp('txtContractForContractSearchDateStart').getValue(),
+                            contractDateEnd: Ext.getCmp('txtContractForContractSearchDateEnd').getValue(),
+                            status: Ext.getCmp('cbContractStatus').getValue(),
+                            states: Ext.getCmp('cbContractState').getValue(),
+                            contractSavedDateStart: Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue(),
+                            contractSavedDateEnd: Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue(),
+                            min: Ext.getCmp('txtContractForContractSearchMin').getValue(),
+                            max: Ext.getCmp('txtContractForContractSearchMax').getValue()
+                        };
+                        attributes.start = 0;
+                        contractSearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'ÊâìÂç∞',
+                    iconCls: 'icon-printer',
+                    handler: function () {
+                        var url = 'printContract.action';
+                        var params = {
+                            companyName: Ext.getCmp('txtNameForContractSearch').getValue(),
+                            companyCode: Ext.getCmp('txtCodeForContractSearch').getValue(),
+                            companyAddress: Ext.getCmp('txtAddressForContractSearch').getValue(),
+                            companyCommAddress: Ext.getCmp('txtCommAddressForContractSearch').getValue(),
+                            companyBank: Ext.getCmp('txtBankForContractSearch').getValue(),
+                            companyTax: Ext.getCmp('txtTaxForContractSearch').getValue(),
+                            companyZipCode: Ext.getCmp('txtZipCodeForContractSearch').getValue(),
+                            companyTele: Ext.getCmp('txtTeleForContractSearch').getValue(),
+                            companyDelegatee: Ext.getCmp('txtDelegateeForContractSearch').getValue(),
+                            companyProvince: Ext.getCmp('cbProvinceForContractSearch').getValue(),
+                            companyCity: Ext.getCmp('cbCityForContractSearch').getValue(),
+                            contractNo: Ext.getCmp('txtContractForContractSearch').getValue(),
+                            contractDateStart: Ext.getCmp('txtContractForContractSearchDateStart').getValue(),
+                            contractDateEnd: Ext.getCmp('txtContractForContractSearchDateEnd').getValue(),
+                            status: Ext.getCmp('cbContractStatus').getValue(),
+                            states: Ext.getCmp('cbContractState').getValue(),
+                            contractSavedDateStart: Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue(),
+                            contractSavedDateEnd: Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue(),
+                            min: Ext.getCmp('txtContractForContractSearchMin').getValue(),
+                            max: Ext.getCmp('txtContractForContractSearchMax').getValue()
+                        };
+
+                        var strUrl = Ext.urlEncode(params);
+                        window.open(url + '?' + strUrl);
+                        params.start = 0;
+                        contractSearchStore.reload({params: params});
+                    },
+                    scope: this
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        contractQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        contractSearchStore.reload();
+                    },
+                    scope: this
+                }, btnShowItems, btnDown]
+            });
+
+            var contractSearchPanel = Ext.getCmp('ContractSearch-mainpanel');
+            contractSearchPanel.add(contractQueryConditionPanel, contractSearchGrid, contractSearchItemsGrid);
+            clsys.form.Util.PagingToolbar(contractSearchStore, contractSearchPanel.tbar, 'contractSearch-paging');
+            contractSearchPanel.doLayout();
+
+            Ext.getCmp('contractSearch-grid').getSelectionModel().on('selectionchange', function (sm) {
+                showItems(sm);
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="contractSearchPanel"></div>

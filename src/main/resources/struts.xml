@@ -131,8 +131,18 @@
             </result>
         </action>
 
-        <!-- export excel -->
+        <!-- export excel 厂商信息导出excel -->
         <action name="getcompanyAction" class="companyAction" method="getReport">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="contentDisposition">attachment;filename=${fileName}</param>
+                <param name="inputName">inputStream</param>
+                <param name="bufferSize">4096</param>
+            </result>
+        </action>
+
+        <!-- export excel 合同信息导出excel -->
+        <action name="getcontractAction" class="contractAction" method="getReport">
             <result name="success" type="stream">
                 <param name="contentType">application/vnd.ms-excel</param>
                 <param name="contentDisposition">attachment;filename=${fileName}</param>
