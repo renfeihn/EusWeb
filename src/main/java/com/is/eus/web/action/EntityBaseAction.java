@@ -15,12 +15,39 @@ import com.is.eus.service.exception.InvalidOperationException;
 import com.is.eus.util.JsonHelper;
 import com.is.eus.web.action.AbstractEntityAction;
 import com.is.eus.web.exception.InvalidPageInformationException;
+
+import java.io.*;
 import java.text.ParseException;
 
 public abstract class EntityBaseAction extends AbstractEntityAction {
     private static final long serialVersionUID = 7664590774096971742L;
     protected SearchService searchService;
     protected EntityService entityService;
+
+
+    protected File downloadFile;
+
+    public File getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(File downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public String getFileName() {
+        String downFileName = this.downloadFile.getName();
+        try {
+            downFileName = new String(downFileName.getBytes(), "ISO8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return downFileName;
+    }
+
+    public InputStream getInputStream() throws FileNotFoundException {
+        return new FileInputStream(this.downloadFile);
+    }
 
     public EntityBaseAction() {
     }

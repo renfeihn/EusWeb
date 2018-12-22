@@ -1,332 +1,384 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
-<title>ºÏÍ¬Ã÷Ï¸²éÑ¯</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>åˆåŒæ˜ç»†æŸ¥è¯¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	  
-	var contractItemSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'queryContractItem.action',
-	  	totalProperty:'results',
-	  	root:'ContractItemList',
-	  	baseParams:{status:['Using'],start:0,limit:25},
-	  	idProperty:'id',
-  	  	fields:['id','amount','price','originalPrice','subTotal','finishedAmount','checkingAmount','socAmount',
-	  	        {name:'productCombination',mapping:'product.productCombination'},
-	  	        {name:'contractNo',mapping:'contract.contractNo'},
-	  	        {name:'state',mapping:'contract.state'},
-	  	        {name:'createTime',mapping:'contract.createTime'},
-	  	        {name:'contractDate',mapping:'contract.contractDate'},
-		  	    {name:'company',mapping:'contract.company.name'}],		  	        
-	  	sortInfo: {field: 'createTime',direction: 'ASC'}	
-  	});
+            Ext.QuickTips.init();
 
-	var productCodeStoreForContractItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductCode.action',
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var humidityStoreForContractItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var errorLevelStoreForContractItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findErrorLevel.action',
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var usageTypeStoreForContractItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findUsageType.action',
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
+            var contractItemSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'queryContractItem.action',
+                totalProperty: 'results',
+                root: 'ContractItemList',
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id', 'amount', 'price', 'originalPrice', 'subTotal', 'finishedAmount', 'checkingAmount', 'socAmount',
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'contractNo', mapping: 'contract.contractNo'},
+                    {name: 'state', mapping: 'contract.state'},
+                    {name: 'createTime', mapping: 'contract.createTime'},
+                    {name: 'contractDate', mapping: 'contract.contractDate'},
+                    {name: 'company', mapping: 'contract.company.name'}],
+                sortInfo: {field: 'createTime', direction: 'ASC'}
+            });
 
-	var productTypeStoreForContractItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductType.action',
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
+            var productCodeStoreForContractItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductCode.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtContractForContractItemSearch = {
-		xtype:'textfield',
-		id:'txtContractForContractItemSearch',
-		fieldLabel:'ºÏÍ¬ºÅ',
-		width:220,
-		name:'txtContractForContractItemSearch'
-	};
+            var humidityStoreForContractItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtCompanyForContractItemSearch = {
-		xtype:'textfield',
-		id:'txtCompanyForContractItemSearch',
-		fieldLabel:'ºÏÍ¬³§ÉÌ',
-		width:220,
-		name:'txtCompanyForContractItemSearch'
-	};
-	
-	var txtProductCombinationForContractItemSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForContractItemSearch',
-		fieldLabel:'²úÆ·Ãû³Æ¼°ĞÍºÅ',
-		width:220,
-		name:'txtProductCombinationForContractItemSearch'
-	};
-	
-	var txtVoltageForContractItemSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForContractItemSearch',
-		fieldLabel:'²úÆ·µçÑ¹',
-		width:220,
-		name:'txtVoltageForContractItemSearch'
-	};
-	var txtCapacityForContractItemSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForContractItemSearch',
-		fieldLabel:'²úÆ·ÈİÁ¿',
-		width:220,
-		name:'txtCapacityForContractItemSearch'
-	};
+            var errorLevelStoreForContractItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findErrorLevel.action',
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var cbProductCodeForContractItemSearch = {
-		xtype:'combo',
-		store:productCodeStoreForContractItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·´úºÅ',
-		fieldLabel:'²úÆ·´úºÅ',
-		selectOnFocus:true,
-		id:'cbProductCodeForContractItemSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·´úºÅ',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbHumidityForContractItemSearch = {
-		xtype:'combo',
-		store:humidityStoreForContractItemSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡ÔñÊª¶ÈÏµÊıÖ¸±ê',
-		fieldLabel:'Êª¶ÈÏµÊıÖ¸±ê',
-		selectOnFocus:true,
-		id:'cbHumidityForContractItemSearch',
-		width:220,
-		blankText:'ÇëÑ¡ÔñÊª¶ÈÏµÊıÖ¸±ê',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbErrorLevelForContractItemSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForContractItemSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡ÔñÎó²îµÈ¼¶',
-		fieldLabel:'Îó²îµÈ¼¶',
-		selectOnFocus:true,
-		id:'cbErrorLevelForContractItemSearch',
-		width:220,
-		blankText:'ÇëÑ¡ÔñÎó²îµÈ¼¶',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbUsageTypeForContractItemSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForContractItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·Æ·ÖÖ',
-		fieldLabel:'²úÆ·Æ·ÖÖ',
-		selectOnFocus:true,
-		id:'cbUsageTypeForContractItemSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·Æ·ÖÖ',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbProductTypeForContractItemSearch = {
-		xtype:'combo',
-		store:productTypeStoreForContractItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·Àà±ğ',
-		fieldLabel:'²úÆ·Àà±ğ',
-		selectOnFocus:true,
-		id:'cbProductTypeForContractItemSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·Àà±ğ',
-		valueField:'id',
-		editable: true
-	};
+            var usageTypeStoreForContractItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findUsageType.action',
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
 
-	var txtDateStartForContractItemSearch = {
-		xtype:'datefield',
-		id:'txtDateStartForContractItemSearch',
-		fieldLabel:'±£´æÈÕÆÚ(¿ªÊ¼)',
-		width:220,
-		name:'txtDateStartForContractItemSearch'	
-	};
-	
-	var txtDateEndForContractItemSearch = {
-		xtype:'datefield',
-		id:'txtDateEndForContractItemSearch',
-		fieldLabel:'±£´æÈÕÆÚ(½áÊø)',
-		width:220,
-		name:'txtDateEndForContractItemSearch'	
-	};
-	
-	var col1 = {
-			columnWidth: .5,
-			layout: 'form',
-			frame: false,
-			border: false,
-			defaultType: 'textfield',
-			items:[txtProductCombinationForContractItemSearch,cbProductCodeForContractItemSearch,cbErrorLevelForContractItemSearch,txtVoltageForContractItemSearch,txtDateStartForContractItemSearch,txtContractForContractItemSearch]		
-		};
-		
-		var col2 = {
-			columnWidth: .5,
-			layout: 'form',
-			frame: false,
-			border: false,
-			defaultType: 'textfield',
-			items:[cbProductTypeForContractItemSearch,cbHumidityForContractItemSearch,cbUsageTypeForContractItemSearch,txtCapacityForContractItemSearch,txtDateEndForContractItemSearch,txtCompanyForContractItemSearch]		
-		};
-	
-	var contractItemSearchGrid = {
-		xtype:'grid',
-		id:'contractItemSearch-grid',
-		anchor:'100% 90%',
-		store:contractItemSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		hidden:false,
-		loadMask:true,
-		frame:true,
-		border:false,
-		renderTo:'contractItemSearchItemsPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'ºÏÍ¬ºÅ',width:120,dataIndex:'contractNo'},
-				{header:'±£´æÊ±¼ä',width:120,dataIndex:'createTime',hidden:true},
-				{header:'ºÏÍ¬³§ÉÌ',width:150,dataIndex:'company'},
-				{header:'²úÆ·Ãû³Æ¼°ĞÍºÅ',width:250,dataIndex:'productCombination'},
-				{header:'ºÏÍ¬ÊıÁ¿',width:70,dataIndex:'amount'},
-				{header:'Íê³ÉÊıÁ¿',width:40,dataIndex:'finishedAmount'},	
-				{header:'ÉóºËÊıÁ¿',width:40,dataIndex:'checkingAmount'},
-				{header:'ºÏÍ¬¼Û¸ñ',width:70,dataIndex:'price'},
-				{header:'Ô­Ê¼¼Û¸ñ',width:70,dataIndex:'originalPrice'},
-				{header:'½ğ¶îĞ¡¼Æ',width:70,dataIndex:'subTotal'},
-				{header:'½»»õÆÚ',width:80,dataIndex:'contractDate'},
-				{header:'ºÏÍ¬×´Ì¬',width:50,renderer:clsys.grid.columnrender.ScheduleStatusRender,dataIndex:'state'}					
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
+            var productTypeStoreForContractItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductType.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
 
-	 var contractItemQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'²éÑ¯Ìõ¼ş',
-         labelWidth:150,
-         renderTo:'contractItemQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '²éÑ¯',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
-					companyName:Ext.getCmp('txtCompanyForContractItemSearch').getValue(),
- 		 			contractNo:Ext.getCmp('txtContractForContractItemSearch').getValue(),
-					productCombination:Ext.getCmp('txtProductCombinationForContractItemSearch').getValue(),
-					productCode:Ext.getCmp('cbProductCodeForContractItemSearch').getValue(),
-					errorLevel:Ext.getCmp('cbErrorLevelForContractItemSearch').getValue(),
-					voltage:Ext.getCmp('txtVoltageForContractItemSearch').getValue(),
-					capacity:Ext.getCmp('txtCapacityForContractItemSearch').getValue(),
-					productType:Ext.getCmp('cbProductTypeForContractItemSearch').getValue(),
-					humidity:Ext.getCmp('cbHumidityForContractItemSearch').getValue(),
-					usageType:Ext.getCmp('cbUsageTypeForContractItemSearch').getValue(),
-					dateStartForContractItemSearch:Ext.getCmp('txtDateStartForContractItemSearch').getValue(),
-					dateEndForContractItemSearch:Ext.getCmp('txtDateEndForContractItemSearch').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				contractItemSearchStore.reload({params:attributes});
-  			}
-		},{
-			text: 'Çå³ı',
-			iconCls: 'icon-remove',
-			handler: function() {contractItemQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'Ë¢ĞÂ',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				contractItemSearchStore.reload();
-			},
-			scope:this
-		}]
-     });
-     		   
-	var contractItemSearchPanel = Ext.getCmp('ContractItemSearch-mainpanel');
-	contractItemSearchPanel.add(contractItemQueryConditionPanel,contractItemSearchGrid);
-	clsys.form.Util.PagingToolbar(contractItemSearchStore, contractItemSearchPanel.tbar, 'contractItemSearch-paging');
-	contractItemSearchPanel.doLayout();
-  	
-  });
-</script>
+            var txtContractForContractItemSearch = {
+                xtype: 'textfield',
+                id: 'txtContractForContractItemSearch',
+                fieldLabel: 'åˆåŒå·',
+                width: 220,
+                name: 'txtContractForContractItemSearch'
+            };
+
+            var txtCompanyForContractItemSearch = {
+                xtype: 'textfield',
+                id: 'txtCompanyForContractItemSearch',
+                fieldLabel: 'åˆåŒå‚å•†',
+                width: 220,
+                name: 'txtCompanyForContractItemSearch'
+            };
+
+            var txtProductCombinationForContractItemSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForContractItemSearch',
+                fieldLabel: 'äº§å“åç§°åŠå‹å·',
+                width: 220,
+                name: 'txtProductCombinationForContractItemSearch'
+            };
+
+            var txtVoltageForContractItemSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForContractItemSearch',
+                fieldLabel: 'äº§å“ç”µå‹',
+                width: 220,
+                name: 'txtVoltageForContractItemSearch'
+            };
+            var txtCapacityForContractItemSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForContractItemSearch',
+                fieldLabel: 'äº§å“å®¹é‡',
+                width: 220,
+                name: 'txtCapacityForContractItemSearch'
+            };
+
+            var cbProductCodeForContractItemSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForContractItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“ä»£å·',
+                fieldLabel: 'äº§å“ä»£å·',
+                selectOnFocus: true,
+                id: 'cbProductCodeForContractItemSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“ä»£å·',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbHumidityForContractItemSearch = {
+                xtype: 'combo',
+                store: humidityStoreForContractItemSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                fieldLabel: 'æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                selectOnFocus: true,
+                id: 'cbHumidityForContractItemSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbErrorLevelForContractItemSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForContractItemSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©è¯¯å·®ç­‰çº§',
+                fieldLabel: 'è¯¯å·®ç­‰çº§',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForContractItemSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©è¯¯å·®ç­‰çº§',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbUsageTypeForContractItemSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForContractItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“å“ç§',
+                fieldLabel: 'äº§å“å“ç§',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForContractItemSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“å“ç§',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbProductTypeForContractItemSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForContractItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“ç±»åˆ«',
+                fieldLabel: 'äº§å“ç±»åˆ«',
+                selectOnFocus: true,
+                id: 'cbProductTypeForContractItemSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“ç±»åˆ«',
+                valueField: 'id',
+                editable: true
+            };
+
+            var txtDateStartForContractItemSearch = {
+                xtype: 'datefield',
+                id: 'txtDateStartForContractItemSearch',
+                fieldLabel: 'ä¿å­˜æ—¥æœŸ(å¼€å§‹)',
+                width: 220,
+                name: 'txtDateStartForContractItemSearch'
+            };
+
+            var txtDateEndForContractItemSearch = {
+                xtype: 'datefield',
+                id: 'txtDateEndForContractItemSearch',
+                fieldLabel: 'ä¿å­˜æ—¥æœŸ(ç»“æŸ)',
+                width: 220,
+                name: 'txtDateEndForContractItemSearch'
+            };
+
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtProductCombinationForContractItemSearch, cbProductCodeForContractItemSearch, cbErrorLevelForContractItemSearch, txtVoltageForContractItemSearch, txtDateStartForContractItemSearch, txtContractForContractItemSearch]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForContractItemSearch, cbHumidityForContractItemSearch, cbUsageTypeForContractItemSearch, txtCapacityForContractItemSearch, txtDateEndForContractItemSearch, txtCompanyForContractItemSearch]
+            };
+
+            var contractItemSearchGrid = {
+                xtype: 'grid',
+                id: 'contractItemSearch-grid',
+                anchor: '100% 90%',
+                store: contractItemSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                hidden: false,
+                loadMask: true,
+                frame: true,
+                border: false,
+                renderTo: 'contractItemSearchItemsPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'åˆåŒå·', width: 120, dataIndex: 'contractNo'},
+                        {header: 'ä¿å­˜æ—¶é—´', width: 120, dataIndex: 'createTime', hidden: true},
+                        {header: 'åˆåŒå‚å•†', width: 150, dataIndex: 'company'},
+                        {header: 'äº§å“åç§°åŠå‹å·', width: 250, dataIndex: 'productCombination'},
+                        {header: 'åˆåŒæ•°é‡', width: 70, dataIndex: 'amount'},
+                        {header: 'å®Œæˆæ•°é‡', width: 40, dataIndex: 'finishedAmount'},
+                        {header: 'å®¡æ ¸æ•°é‡', width: 40, dataIndex: 'checkingAmount'},
+                        {header: 'åˆåŒä»·æ ¼', width: 70, dataIndex: 'price'},
+                        {header: 'åŸå§‹ä»·æ ¼', width: 70, dataIndex: 'originalPrice'},
+                        {header: 'é‡‘é¢å°è®¡', width: 70, dataIndex: 'subTotal'},
+                        {header: 'äº¤è´§æœŸ', width: 80, dataIndex: 'contractDate'},
+                        {
+                            header: 'åˆåŒçŠ¶æ€',
+                            width: 50,
+                            renderer: clsys.grid.columnrender.ScheduleStatusRender,
+                            dataIndex: 'state'
+                        }
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+
+            var btnDown = {
+                text: 'Excelå¯¼å‡º',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        companyName: encodeURI(Ext.getCmp('txtCompanyForContractItemSearch').getValue()),
+                        contractNo: encodeURI(Ext.getCmp('txtContractForContractItemSearch').getValue()),
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForContractItemSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForContractItemSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForContractItemSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForContractItemSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForContractItemSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForContractItemSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForContractItemSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForContractItemSearch').getValue()),
+                        dateStartForContractItemSearch: encodeURI(Ext.getCmp('txtDateStartForContractItemSearch').getValue()),
+                        dateEndForContractItemSearch: encodeURI(Ext.getCmp('txtDateEndForContractItemSearch').getValue())
+                    };
+
+                    //å¦‚æœä¸å­˜åœ¨ä¸€ä¸ªidä¸º"downForm"çš„formè¡¨å•ï¼Œåˆ™æ‰§è¡Œä¸‹é¢çš„æ“ä½œ
+                    if (!Ext.fly('downForm2')) {
+
+                        //ä¸‹é¢ä»£ç æ˜¯åœ¨åˆ›å»ºä¸€ä¸ªè¡¨å•ä»¥åŠæ·»åŠ ç›¸åº”çš„ä¸€äº›å±æ€§
+                        var downForm = document.createElement('form');  //åˆ›å»ºä¸€ä¸ªformè¡¨å•
+                        downForm.id = 'downForm2'; ã€€ã€€//è¯¥è¡¨å•çš„idä¸ºdownForm
+                        downForm.name = 'downForm2';  //è¯¥è¡¨å•çš„nameå±æ€§ä¸ºdownForm
+                        downForm.className = 'x-hidden'; //è¯¥è¡¨å•ä¸ºéšè—çš„
+//                        downForm.action = 'getcontractAction.action'; //è¡¨å•çš„æäº¤åœ°å€
+                        downForm.method = 'POST';  //è¡¨å•çš„æäº¤æ–¹æ³•
+
+                        document.body.appendChild(downForm); //å°†formè¡¨å•è¿½åŠ åˆ°bodyé‡Œé¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getcontractItemAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm2'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var contractItemQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'æŸ¥è¯¢æ¡ä»¶',
+                labelWidth: 150,
+                renderTo: 'contractItemQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'æŸ¥è¯¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            companyName: Ext.getCmp('txtCompanyForContractItemSearch').getValue(),
+                            contractNo: Ext.getCmp('txtContractForContractItemSearch').getValue(),
+                            productCombination: Ext.getCmp('txtProductCombinationForContractItemSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForContractItemSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForContractItemSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForContractItemSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForContractItemSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForContractItemSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForContractItemSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForContractItemSearch').getValue(),
+                            dateStartForContractItemSearch: Ext.getCmp('txtDateStartForContractItemSearch').getValue(),
+                            dateEndForContractItemSearch: Ext.getCmp('txtDateEndForContractItemSearch').getValue()
+                        };
+                        attributes.start = 0;
+                        contractItemSearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'æ¸…é™¤',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        contractItemQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'åˆ·æ–°',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        contractItemSearchStore.reload();
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var contractItemSearchPanel = Ext.getCmp('ContractItemSearch-mainpanel');
+            contractItemSearchPanel.add(contractItemQueryConditionPanel, contractItemSearchGrid);
+            clsys.form.Util.PagingToolbar(contractItemSearchStore, contractItemSearchPanel.tbar, 'contractItemSearch-paging');
+            contractItemSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="contractItemSearchPanel"></div>

@@ -8,9 +8,6 @@ import com.is.eus.pojo.basic.Product;
 import com.is.eus.pojo.contract.Contract;
 import com.is.eus.pojo.contract.ContractItem;
 import com.is.eus.pojo.dac.User;
-import com.is.eus.service.EntityService;
-import com.is.eus.service.SearchService;
-import com.is.eus.service.basic.ui.CompanyService;
 import com.is.eus.service.biz.ui.ContractService;
 import com.is.eus.service.exception.InvalidOperationException;
 import com.is.eus.service.support.FileUtil;
@@ -20,13 +17,6 @@ import com.is.eus.util.DateUtil;
 import com.is.eus.util.JsonHelper;
 import com.is.eus.web.action.EntityBaseAction;
 import com.is.eus.web.exception.InvalidPageInformationException;
-
-import java.io.*;
-import java.net.URLDecoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.PageOrientation;
@@ -34,6 +24,11 @@ import jxl.format.PaperSize;
 import jxl.format.VerticalAlignment;
 import jxl.write.*;
 import org.apache.commons.lang.xwork.StringUtils;
+
+import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class contractAction extends EntityBaseAction {
     private String companyID;
@@ -72,15 +67,7 @@ public class contractAction extends EntityBaseAction {
     private String humidity;
     private String min;
     private String max;
-    private File downloadFile;
 
-    public File getDownloadFile() {
-        return downloadFile;
-    }
-
-    public void setDownloadFile(File downloadFile) {
-        this.downloadFile = downloadFile;
-    }
 
     public void setMin(String min) {
         this.min = min;
@@ -706,11 +693,6 @@ public class contractAction extends EntityBaseAction {
         return strClause.toString();
     }
 
-    private CompanyService companyService;
-
-    public void setCompanyService(CompanyService companyService) {
-        this.companyService = companyService;
-    }
 
     public String getReport() {
         try {
@@ -745,20 +727,6 @@ public class contractAction extends EntityBaseAction {
     }
 
 
-    public String getFileName() {
-        String downFileName = this.downloadFile.getName();
-        try {
-            downFileName = new String(downFileName.getBytes(), "ISO8859-1");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return downFileName;
-    }
-
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(this.downloadFile);
-    }
-
     /**
      * 导出厂商信息
      *
@@ -766,8 +734,6 @@ public class contractAction extends EntityBaseAction {
      */
     private File createExcel(List items) {
         String dir = FileUtil.tmpdir();
-//        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date2 = new Date();
         String strDate = DateUtil.formatDate(new Date(), DateUtil.PATTERN_ISO_DATE);
         String filename = dir + "\\" + "合同查询(" + strDate + ").xls";
         File file = new File(filename);
@@ -785,7 +751,7 @@ public class contractAction extends EntityBaseAction {
 
         try {
             WritableWorkbook e = Workbook.createWorkbook(file);
-            WritableSheet ws = e.createSheet("厂商信息", 0);
+            WritableSheet ws = e.createSheet("合同信息", 0);
             ws.getSettings().setPaperSize(PaperSize.A4);
             ws.getSettings().setOrientation(PageOrientation.LANDSCAPE);
             ws.setRowView(0, 600);
@@ -832,8 +798,8 @@ public class contractAction extends EntityBaseAction {
                 ws.addCell(new Label(4, row.intValue(), BusiUtil.nvlToString(item.getTotalCheckingAmount(), ""), wcfi2));
                 ws.addCell(new Label(5, row.intValue(), BusiUtil.nvlToString(item.getTotalSum(), ""), wcfi2));
                 ws.addCell(new Label(6, row.intValue(), DateUtil.formatDate(BusiUtil.nvl(item.getContractDate(), new Date()), DateUtil.PATTERN_ISO_DATE), wcfi2));
-                ws.addCell(new Label(7, row.intValue(), getStatus(item.getStatus()), wcfi2));
-                ws.addCell(new Label(8, row.intValue(), getState(item.getState()), wcfi2));
+                ws.addCell(new Label(7, row.intValue(), BusiUtil.getStatus(item.getStatus()), wcfi2));
+                ws.addCell(new Label(8, row.intValue(), BusiUtil.getState(item.getState()), wcfi2));
             }
 
             e.write();
@@ -845,53 +811,6 @@ public class contractAction extends EntityBaseAction {
         } catch (IOException var29) {
             var29.printStackTrace();
             return null;
-        }
-    }
-
-
-    /**
-     * 获取有效状态
-     *
-     * @param value
-     * @return
-     */
-    private String getStatus(Integer value) {
-        switch (value) {
-            case 0:
-                return "有效";
-            case 1:
-                return "禁用";
-            case 2:
-                return "作废";
-            default:
-                return "未知";
-        }
-    }
-
-    /**
-     * 获取有效状态
-     *
-     * @param value
-     * @return
-     */
-    private String getState(Integer value) {
-        switch (value) {
-            case 0:
-                return "已保存";
-            case 1:
-                return "待审核";
-            case 2:
-                return "审核失败";
-            case 3:
-                return "未完成";
-            case 4:
-                return "部分完成";
-            case 5:
-                return "全部完成";
-            case 6:
-                return "终止";
-            default:
-                return "未知";
         }
     }
 }
