@@ -1,326 +1,367 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>∫œÕ¨∂‘ø‚«∑Ωªª„◊‹≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ÂêàÂêåÂØπÂ∫ìÊ¨†‰∫§Ê±áÊÄªÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	  
-	var contractSummeryViewSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'queryContractItemOwnedSummeryView.action',
-	  	totalProperty:'results',
-	  	root:'ContractItemOwnedSummeryViewList',
-	  	baseParams:{start:0,limit:25},
-	  	idProperty:'id',
-	  	fields:['id','amount','checkingAmount','finishedAmount','unfinishedAmount','restAmount','ownedAmount',
-	  	        {name:'productCombination',mapping:'product.productCombination'},
-	  		  	{name:'voltage',mapping:'product.voltage'},
-	  			{name:'capacity',mapping:'product.capacity'},
-		        {name:'productCode',mapping:'product.productCode.name'},	        		   
-		        {name:'humidity',mapping:'product.humidity.code'},
-		        {name:'errorLevel',mapping:'product.errorLevel.code'},   		  	
-	  		   	{name:'unit',mapping:'product.unit.name'},
-	  		   	{name:'usageType',mapping:'product.usageType.name'}],  	
-		sortInfo:{field: 'productCombination',direction: 'ASC'}  	
-  	});
-  	
-	var productCodeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductCode.action',
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var humidityStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var errorLevelStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findErrorLevel.action',
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var usageTypeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findUsageType.action',
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
+            Ext.QuickTips.init();
 
-	var productTypeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductType.action',
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var txtProductCombinationForContractSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForContractSummeryViewSearch',
-		fieldLabel:'≤˙∆∑√˚≥∆º∞–Õ∫≈',
-		width:220,
-		name:'txtProductCombinationForContractSummeryViewSearch'
-	};
-	
-	//2
-	var txtVoltageForContractSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForContractSummeryViewSearch',
-		fieldLabel:'≤˙∆∑µÁ—π',
-		width:220,
-		name:'txtVoltageForContractSummeryViewSearch'
-	};
-	//3
-	var txtCapacityForContractSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForContractSummeryViewSearch',
-		fieldLabel:'≤˙∆∑»›¡ø',
-		width:220,
-		name:'txtCapacityForContractSummeryViewSearch'
-	};
+            var contractSummeryViewSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'queryContractItemOwnedSummeryView.action',
+                totalProperty: 'results',
+                root: 'ContractItemOwnedSummeryViewList',
+                baseParams: {start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id', 'amount', 'checkingAmount', 'finishedAmount', 'unfinishedAmount', 'restAmount', 'ownedAmount',
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'voltage', mapping: 'product.voltage'},
+                    {name: 'capacity', mapping: 'product.capacity'},
+                    {name: 'productCode', mapping: 'product.productCode.name'},
+                    {name: 'humidity', mapping: 'product.humidity.code'},
+                    {name: 'errorLevel', mapping: 'product.errorLevel.code'},
+                    {name: 'unit', mapping: 'product.unit.name'},
+                    {name: 'usageType', mapping: 'product.usageType.name'}],
+                sortInfo: {field: 'productCombination', direction: 'ASC'}
+            });
 
-	//9 ≤˙∆∑¥˙∫≈œ¬¿≠¡–±Ì	
-	var cbProductCodeForContractSummeryViewSearch = {
-		xtype:'combo',
-		store:productCodeStoreForContractSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		fieldLabel:'≤˙∆∑¥˙∫≈',
-		selectOnFocus:true,
-		id:'cbProductCodeForContractSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		valueField:'id',
-		editable: true
-	};
-	
-	//10  ™∂»œµ ˝÷∏±Í	
-	var cbHumidityForContractSummeryViewSearch = {
-		xtype:'combo',
-		store:humidityStoreForContractSummeryViewSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		fieldLabel:' ™∂»œµ ˝÷∏±Í',
-		selectOnFocus:true,
-		id:'cbHumidityForContractSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		valueField:'id',
-		editable: true
-	};
-	
-	//11 ŒÛ≤Óµ»º∂
-	var cbErrorLevelForContractSummeryViewSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForContractSummeryViewSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		fieldLabel:'ŒÛ≤Óµ»º∂',
-		selectOnFocus:true,
-		id:'cbErrorLevelForContractSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		valueField:'id',
-		editable: true
-	};
-	
-	//13  ≤˙∆∑∆∑÷÷
-	var cbUsageTypeForContractSummeryViewSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForContractSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		fieldLabel:'≤˙∆∑∆∑÷÷',
-		selectOnFocus:true,
-		id:'cbUsageTypeForContractSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		valueField:'id',
-		editable: true
-	};
-	
-	//14  ≤˙∆∑¿‡±
-	var cbProductTypeForContractSummeryViewSearch = {
-		xtype:'combo',
-		store:productTypeStoreForContractSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		fieldLabel:'≤˙∆∑¿‡±',
-		selectOnFocus:true,
-		id:'cbProductTypeForContractSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		valueField:'id',
-		editable: true
-	};
+            var productCodeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductCode.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var col1 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductCodeForContractSummeryViewSearch,cbErrorLevelForContractSummeryViewSearch,txtVoltageForContractSummeryViewSearch,txtProductCombinationForContractSummeryViewSearch]		
-	};
-	
-	var col2 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductTypeForContractSummeryViewSearch,cbHumidityForContractSummeryViewSearch,cbUsageTypeForContractSummeryViewSearch,txtCapacityForContractSummeryViewSearch]		
-	};
-	
-	var contractSummeryViewSearchGrid = {
-		xtype:'grid',
-		id:'contractSummeryViewSearch-grid',
-		anchor:'100% 90%',
-		store:contractSummeryViewSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'contractSummeryViewSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'≤˙∆∑√˚≥∆º∞–Õ∫≈',dataIndex:'productCombination'},
-				{header:'≤˙∆∑¥˙∫≈',width:40,dataIndex:'productCode'},
-			    {header:'≤˙∆∑∆∑÷÷',width:40,dataIndex:'usageType'},
-				{header:' ˝¡ø∫œº∆',width:50,dataIndex:'amount'},
-				{header:'ÕÍ≥…∫œº∆',width:50,dataIndex:'finishedAmount'},
-				{header:'…Û∫À∫œº∆',width:50,dataIndex:'checkingAmount'},
-				{header:'Œ¥ÕÍ≥…∫œº∆',width:50,dataIndex:'unfinishedAmount'},	
-				{header:'ø‚¥Ê◊‹ ˝',width:50,dataIndex:'restAmount'},
-				{header:'«∑Ωª∫œº∆',width:50,dataIndex:'ownedAmount'}	
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
+            var humidityStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
- 	 var contractSummeryViewQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'contractSummeryViewQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
- 						productCombination:Ext.getCmp('txtProductCombinationForContractSummeryViewSearch').getValue(),
- 						productCode:Ext.getCmp('cbProductCodeForContractSummeryViewSearch').getValue(),
- 						errorLevel:Ext.getCmp('cbErrorLevelForContractSummeryViewSearch').getValue(),
- 						voltage:Ext.getCmp('txtVoltageForContractSummeryViewSearch').getValue(),
- 						capacity:Ext.getCmp('txtCapacityForContractSummeryViewSearch').getValue(),
- 						productType:Ext.getCmp('cbProductTypeForContractSummeryViewSearch').getValue(),
- 						humidity:Ext.getCmp('cbHumidityForContractSummeryViewSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForContractSummeryViewSearch').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				contractSummeryViewSearchStore.reload({params:attributes});
-  			}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				contractSummeryViewSearchStore.reload();
-			},
-			scope:this
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {
-				contractSummeryViewQueryConditionPanel.getForm().reset();
-			},
-			scope:this
-		},{
-			text:'¥Ú”°',
-			iconCls:'icon-printer',
-			handler:function(){
-	   			var url = 'printQueryContractItemOwnedSummeryView.action';
- 				var params = {
- 						productCombination:Ext.getCmp('txtProductCombinationForContractSummeryViewSearch').getValue(),
- 						productCode:Ext.getCmp('cbProductCodeForContractSummeryViewSearch').getValue(),
- 						errorLevel:Ext.getCmp('cbErrorLevelForContractSummeryViewSearch').getValue(),
- 						voltage:Ext.getCmp('txtVoltageForContractSummeryViewSearch').getValue(),
- 						capacity:Ext.getCmp('txtCapacityForContractSummeryViewSearch').getValue(),
- 						productType:Ext.getCmp('cbProductTypeForContractSummeryViewSearch').getValue(),
- 						humidity:Ext.getCmp('cbHumidityForContractSummeryViewSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForContractSummeryViewSearch').getValue()
- 		 	 	};
+            var errorLevelStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findErrorLevel.action',
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
- 				var strUrl = Ext.urlEncode(params);
- 				window.open(url + '?' + strUrl);
-	   			params.start = 0;
- 				contractSummeryViewSearchStore.reload({params:params});
-			},
-			scope:this	
-		}]
-     });
+            var usageTypeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findUsageType.action',
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var contractSummeryViewSearchPanel = Ext.getCmp('ContractSummeryViewSearch-mainpanel');
-	contractSummeryViewSearchPanel.add(contractSummeryViewQueryConditionPanel,contractSummeryViewSearchGrid);
-	clsys.form.Util.PagingToolbar(contractSummeryViewSearchStore, contractSummeryViewSearchPanel.tbar, 'contractSummeryViewSearch-paging');
-	contractSummeryViewSearchPanel.doLayout();
-  	
-  });
-</script>
+            var productTypeStoreForContractSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductType.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var txtProductCombinationForContractSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForContractSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑',
+                width: 220,
+                name: 'txtProductCombinationForContractSummeryViewSearch'
+            };
+
+            //2
+            var txtVoltageForContractSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForContractSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÁîµÂéã',
+                width: 220,
+                name: 'txtVoltageForContractSummeryViewSearch'
+            };
+            //3
+            var txtCapacityForContractSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForContractSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÂÆπÈáè',
+                width: 220,
+                name: 'txtCapacityForContractSummeryViewSearch'
+            };
+
+            //9 ‰∫ßÂìÅ‰ª£Âè∑‰∏ãÊãâÂàóË°®
+            var cbProductCodeForContractSummeryViewSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForContractSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                fieldLabel: '‰∫ßÂìÅ‰ª£Âè∑',
+                selectOnFocus: true,
+                id: 'cbProductCodeForContractSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                valueField: 'id',
+                editable: true
+            };
+
+            //10 ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á
+            var cbHumidityForContractSummeryViewSearch = {
+                xtype: 'combo',
+                store: humidityStoreForContractSummeryViewSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                fieldLabel: 'ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                selectOnFocus: true,
+                id: 'cbHumidityForContractSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                valueField: 'id',
+                editable: true
+            };
+
+            //11 ËØØÂ∑ÆÁ≠âÁ∫ß
+            var cbErrorLevelForContractSummeryViewSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForContractSummeryViewSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                fieldLabel: 'ËØØÂ∑ÆÁ≠âÁ∫ß',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForContractSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                valueField: 'id',
+                editable: true
+            };
+
+            //13  ‰∫ßÂìÅÂìÅÁßç
+            var cbUsageTypeForContractSummeryViewSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForContractSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                fieldLabel: '‰∫ßÂìÅÂìÅÁßç',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForContractSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                valueField: 'id',
+                editable: true
+            };
+
+            //14  ‰∫ßÂìÅÁ±ªÂà´
+            var cbProductTypeForContractSummeryViewSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForContractSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                fieldLabel: '‰∫ßÂìÅÁ±ªÂà´',
+                selectOnFocus: true,
+                id: 'cbProductTypeForContractSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                valueField: 'id',
+                editable: true
+            };
+
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductCodeForContractSummeryViewSearch, cbErrorLevelForContractSummeryViewSearch, txtVoltageForContractSummeryViewSearch, txtProductCombinationForContractSummeryViewSearch]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForContractSummeryViewSearch, cbHumidityForContractSummeryViewSearch, cbUsageTypeForContractSummeryViewSearch, txtCapacityForContractSummeryViewSearch]
+            };
+
+            var contractSummeryViewSearchGrid = {
+                xtype: 'grid',
+                id: 'contractSummeryViewSearch-grid',
+                anchor: '100% 90%',
+                store: contractSummeryViewSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'contractSummeryViewSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', dataIndex: 'productCombination'},
+                        {header: '‰∫ßÂìÅ‰ª£Âè∑', width: 40, dataIndex: 'productCode'},
+                        {header: '‰∫ßÂìÅÂìÅÁßç', width: 40, dataIndex: 'usageType'},
+                        {header: 'Êï∞ÈáèÂêàËÆ°', width: 50, dataIndex: 'amount'},
+                        {header: 'ÂÆåÊàêÂêàËÆ°', width: 50, dataIndex: 'finishedAmount'},
+                        {header: 'ÂÆ°Ê†∏ÂêàËÆ°', width: 50, dataIndex: 'checkingAmount'},
+                        {header: 'Êú™ÂÆåÊàêÂêàËÆ°', width: 50, dataIndex: 'unfinishedAmount'},
+                        {header: 'Â∫ìÂ≠òÊÄªÊï∞', width: 50, dataIndex: 'restAmount'},
+                        {header: 'Ê¨†‰∫§ÂêàËÆ°', width: 50, dataIndex: 'ownedAmount'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForContractSummeryViewSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForContractSummeryViewSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForContractSummeryViewSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForContractSummeryViewSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForContractSummeryViewSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForContractSummeryViewSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForContractSummeryViewSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForContractSummeryViewSearch').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm3')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm3'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm3';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getcontractItemOwnedSummeryViewAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm3'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var contractSummeryViewQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'contractSummeryViewQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            productCombination: Ext.getCmp('txtProductCombinationForContractSummeryViewSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForContractSummeryViewSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForContractSummeryViewSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForContractSummeryViewSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForContractSummeryViewSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForContractSummeryViewSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForContractSummeryViewSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForContractSummeryViewSearch').getValue()
+                        };
+                        attributes.start = 0;
+                        contractSummeryViewSearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        contractSummeryViewSearchStore.reload();
+                    },
+                    scope: this
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        contractSummeryViewQueryConditionPanel.getForm().reset();
+                    },
+                    scope: this
+                }, {
+                    text: 'ÊâìÂç∞',
+                    iconCls: 'icon-printer',
+                    handler: function () {
+                        var url = 'printQueryContractItemOwnedSummeryView.action';
+                        var params = {
+                            productCombination: Ext.getCmp('txtProductCombinationForContractSummeryViewSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForContractSummeryViewSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForContractSummeryViewSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForContractSummeryViewSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForContractSummeryViewSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForContractSummeryViewSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForContractSummeryViewSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForContractSummeryViewSearch').getValue()
+                        };
+
+                        var strUrl = Ext.urlEncode(params);
+                        window.open(url + '?' + strUrl);
+                        params.start = 0;
+                        contractSummeryViewSearchStore.reload({params: params});
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var contractSummeryViewSearchPanel = Ext.getCmp('ContractSummeryViewSearch-mainpanel');
+            contractSummeryViewSearchPanel.add(contractSummeryViewQueryConditionPanel, contractSummeryViewSearchGrid);
+            clsys.form.Util.PagingToolbar(contractSummeryViewSearchStore, contractSummeryViewSearchPanel.tbar, 'contractSummeryViewSearch-paging');
+            contractSummeryViewSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="contractSummeryViewSearchPanel"></div>

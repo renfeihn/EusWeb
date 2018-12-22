@@ -149,7 +149,7 @@ public class contractItemAction extends EntityBaseAction {
         return "success";
     }
 
-    private String getHQL() throws ParseException {
+    private String getHQL() {
         String strHQL = "";
         StringBuilder strClause = new StringBuilder();
         String strConnection = " and ";
@@ -225,16 +225,12 @@ public class contractItemAction extends EntityBaseAction {
 
 
     public String getReport() {
-        try {
-            if (!StringUtils.isEmpty(getHQL()))
-                this.HQLCondition = getHQL();
-            else {
-                this.HQLCondition = "";
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!StringUtils.isEmpty(getHQL()))
+            this.HQLCondition = getHQL();
+        else {
             this.HQLCondition = "";
         }
+
         Search search = createSearch(getEntityClass(), getEntityStateClass(), this.search, this.states, this.status, this.start, this.limit, this.HQLCondition, "queryContractItem");
         SearchResult result = this.searchService.search(search);
         List<ContractItem> list = result.get();
@@ -287,7 +283,7 @@ public class contractItemAction extends EntityBaseAction {
             ws.getSettings().setPaperSize(PaperSize.A4);
             ws.getSettings().setOrientation(PageOrientation.LANDSCAPE);
             ws.setRowView(0, 600);
-            ws.mergeCells(0, 0, 8, 0);
+            ws.mergeCells(0, 0, 10, 0);
             WritableFont wFont = new WritableFont(WritableFont.createFont("宋体"), 18, WritableFont.BOLD);
             WritableCellFormat wcf = new WritableCellFormat(wFont);
             wcf.setAlignment(Alignment.CENTRE);
