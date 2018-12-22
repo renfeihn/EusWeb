@@ -1,483 +1,545 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
-<title>º∆ªÆ≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ËÆ°ÂàíÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	  
-	var scheduleSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'queryScheduleView.action',
-	  	totalProperty:'results',
-	  	root:'ScheduleViewList',
-	  	baseParams:{status:['Using'],start:0,limit:25},
-	  	idProperty:'id',
-	  	fields:['id','scheduleNo','scheduleType','scheduleDate','createTime','state',
-	  	      	'amount','finishedAmount','memo','contractNo','q1','q2','q3','q4',
-	  	        {name:'productID',mapping:'product.id'},
-	  	        {name:'productCombination',mapping:'product.productCombination'},
-	  	        {name:'companyName',mapping:'company.name'},
-		        {name:'productTypeID',mapping:'product.productType.id'}],  	
-		sortInfo:{field: 'scheduleNo',direction: 'ASC'}  	
-  	});
-  	
-	var productCodeStoreForScheduleSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductCode.action',
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var humidityStoreForScheduleSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var errorLevelStoreForScheduleSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findErrorLevel.action',
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var usageTypeStoreForScheduleSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findUsageType.action',
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
+            Ext.QuickTips.init();
 
-	var productTypeStoreForScheduleSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductType.action',
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var txtProductCombinationForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForScheduleSearch',
-		fieldLabel:'≤˙∆∑√˚≥∆º∞–Õ∫≈',
-		width:220,
-		name:'txtProductCombinationForScheduleSearch'
-	};
-	
-	//2
-	var txtVoltageForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForScheduleSearch',
-		fieldLabel:'≤˙∆∑µÁ—π',
-		width:220,
-		name:'txtVoltageForScheduleSearch'
-	};
-	//3
-	var txtCapacityForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForScheduleSearch',
-		fieldLabel:'≤˙∆∑»›¡ø',
-		width:220,
-		name:'txtCapacityForScheduleSearch'
-	};
+            var scheduleSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'queryScheduleView.action',
+                totalProperty: 'results',
+                root: 'ScheduleViewList',
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id', 'scheduleNo', 'scheduleType', 'scheduleDate', 'createTime', 'state',
+                    'amount', 'finishedAmount', 'memo', 'contractNo', 'q1', 'q2', 'q3', 'q4',
+                    {name: 'productID', mapping: 'product.id'},
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'companyName', mapping: 'company.name'},
+                    {name: 'productTypeID', mapping: 'product.productType.id'}],
+                sortInfo: {field: 'scheduleNo', direction: 'ASC'}
+            });
 
-	//8
-	var txtMemoForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtMemoForScheduleSearch',
-		fieldLabel:'∫œÕ¨∫≈',
-		width:220,
-		name:'txtMemoForScheduleSearch'	
-	};
+            var productCodeStoreForScheduleSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductCode.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtCompanyForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtCompanyForScheduleSearch',
-		fieldLabel:'∫œÕ¨≥ß…Ã',
-		width:220,
-		name:'txtCompanyForScheduleSearch'	
-	};
-	
-	//9 ≤˙∆∑¥˙∫≈œ¬¿≠¡–±Ì	
-	var cbProductCodeForScheduleSearch = {
-		xtype:'combo',
-		store:productCodeStoreForScheduleSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		fieldLabel:'≤˙∆∑¥˙∫≈',
-		selectOnFocus:true,
-		id:'cbProductCodeForScheduleSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		valueField:'id',
-		editable: true
-	};
-	
-	//10  ™∂»œµ ˝÷∏±Í	
-	var cbHumidityForScheduleSearch = {
-		xtype:'combo',
-		store:humidityStoreForScheduleSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		fieldLabel:' ™∂»œµ ˝÷∏±Í',
-		selectOnFocus:true,
-		id:'cbHumidityForScheduleSearch',
-		width:220,
-		blankText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		valueField:'id',
-		editable: true
-	};
-	
-	//11 ŒÛ≤Óµ»º∂
-	var cbErrorLevelForScheduleSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForScheduleSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		fieldLabel:'ŒÛ≤Óµ»º∂',
-		selectOnFocus:true,
-		id:'cbErrorLevelForScheduleSearch',
-		width:220,
-		blankText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		valueField:'id',
-		editable: true
-	};
-	
-	//13  ≤˙∆∑∆∑÷÷
-	var cbUsageTypeForScheduleSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForScheduleSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		fieldLabel:'≤˙∆∑∆∑÷÷',
-		selectOnFocus:true,
-		id:'cbUsageTypeForScheduleSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		valueField:'id',
-		editable: true
-	};
-	
-	//14  ≤˙∆∑¿‡±
-	var cbProductTypeForScheduleSearch = {
-		xtype:'combo',
-		store:productTypeStoreForScheduleSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		fieldLabel:'≤˙∆∑¿‡±',
-		selectOnFocus:true,
-		id:'cbProductTypeForScheduleSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		valueField:'id',
-		editable: true
-	};
-	
-	var txtScheduleNoForScheduleSearch = {
-		xtype:'textfield',
-		id:'txtScheduleNoForScheduleSearch',
-		fieldLabel:'º∆ªÆ±‡∫≈',
-		width:220,
-		name:'txtScheduleNoForScheduleSearch'	
-	};
+            var humidityStoreForScheduleSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtScheduleDateStart = {
-		xtype:'datefield',
-		id:'txtScheduleDateStart',
-		fieldLabel:'Ωªªı»’∆⁄(ø™ º)',
-		width:220,
-		name:'txtScheduleDateStart'	
-	};
-	
-	var txtScheduleDateEnd = {
-		xtype:'datefield',
-		id:'txtScheduleDateEnd',
-		fieldLabel:'Ωªªı»’∆⁄(Ω· ¯)',
-		width:220,
-		name:'txtScheduleDateEnd'	
-	};
-	
-	var txtScheduleSavedDateStart = {
-		xtype:'datefield',
-		id:'txtScheduleSavedDateStart',
-		fieldLabel:'±£¥Ê»’∆⁄(ø™ º)',
-		width:220,
-		name:'txtScheduleSavedDateStart'	
-	};
-	
-	var txtScheduleSavedDateEnd = {
-		xtype:'datefield',
-		id:'txtScheduleSavedDateEnd',
-		fieldLabel:'±£¥Ê»’∆⁄(Ω· ¯)',
-		width:220,
-		name:'txtScheduleSavedDateEnd'	
-	};	
-	
-	var cbScheduleState = {
-		xtype: 'combo',
-		id: 'cbScheduleState',
-		emptyText: '«Î—°‘Òº∆ªÆ◊¥Ã¨',
-		fieldLabel:'º∆ªÆ◊¥Ã¨',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					[ '', '»´≤ø◊¥Ã¨' ],
-					['Saved','“—±£¥Ê'],
-					['WaitForAduilt','¥˝…Û∫À'],
-					['AduitFailed','…Û∫À ß∞‹'],
-					['None','Œ¥ÕÍ≥…'],
-					['Part','≤ø∑÷ÕÍ≥…'],
-					[['None','Part'],'«∑Ωªº∆ªÆ'],
-					['Complete','»´≤øÕÍ≥…'],
-					['Terminated','÷’÷π']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};
-	
-	
-	var cbScheduleStatus = {
-		xtype: 'combo',
-		id: 'cbScheduleStatus',
-		emptyText: '«Î—°‘Òº∆ªÆ «∑Ò◊˜∑œ',
-		fieldLabel:' «∑Ò◊˜∑œ',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					[ '', '»´≤ø' ],
-					['Using','”––ß'],
-					['Deleted','◊˜∑œ']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};	
+            var errorLevelStoreForScheduleSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findErrorLevel.action',
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var usageTypeStoreForScheduleSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findUsageType.action',
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var productTypeStoreForScheduleSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductType.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var txtProductCombinationForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForScheduleSearch',
+                fieldLabel: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑',
+                width: 220,
+                name: 'txtProductCombinationForScheduleSearch'
+            };
+
+            //2
+            var txtVoltageForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForScheduleSearch',
+                fieldLabel: '‰∫ßÂìÅÁîµÂéã',
+                width: 220,
+                name: 'txtVoltageForScheduleSearch'
+            };
+            //3
+            var txtCapacityForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForScheduleSearch',
+                fieldLabel: '‰∫ßÂìÅÂÆπÈáè',
+                width: 220,
+                name: 'txtCapacityForScheduleSearch'
+            };
+
+            //8
+            var txtMemoForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtMemoForScheduleSearch',
+                fieldLabel: 'ÂêàÂêåÂè∑',
+                width: 220,
+                name: 'txtMemoForScheduleSearch'
+            };
+
+            var txtCompanyForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtCompanyForScheduleSearch',
+                fieldLabel: 'ÂêàÂêåÂéÇÂïÜ',
+                width: 220,
+                name: 'txtCompanyForScheduleSearch'
+            };
+
+            //9 ‰∫ßÂìÅ‰ª£Âè∑‰∏ãÊãâÂàóË°®
+            var cbProductCodeForScheduleSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForScheduleSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                fieldLabel: '‰∫ßÂìÅ‰ª£Âè∑',
+                selectOnFocus: true,
+                id: 'cbProductCodeForScheduleSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                valueField: 'id',
+                editable: true
+            };
+
+            //10 ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á
+            var cbHumidityForScheduleSearch = {
+                xtype: 'combo',
+                store: humidityStoreForScheduleSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                fieldLabel: 'ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                selectOnFocus: true,
+                id: 'cbHumidityForScheduleSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                valueField: 'id',
+                editable: true
+            };
+
+            //11 ËØØÂ∑ÆÁ≠âÁ∫ß
+            var cbErrorLevelForScheduleSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForScheduleSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                fieldLabel: 'ËØØÂ∑ÆÁ≠âÁ∫ß',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForScheduleSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                valueField: 'id',
+                editable: true
+            };
+
+            //13  ‰∫ßÂìÅÂìÅÁßç
+            var cbUsageTypeForScheduleSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForScheduleSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                fieldLabel: '‰∫ßÂìÅÂìÅÁßç',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForScheduleSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                valueField: 'id',
+                editable: true
+            };
+
+            //14  ‰∫ßÂìÅÁ±ªÂà´
+            var cbProductTypeForScheduleSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForScheduleSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                fieldLabel: '‰∫ßÂìÅÁ±ªÂà´',
+                selectOnFocus: true,
+                id: 'cbProductTypeForScheduleSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                valueField: 'id',
+                editable: true
+            };
+
+            var txtScheduleNoForScheduleSearch = {
+                xtype: 'textfield',
+                id: 'txtScheduleNoForScheduleSearch',
+                fieldLabel: 'ËÆ°ÂàíÁºñÂè∑',
+                width: 220,
+                name: 'txtScheduleNoForScheduleSearch'
+            };
+
+            var txtScheduleDateStart = {
+                xtype: 'datefield',
+                id: 'txtScheduleDateStart',
+                fieldLabel: '‰∫§Ë¥ßÊó•Êúü(ÂºÄÂßã)',
+                width: 220,
+                name: 'txtScheduleDateStart'
+            };
+
+            var txtScheduleDateEnd = {
+                xtype: 'datefield',
+                id: 'txtScheduleDateEnd',
+                fieldLabel: '‰∫§Ë¥ßÊó•Êúü(ÁªìÊùü)',
+                width: 220,
+                name: 'txtScheduleDateEnd'
+            };
+
+            var txtScheduleSavedDateStart = {
+                xtype: 'datefield',
+                id: 'txtScheduleSavedDateStart',
+                fieldLabel: '‰øùÂ≠òÊó•Êúü(ÂºÄÂßã)',
+                width: 220,
+                name: 'txtScheduleSavedDateStart'
+            };
+
+            var txtScheduleSavedDateEnd = {
+                xtype: 'datefield',
+                id: 'txtScheduleSavedDateEnd',
+                fieldLabel: '‰øùÂ≠òÊó•Êúü(ÁªìÊùü)',
+                width: 220,
+                name: 'txtScheduleSavedDateEnd'
+            };
+
+            var cbScheduleState = {
+                xtype: 'combo',
+                id: 'cbScheduleState',
+                emptyText: 'ËØ∑ÈÄâÊã©ËÆ°ÂàíÁä∂ÊÄÅ',
+                fieldLabel: 'ËÆ°ÂàíÁä∂ÊÄÅ',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'ÂÖ®ÈÉ®Áä∂ÊÄÅ'],
+                        ['Saved', 'Â∑≤‰øùÂ≠ò'],
+                        ['WaitForAduilt', 'ÂæÖÂÆ°Ê†∏'],
+                        ['AduitFailed', 'ÂÆ°Ê†∏Â§±Ë¥•'],
+                        ['None', 'Êú™ÂÆåÊàê'],
+                        ['Part', 'ÈÉ®ÂàÜÂÆåÊàê'],
+                        [['None', 'Part'], 'Ê¨†‰∫§ËÆ°Âàí'],
+                        ['Complete', 'ÂÖ®ÈÉ®ÂÆåÊàê'],
+                        ['Terminated', 'ÁªàÊ≠¢']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
 
 
-	var cbScheduleType = {
-		xtype: 'combo',
-		id: 'cbScheduleType',
-		emptyText: '«Î—°‘Òº∆ªÆ¿‡–Õ',
-		fieldLabel:'º∆ªÆ¿‡–Õ',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					[ '', '»´≤ø' ],
-					['SchduleType','‘§Õ∂º∆ªÆ'],
-					['ContractType','∫œÕ¨º∆ªÆ']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};
-		
-	var col1 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[txtScheduleNoForScheduleSearch,cbScheduleType,txtScheduleDateStart,txtScheduleDateEnd,cbProductCodeForScheduleSearch,cbErrorLevelForScheduleSearch,txtVoltageForScheduleSearch,txtCapacityForScheduleSearch,txtProductCombinationForScheduleSearch]		
-	};
-	
-	var col2 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbScheduleStatus,cbScheduleState,txtScheduleSavedDateStart,txtScheduleSavedDateEnd,cbProductTypeForScheduleSearch,cbHumidityForScheduleSearch,cbUsageTypeForScheduleSearch,txtMemoForScheduleSearch,txtCompanyForScheduleSearch]		
-	};
-	
-	var btnPrint = {
-		text:'µº≥ˆ',
-		iconCls:'icon-printer',
-		handler:function(){
-			window.open('getReportSchedule.action');
-		},
-		scope:this
-	};
-	
-	var scheduleSearchGrid = {
-		xtype:'grid',
-		id:'scheduleSearch-grid',
-		anchor:'100% 90%',
-		store:scheduleSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'scheduleSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-			    {header:'º∆ªÆ±‡∫≈',width:120,dataIndex:'scheduleNo'},
-				{header:'≤˙∆∑√˚≥∆º∞–Õ∫≈',width:250,dataIndex:'productCombination'},
-				{header:'º∆ªÆ ˝¡ø',width:80,dataIndex:'amount'},
-				{header:'ÕÍ≥… ˝¡ø',width:80,dataIndex:'finishedAmount'},				
-				{header:'Ωªªı»’∆⁄',width:150,dataIndex:'scheduleDate'},
-				{header:'∫œÕ¨≥ß…Ã',width:400,dataIndex:'companyName'},
-				{header:'∫œÕ¨∫≈',width:180,dataIndex:'contractNo'},
-			    {header:'◊¥Ã¨',width:80,renderer:clsys.grid.columnrender.ScheduleStatusRender,dataIndex:'state'},												
-			    {header:'¿‡–Õ',width:80,renderer:clsys.grid.columnrender.ScheduleTypeRender,dataIndex:'scheduleType'},															    
-				{header:'±£¥Ê ±º‰',width:80,dataIndex:'createTime',hidden:true}
-			]
-		}),
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
+            var cbScheduleStatus = {
+                xtype: 'combo',
+                id: 'cbScheduleStatus',
+                emptyText: 'ËØ∑ÈÄâÊã©ËÆ°ÂàíÊòØÂê¶‰ΩúÂ∫ü',
+                fieldLabel: 'ÊòØÂê¶‰ΩúÂ∫ü',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'ÂÖ®ÈÉ®'],
+                        ['Using', 'ÊúâÊïà'],
+                        ['Deleted', '‰ΩúÂ∫ü']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
 
- 	 var scheduleQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'scheduleQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
- 						scheduleNo:Ext.getCmp('txtScheduleNoForScheduleSearch').getValue(),
- 						productCombination:Ext.getCmp('txtProductCombinationForScheduleSearch').getValue(),
- 						scheduleDateStart:Ext.getCmp('txtScheduleDateStart').getValue(),
- 						scheduleDateEnd:Ext.getCmp('txtScheduleDateEnd').getValue(),
- 						productCode:Ext.getCmp('cbProductCodeForScheduleSearch').getValue(),
- 						errorLevel:Ext.getCmp('cbErrorLevelForScheduleSearch').getValue(),
- 						voltage:Ext.getCmp('txtVoltageForScheduleSearch').getValue(),
- 						capacity:Ext.getCmp('txtCapacityForScheduleSearch').getValue(),
- 						status:Ext.getCmp('cbScheduleStatus').getValue(),
- 						states:Ext.getCmp('cbScheduleState').getValue(),
- 						scheduleSavedDateStart:Ext.getCmp('txtScheduleSavedDateStart').getValue(),
- 						scheduleSavedDateEnd:Ext.getCmp('txtScheduleSavedDateEnd').getValue(),
- 						productType:Ext.getCmp('cbProductTypeForScheduleSearch').getValue(),
- 						humidity:Ext.getCmp('cbHumidityForScheduleSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForScheduleSearch').getValue(),
- 						scheduleType:Ext.getCmp('cbScheduleType').getValue(),
- 						memo:Ext.getCmp('txtMemoForScheduleSearch').getValue(),
- 						companyName:Ext.getCmp('txtCompanyForScheduleSearch').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				scheduleSearchStore.reload({params:attributes});
-  			}
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {scheduleQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				scheduleSearchStore.reload();
-			},
-			scope:this
-		},{
-			text:'¥Ú”°',
-			iconCls:'icon-printer',
-			handler:function(){
-	   			var url = 'printQueryScheduleView.action';
- 				var params = {
- 						scheduleNo:Ext.getCmp('txtScheduleNoForScheduleSearch').getValue(),
- 						productCombination:Ext.getCmp('txtProductCombinationForScheduleSearch').getValue(),
- 						scheduleDateStart:Ext.getCmp('txtScheduleDateStart').getValue(),
- 						scheduleDateEnd:Ext.getCmp('txtScheduleDateEnd').getValue(),
- 						productCode:Ext.getCmp('cbProductCodeForScheduleSearch').getValue(),
- 						errorLevel:Ext.getCmp('cbErrorLevelForScheduleSearch').getValue(),
- 						voltage:Ext.getCmp('txtVoltageForScheduleSearch').getValue(),
- 						capacity:Ext.getCmp('txtCapacityForScheduleSearch').getValue(),
- 						status:Ext.getCmp('cbScheduleStatus').getValue(),
- 						states:Ext.getCmp('cbScheduleState').getValue(),
- 						scheduleSavedDateStart:Ext.getCmp('txtScheduleSavedDateStart').getValue(),
- 						scheduleSavedDateEnd:Ext.getCmp('txtScheduleSavedDateEnd').getValue(),
- 						productType:Ext.getCmp('cbProductTypeForScheduleSearch').getValue(),
- 						humidity:Ext.getCmp('cbHumidityForScheduleSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForScheduleSearch').getValue(),
- 						scheduleType:Ext.getCmp('cbScheduleType').getValue(),
- 						memo:Ext.getCmp('txtMemoForScheduleSearch').getValue(),
- 						companyName:Ext.getCmp('txtCompanyForScheduleSearch').getValue()
- 		 	 	};
 
- 				var strUrl = Ext.urlEncode(params);
- 				window.open(url + '?' + strUrl);
-	   			params.start = 0;
- 				scheduleSearchStore.reload({params:params});
-			},
-			scope:this	
-		}]
-     });
+            var cbScheduleType = {
+                xtype: 'combo',
+                id: 'cbScheduleType',
+                emptyText: 'ËØ∑ÈÄâÊã©ËÆ°ÂàíÁ±ªÂûã',
+                fieldLabel: 'ËÆ°ÂàíÁ±ªÂûã',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'ÂÖ®ÈÉ®'],
+                        ['SchduleType', 'È¢ÑÊäïËÆ°Âàí'],
+                        ['ContractType', 'ÂêàÂêåËÆ°Âàí']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
 
-	var scheduleSearchPanel = Ext.getCmp('ScheduleSearch-mainpanel');
-	scheduleSearchPanel.add(scheduleQueryConditionPanel,scheduleSearchGrid);
-	clsys.form.Util.PagingToolbar(scheduleSearchStore, scheduleSearchPanel.tbar, 'scheduleSearch-paging');
-	scheduleSearchPanel.doLayout();
-  	
-  });
-</script>
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtScheduleNoForScheduleSearch, cbScheduleType, txtScheduleDateStart, txtScheduleDateEnd, cbProductCodeForScheduleSearch, cbErrorLevelForScheduleSearch, txtVoltageForScheduleSearch, txtCapacityForScheduleSearch, txtProductCombinationForScheduleSearch]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbScheduleStatus, cbScheduleState, txtScheduleSavedDateStart, txtScheduleSavedDateEnd, cbProductTypeForScheduleSearch, cbHumidityForScheduleSearch, cbUsageTypeForScheduleSearch, txtMemoForScheduleSearch, txtCompanyForScheduleSearch]
+            };
+
+            var btnPrint = {
+                text: 'ÂØºÂá∫',
+                iconCls: 'icon-printer',
+                handler: function () {
+                    window.open('getReportSchedule.action');
+                },
+                scope: this
+            };
+
+            var scheduleSearchGrid = {
+                xtype: 'grid',
+                id: 'scheduleSearch-grid',
+                anchor: '100% 90%',
+                store: scheduleSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'scheduleSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'ËÆ°ÂàíÁºñÂè∑', width: 120, dataIndex: 'scheduleNo'},
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', width: 250, dataIndex: 'productCombination'},
+                        {header: 'ËÆ°ÂàíÊï∞Èáè', width: 80, dataIndex: 'amount'},
+                        {header: 'ÂÆåÊàêÊï∞Èáè', width: 80, dataIndex: 'finishedAmount'},
+                        {header: '‰∫§Ë¥ßÊó•Êúü', width: 150, dataIndex: 'scheduleDate'},
+                        {header: 'ÂêàÂêåÂéÇÂïÜ', width: 400, dataIndex: 'companyName'},
+                        {header: 'ÂêàÂêåÂè∑', width: 180, dataIndex: 'contractNo'},
+                        {
+                            header: 'Áä∂ÊÄÅ',
+                            width: 80,
+                            renderer: clsys.grid.columnrender.ScheduleStatusRender,
+                            dataIndex: 'state'
+                        },
+                        {
+                            header: 'Á±ªÂûã',
+                            width: 80,
+                            renderer: clsys.grid.columnrender.ScheduleTypeRender,
+                            dataIndex: 'scheduleType'
+                        },
+                        {header: '‰øùÂ≠òÊó∂Èó¥', width: 80, dataIndex: 'createTime', hidden: true}
+                    ]
+                }),
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        scheduleNo: encodeURI(Ext.getCmp('txtScheduleNoForScheduleSearch').getValue()),
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForScheduleSearch').getValue()),
+                        scheduleDateStart: encodeURI(Ext.getCmp('txtScheduleDateStart').getValue()),
+                        scheduleDateEnd: encodeURI(Ext.getCmp('txtScheduleDateEnd').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForScheduleSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForScheduleSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForScheduleSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForScheduleSearch').getValue()),
+                        status: encodeURI(Ext.getCmp('cbScheduleStatus').getValue()),
+                        states: encodeURI(Ext.getCmp('cbScheduleState').getValue()),
+                        scheduleSavedDateStart: encodeURI(Ext.getCmp('txtScheduleSavedDateStart').getValue()),
+                        scheduleSavedDateEnd: encodeURI(Ext.getCmp('txtScheduleSavedDateEnd').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForScheduleSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForScheduleSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForScheduleSearch').getValue()),
+                        scheduleType: encodeURI(Ext.getCmp('cbScheduleType').getValue()),
+                        memo: encodeURI(Ext.getCmp('txtMemoForScheduleSearch').getValue()),
+                        companyName: encodeURI(Ext.getCmp('txtCompanyForScheduleSearch').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm4')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm4'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm4';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getscheduleViewAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm4'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var scheduleQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'scheduleQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            scheduleNo: Ext.getCmp('txtScheduleNoForScheduleSearch').getValue(),
+                            productCombination: Ext.getCmp('txtProductCombinationForScheduleSearch').getValue(),
+                            scheduleDateStart: Ext.getCmp('txtScheduleDateStart').getValue(),
+                            scheduleDateEnd: Ext.getCmp('txtScheduleDateEnd').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForScheduleSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForScheduleSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForScheduleSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForScheduleSearch').getValue(),
+                            status: Ext.getCmp('cbScheduleStatus').getValue(),
+                            states: Ext.getCmp('cbScheduleState').getValue(),
+                            scheduleSavedDateStart: Ext.getCmp('txtScheduleSavedDateStart').getValue(),
+                            scheduleSavedDateEnd: Ext.getCmp('txtScheduleSavedDateEnd').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForScheduleSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForScheduleSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForScheduleSearch').getValue(),
+                            scheduleType: Ext.getCmp('cbScheduleType').getValue(),
+                            memo: Ext.getCmp('txtMemoForScheduleSearch').getValue(),
+                            companyName: Ext.getCmp('txtCompanyForScheduleSearch').getValue()
+                        };
+                        attributes.start = 0;
+                        scheduleSearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        scheduleQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        scheduleSearchStore.reload();
+                    },
+                    scope: this
+                }, {
+                    text: 'ÊâìÂç∞',
+                    iconCls: 'icon-printer',
+                    handler: function () {
+                        var url = 'printQueryScheduleView.action';
+                        var params = {
+                            scheduleNo: Ext.getCmp('txtScheduleNoForScheduleSearch').getValue(),
+                            productCombination: Ext.getCmp('txtProductCombinationForScheduleSearch').getValue(),
+                            scheduleDateStart: Ext.getCmp('txtScheduleDateStart').getValue(),
+                            scheduleDateEnd: Ext.getCmp('txtScheduleDateEnd').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForScheduleSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForScheduleSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForScheduleSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForScheduleSearch').getValue(),
+                            status: Ext.getCmp('cbScheduleStatus').getValue(),
+                            states: Ext.getCmp('cbScheduleState').getValue(),
+                            scheduleSavedDateStart: Ext.getCmp('txtScheduleSavedDateStart').getValue(),
+                            scheduleSavedDateEnd: Ext.getCmp('txtScheduleSavedDateEnd').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForScheduleSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForScheduleSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForScheduleSearch').getValue(),
+                            scheduleType: Ext.getCmp('cbScheduleType').getValue(),
+                            memo: Ext.getCmp('txtMemoForScheduleSearch').getValue(),
+                            companyName: Ext.getCmp('txtCompanyForScheduleSearch').getValue()
+                        };
+
+                        var strUrl = Ext.urlEncode(params);
+                        window.open(url + '?' + strUrl);
+                        params.start = 0;
+                        scheduleSearchStore.reload({params: params});
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var scheduleSearchPanel = Ext.getCmp('ScheduleSearch-mainpanel');
+            scheduleSearchPanel.add(scheduleQueryConditionPanel, scheduleSearchGrid);
+            clsys.form.Util.PagingToolbar(scheduleSearchStore, scheduleSearchPanel.tbar, 'scheduleSearch-paging');
+            scheduleSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="scheduleSearchPanel"></div>

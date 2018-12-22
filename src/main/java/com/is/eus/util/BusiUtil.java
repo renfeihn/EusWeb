@@ -44,25 +44,6 @@ public class BusiUtil {
     }
 
 
-
-    /**
-     * 当source与condition比较值大小时，return 较大值<br>
-     *
-     * @param source
-     * @param condition
-     * @return
-     * @description
-     * @version 1.0
-     * @author furong
-     * @update 2016年1月28日 下午20:35:46
-     */
-    public static String Max(String source, String condition) {
-        if (source.compareTo(condition) >= 0) {
-            return source;
-        }
-        return condition;
-    }
-
     /**
      * 转换为BigDecimal类型
      *
@@ -71,8 +52,6 @@ public class BusiUtil {
      * @author xucxd
      * @update 2016年2月24日 下午16:50:50
      */
-
-
     public static BigDecimal toBigDecimal(Object obj) {
         if (obj == null) {
             return null;
@@ -87,13 +66,6 @@ public class BusiUtil {
         return new BigDecimal(String.valueOf(obj));
     }
 
-    public static String formatArrayString(List list) {
-        String ret = "";
-        ret = list.toString();
-        ret = ret.substring(1, ret.length());
-        ret = ret.substring(0, ret.length() - 1);
-        return ret;
-    }
 
     /**
      * 判断对象是否为Null，数组size = 0,字符串 length = 0
@@ -191,52 +163,6 @@ public class BusiUtil {
         return true;
     }
 
-    /**
-     * 对象是否存在不为null
-     *
-     * @param objs
-     * @return
-     */
-    public static boolean existNotNull(Object... objs) {
-
-        for (int i = 0; i < objs.length; i++) {
-            if (isNotNull(objs[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 对象是否存在为null
-     *
-     * @param objs
-     * @return
-     */
-    public static boolean existNull(Object... objs) {
-
-        for (int i = 0; i < objs.length; i++) {
-            if (isNull(objs[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 对象为空返回0，否则返回对应int类型的数值
-     *
-     * @param strNum
-     * @return
-     */
-    public static int nvlZero(String strNum) {
-        int ret = 0;
-
-        if (BusiUtil.isNotNull(strNum)) {
-            ret = Integer.parseInt(strNum);
-        }
-        return ret;
-    }
 
     /**
      * 对象为空（包括list size=0, string length=0），返回dest
@@ -262,8 +188,7 @@ public class BusiUtil {
     }
 
 
-
-    public static String decode(String s){
+    public static String decode(String s) {
         try {
             return URLDecoder.decode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -271,7 +196,6 @@ public class BusiUtil {
         }
         return "";
     }
-
 
 
     /**
@@ -315,6 +239,23 @@ public class BusiUtil {
                 return "全部完成";
             case 6:
                 return "终止";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
+     * 获取类型
+     *
+     * @param value
+     * @return
+     */
+    public static String getScheduleType(Integer value) {
+        switch (value) {
+            case 0:
+                return "预投";
+            case 1:
+                return "合同";
             default:
                 return "未知";
         }

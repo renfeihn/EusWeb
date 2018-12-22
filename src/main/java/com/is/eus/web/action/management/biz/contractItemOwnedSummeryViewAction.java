@@ -215,7 +215,6 @@ public class contractItemOwnedSummeryViewAction extends EntityBaseAction {
         Product product = new Capacitor();
         product.setProductCombination("合计");
         sum.setProduct(product);
-        sum.setProductCombination("合计1");
         for (ContractItemOwnedSummeryView contractItem : list) {
             sum.setAmount(sum.getAmount() + contractItem.getAmount());
             sum.setFinishedAmount(sum.getFinishedAmount() + contractItem.getFinishedAmount());
