@@ -1,417 +1,474 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>◊ ‘¥ª„◊‹≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ËµÑÊ∫êÊ±áÊÄªÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
+            Ext.QuickTips.init();
 
-	var cbVarAmount = {
-		xtype: 'combo',
-		id: 'cbVarAmount',
-		emptyText: '',
-		fieldLabel:'≤Ó∂Ó◊¥Ã¨',
-		store: new Ext.data.ArrayStore({
-			fields: [ 'id', 'name' ],
-			data: [
-					['0','»´≤ø'],
-					['1','µ»”⁄0'],
-					['2','¥Û”⁄0'],
-					['3','–°”⁄0']
-				]
-		}),
-		mode: 'local',
-		triggerAction: 'all',
-		displayField: 'name',
-		valueField: 'id',
-		width: 220,
-		selectOnFocus: true,
-		forceSelection: true,
-		editable: true
-	};
+            var cbVarAmount = {
+                xtype: 'combo',
+                id: 'cbVarAmount',
+                emptyText: '',
+                fieldLabel: 'Â∑ÆÈ¢ùÁä∂ÊÄÅ',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['0', 'ÂÖ®ÈÉ®'],
+                        ['1', 'Á≠â‰∫é0'],
+                        ['2', 'Â§ß‰∫é0'],
+                        ['3', 'Â∞è‰∫é0']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
 
-    var srAmount1 = {
-          xtype: 'combo',
-          id: 'srAmount1',
-          emptyText: '',
-          fieldLabel:'◊ ‘¥ ˝',
-          store: new Ext.data.ArrayStore({
-              fields: [ 'id', 'name' ],
-              data: [
-                  ['0','»´≤ø'],
-                  ['1','µ»”⁄0'],
-                  ['2','¥Û”⁄0'],
-                  ['3','–°”⁄0']
-              ]
-          }),
-          mode: 'local',
-          triggerAction: 'all',
-          displayField: 'name',
-          valueField: 'id',
-          width: 220,
-          selectOnFocus: true,
-          forceSelection: true,
-          editable: true
-    };
+            var srAmount1 = {
+                xtype: 'combo',
+                id: 'srAmount1',
+                emptyText: '',
+                fieldLabel: 'ËµÑÊ∫êÊï∞',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['0', 'ÂÖ®ÈÉ®'],
+                        ['1', 'Á≠â‰∫é0'],
+                        ['2', 'Â§ß‰∫é0'],
+                        ['3', 'Â∞è‰∫é0']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
 
-	
-	var SCSSummerySearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'querySummerySCSSummeryView.action',
-	  	root:'SCSSumeryList',
-	  	totalProperty:'results',
-	  	fields:['srTotalAmount','srAmount','coCheckingAmount','coUnfinishedAmount','coOwnedAmount','ssRestAmount','varAmount']  	
-  	});
-	
-	var SCSSummeryViewSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'querySCSSummeryView.action',
-	  	totalProperty:'results',
-	  	root:'SCSSummeryViewList',
-	  	baseParams:{start:0,limit:25},
-	  	idProperty:'id',
-	  	fields:['id',
-	  	      	'coAmount','coFinishedAmount','coCheckingAmount','coUnfinishedAmount','coRestAmount','coOwnedAmount',
-	  	    	'srAmount','srAdvancedAmount','srTotalAmount','srRestAmount','srVarAmount',
-	  	    	'ssAmount','ssFinishedAmount','ssRestAmount','varAmount',
-	  	        {name:'productCombination',mapping:'product.productCombination'},
-	  		  	{name:'voltage',mapping:'product.voltage'},
-	  			{name:'capacity',mapping:'product.capacity'},
-		        {name:'productCode',mapping:'product.productCode.name'},	        		   
-		        {name:'humidity',mapping:'product.humidity.code'},
-		        {name:'errorLevel',mapping:'product.errorLevel.code'},   		  	
-	  		   	{name:'unit',mapping:'product.unit.name'},
-	  		   	{name:'usageType',mapping:'product.usageType.name'}],  	
-		sortInfo:{field: 'productCombination',direction: 'ASC'}  	
-  	});
-  	
-	var productCodeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductCode.action',
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var humidityStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var errorLevelStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findErrorLevel.action',
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var usageTypeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findUsageType.action',
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
 
-	var productTypeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductType.action',
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var txtMinForSCSSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtMinForSCSSummeryViewSearch',
-		fieldLabel:'≤Ó∂Ó(◊Ó–°)',
-		width:220,
-		name:'txtMinForSCSSummeryViewSearch'
-	};
-	
-	var txtMaxForSCSSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtMaxForSCSSummeryViewSearch',
-		fieldLabel:'≤Ó∂Ó(◊Ó¥Û)',
-		width:220,
-		name:'txtMaxForSCSSummeryViewSearch'
-	};
-	
-	var txtProductCombinationForSCSSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForSCSSummeryViewSearch',
-		fieldLabel:'≤˙∆∑√˚≥∆º∞–Õ∫≈',
-		width:220,
-		name:'txtProductCombinationForSCSSummeryViewSearch'
-	};
-	
-	//2
-	var txtVoltageForSCSSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForSCSSummeryViewSearch',
-		fieldLabel:'≤˙∆∑µÁ—π',
-		width:220,
-		name:'txtVoltageForSCSSummeryViewSearch'
-	};
-	//3
-	var txtCapacityForSCSSummeryViewSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForSCSSummeryViewSearch',
-		fieldLabel:'≤˙∆∑»›¡ø',
-		width:220,
-		name:'txtCapacityForSCSSummeryViewSearch'
-	};
+            var SCSSummerySearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'querySummerySCSSummeryView.action',
+                root: 'SCSSumeryList',
+                totalProperty: 'results',
+                fields: ['srTotalAmount', 'srAmount', 'coCheckingAmount', 'coUnfinishedAmount', 'coOwnedAmount', 'ssRestAmount', 'varAmount']
+            });
 
-	//9 ≤˙∆∑¥˙∫≈œ¬¿≠¡–±Ì	
-	var cbProductCodeForSCSSummeryViewSearch = {
-		xtype:'combo',
-		store:productCodeStoreForSCSSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		fieldLabel:'≤˙∆∑¥˙∫≈',
-		selectOnFocus:true,
-		id:'cbProductCodeForSCSSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		valueField:'id',
-		editable: true
-	};
-	
-	//10  ™∂»œµ ˝÷∏±Í	
-	var cbHumidityForSCSSummeryViewSearch = {
-		xtype:'combo',
-		store:humidityStoreForSCSSummeryViewSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		fieldLabel:' ™∂»œµ ˝÷∏±Í',
-		selectOnFocus:true,
-		id:'cbHumidityForSCSSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		valueField:'id',
-		editable: true
-	};
-	
-	//11 ŒÛ≤Óµ»º∂
-	var cbErrorLevelForSCSSummeryViewSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForSCSSummeryViewSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		fieldLabel:'ŒÛ≤Óµ»º∂',
-		selectOnFocus:true,
-		id:'cbErrorLevelForSCSSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		valueField:'id',
-		editable: true
-	};
-	
-	//13  ≤˙∆∑∆∑÷÷
-	var cbUsageTypeForSCSSummeryViewSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForSCSSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		fieldLabel:'≤˙∆∑∆∑÷÷',
-		selectOnFocus:true,
-		id:'cbUsageTypeForSCSSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		valueField:'id',
-		editable: true
-	};
-	
-	//14  ≤˙∆∑¿‡±
-	var cbProductTypeForSCSSummeryViewSearch = {
-		xtype:'combo',
-		store:productTypeStoreForSCSSummeryViewSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		fieldLabel:'≤˙∆∑¿‡±',
-		selectOnFocus:true,
-		id:'cbProductTypeForSCSSummeryViewSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		valueField:'id',
-		editable: true
-	};
+            var SCSSummeryViewSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'querySCSSummeryView.action',
+                totalProperty: 'results',
+                root: 'SCSSummeryViewList',
+                baseParams: {start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id',
+                    'coAmount', 'coFinishedAmount', 'coCheckingAmount', 'coUnfinishedAmount', 'coRestAmount', 'coOwnedAmount',
+                    'srAmount', 'srAdvancedAmount', 'srTotalAmount', 'srRestAmount', 'srVarAmount',
+                    'ssAmount', 'ssFinishedAmount', 'ssRestAmount', 'varAmount',
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'voltage', mapping: 'product.voltage'},
+                    {name: 'capacity', mapping: 'product.capacity'},
+                    {name: 'productCode', mapping: 'product.productCode.name'},
+                    {name: 'humidity', mapping: 'product.humidity.code'},
+                    {name: 'errorLevel', mapping: 'product.errorLevel.code'},
+                    {name: 'unit', mapping: 'product.unit.name'},
+                    {name: 'usageType', mapping: 'product.usageType.name'}],
+                sortInfo: {field: 'productCombination', direction: 'ASC'}
+            });
 
-	var col1 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductCodeForSCSSummeryViewSearch,cbErrorLevelForSCSSummeryViewSearch,txtVoltageForSCSSummeryViewSearch,txtProductCombinationForSCSSummeryViewSearch,txtMinForSCSSummeryViewSearch,cbVarAmount,srAmount1]
-	};
-	
-	var col2 = {
-		columnWidth: .5,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductTypeForSCSSummeryViewSearch,cbHumidityForSCSSummeryViewSearch,cbUsageTypeForSCSSummeryViewSearch,txtCapacityForSCSSummeryViewSearch,txtMaxForSCSSummeryViewSearch]		
-	};
-	
-	var SCSSummeryViewSearchGrid = new Ext.grid.EditorGridPanel ({
-		xtype:'grid',
-		id:'SCSSummeryViewSearch-grid',
-		anchor:'100% 75%',
-		store:SCSSummeryViewSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		clicksToEdit:1,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'SCSSummeryViewSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'≤˙∆∑√˚≥∆º∞–Õ∫≈',width:150,dataIndex:'productCombination',editor:{xtype:'textfield'}},
-				{header:'ø‚¥Ê ˝',width:50,dataIndex:'srTotalAmount'},
-				{header:'◊ ‘¥ ˝',width:50,dataIndex:'srAmount'},
-				{header:'∫œÕ¨…Û∫À ˝',width:60,dataIndex:'coCheckingAmount'},				
-				{header:'∫œÕ¨«∑Ωª ˝',width:60,dataIndex:'coUnfinishedAmount'},
-				{header:'∫œÕ¨∂‘ø‚«∑Ωª ˝',width:80,dataIndex:'coOwnedAmount',renderer:clsys.grid.columnrender.coOwnedAmount},
-				{header:'º∆ªÆ«∑Ωª ˝',width:60,dataIndex:'ssRestAmount'},
-				{header:'≤Ó∂Ó',width:50,dataIndex:'varAmount',renderer:clsys.grid.columnrender.varStyle},
-				{header:'≤˙∆∑¥˙∫≈',width:50,dataIndex:'productCode'},
-			    {header:'≤˙∆∑∆∑÷÷',width:50,dataIndex:'usageType'},
-			    {header:'µÁ—π',width:40,dataIndex:'voltage'},
-			    {header:'»›¡ø',width:40,dataIndex:'capacity'},
-			    {header:' ™∂»',width:40,dataIndex:'humidity'},
-			    {header:'ŒÛ≤Ó',width:40,dataIndex:'errorLevel'}, 
-				{header:'µ•Œª',width:40,dataIndex:'unit'}
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	});
-	
-	var SCSSummerySearchGrid = new Ext.grid.EditorGridPanel ({
-		xtype:'grid',
-		id:'SCSSummerySearch-grid',
-		anchor:'100% 15%',
-		store:SCSSummerySearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		clicksToEdit:1,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'SCSSummerySearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'ø‚¥Ê ˝∫œº∆',width:50,dataIndex:'srTotalAmount'},
-				{header:'◊ ‘¥ ˝∫œº∆',width:50,dataIndex:'srAmount'},
-				{header:'∫œÕ¨…Û∫À ˝∫œº∆',width:60,dataIndex:'coCheckingAmount'},				
-				{header:'∫œÕ¨«∑Ωª ˝∫œº∆',width:60,dataIndex:'coUnfinishedAmount'},
-				{header:'∫œÕ¨∂‘ø‚«∑Ωª ˝∫œº∆',width:80,dataIndex:'coOwnedAmount',renderer:clsys.grid.columnrender.coOwnedAmount},
-				{header:'º∆ªÆ«∑Ωª ˝∫œº∆',width:60,dataIndex:'ssRestAmount'},
-				{header:'≤Ó∂Ó∫œº∆',width:50,dataIndex:'varAmount',renderer:clsys.grid.columnrender.varStyle}
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	});
+            var productCodeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductCode.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
- 	 var SCSSummeryViewQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'SCSSummeryViewQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
- 						varAmount:Ext.getCmp('cbVarAmount').getValue(),
- 						minAmount:Ext.getCmp('txtMinForSCSSummeryViewSearch').getValue(),
- 						maxAmount:Ext.getCmp('txtMaxForSCSSummeryViewSearch').getValue(), 						
- 						productCombination:Ext.getCmp('txtProductCombinationForSCSSummeryViewSearch').getValue(),
- 						productCode:Ext.getCmp('cbProductCodeForSCSSummeryViewSearch').getValue(),
- 						errorLevel:Ext.getCmp('cbErrorLevelForSCSSummeryViewSearch').getValue(),
- 						voltage:Ext.getCmp('txtVoltageForSCSSummeryViewSearch').getValue(),
- 						capacity:Ext.getCmp('txtCapacityForSCSSummeryViewSearch').getValue(),
- 						productType:Ext.getCmp('cbProductTypeForSCSSummeryViewSearch').getValue(),
- 						humidity:Ext.getCmp('cbHumidityForSCSSummeryViewSearch').getValue(),
- 						usageType:Ext.getCmp('cbUsageTypeForSCSSummeryViewSearch').getValue(),
- 						srAmount:Ext.getCmp('srAmount1').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				SCSSummeryViewSearchStore.reload({params:attributes});
- 				SCSSummerySearchStore.reload({params:attributes});
-  			}
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {SCSSummeryViewQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				SCSSummeryViewSearchStore.reload();
-			},
-			scope:this
-		}]
-     });
+            var humidityStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var SCSSummeryViewSearchPanel = Ext.getCmp('SCSSummeryViewSearch-mainpanel');
-	SCSSummeryViewSearchPanel.add(SCSSummeryViewQueryConditionPanel,SCSSummerySearchGrid,SCSSummeryViewSearchGrid);
-	clsys.form.Util.PagingToolbar(SCSSummeryViewSearchStore, SCSSummeryViewSearchPanel.tbar, 'SCSSummeryViewSearch-paging');
-	SCSSummeryViewSearchPanel.doLayout();
-  	
-  });
-</script>
+            var errorLevelStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findErrorLevel.action',
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var usageTypeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findUsageType.action',
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var productTypeStoreForSCSSummeryViewSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductType.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
+
+            var txtMinForSCSSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtMinForSCSSummeryViewSearch',
+                fieldLabel: 'Â∑ÆÈ¢ù(ÊúÄÂ∞è)',
+                width: 220,
+                name: 'txtMinForSCSSummeryViewSearch'
+            };
+
+            var txtMaxForSCSSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtMaxForSCSSummeryViewSearch',
+                fieldLabel: 'Â∑ÆÈ¢ù(ÊúÄÂ§ß)',
+                width: 220,
+                name: 'txtMaxForSCSSummeryViewSearch'
+            };
+
+            var txtProductCombinationForSCSSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForSCSSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑',
+                width: 220,
+                name: 'txtProductCombinationForSCSSummeryViewSearch'
+            };
+
+            //2
+            var txtVoltageForSCSSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForSCSSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÁîµÂéã',
+                width: 220,
+                name: 'txtVoltageForSCSSummeryViewSearch'
+            };
+            //3
+            var txtCapacityForSCSSummeryViewSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForSCSSummeryViewSearch',
+                fieldLabel: '‰∫ßÂìÅÂÆπÈáè',
+                width: 220,
+                name: 'txtCapacityForSCSSummeryViewSearch'
+            };
+
+            //9 ‰∫ßÂìÅ‰ª£Âè∑‰∏ãÊãâÂàóË°®
+            var cbProductCodeForSCSSummeryViewSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForSCSSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                fieldLabel: '‰∫ßÂìÅ‰ª£Âè∑',
+                selectOnFocus: true,
+                id: 'cbProductCodeForSCSSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                valueField: 'id',
+                editable: true
+            };
+
+            //10 ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á
+            var cbHumidityForSCSSummeryViewSearch = {
+                xtype: 'combo',
+                store: humidityStoreForSCSSummeryViewSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                fieldLabel: 'ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                selectOnFocus: true,
+                id: 'cbHumidityForSCSSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                valueField: 'id',
+                editable: true
+            };
+
+            //11 ËØØÂ∑ÆÁ≠âÁ∫ß
+            var cbErrorLevelForSCSSummeryViewSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForSCSSummeryViewSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                fieldLabel: 'ËØØÂ∑ÆÁ≠âÁ∫ß',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForSCSSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                valueField: 'id',
+                editable: true
+            };
+
+            //13  ‰∫ßÂìÅÂìÅÁßç
+            var cbUsageTypeForSCSSummeryViewSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForSCSSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                fieldLabel: '‰∫ßÂìÅÂìÅÁßç',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForSCSSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                valueField: 'id',
+                editable: true
+            };
+
+            //14  ‰∫ßÂìÅÁ±ªÂà´
+            var cbProductTypeForSCSSummeryViewSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForSCSSummeryViewSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                fieldLabel: '‰∫ßÂìÅÁ±ªÂà´',
+                selectOnFocus: true,
+                id: 'cbProductTypeForSCSSummeryViewSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                valueField: 'id',
+                editable: true
+            };
+
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductCodeForSCSSummeryViewSearch, cbErrorLevelForSCSSummeryViewSearch, txtVoltageForSCSSummeryViewSearch, txtProductCombinationForSCSSummeryViewSearch, txtMinForSCSSummeryViewSearch, cbVarAmount, srAmount1]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForSCSSummeryViewSearch, cbHumidityForSCSSummeryViewSearch, cbUsageTypeForSCSSummeryViewSearch, txtCapacityForSCSSummeryViewSearch, txtMaxForSCSSummeryViewSearch]
+            };
+
+            var SCSSummeryViewSearchGrid = new Ext.grid.EditorGridPanel({
+                xtype: 'grid',
+                id: 'SCSSummeryViewSearch-grid',
+                anchor: '100% 75%',
+                store: SCSSummeryViewSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                clicksToEdit: 1,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'SCSSummeryViewSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', width: 150, dataIndex: 'productCombination', editor: {xtype: 'textfield'}},
+                        {header: 'Â∫ìÂ≠òÊï∞', width: 50, dataIndex: 'srTotalAmount'},
+                        {header: 'ËµÑÊ∫êÊï∞', width: 50, dataIndex: 'srAmount'},
+                        {header: 'ÂêàÂêåÂÆ°Ê†∏Êï∞', width: 60, dataIndex: 'coCheckingAmount'},
+                        {header: 'ÂêàÂêåÊ¨†‰∫§Êï∞', width: 60, dataIndex: 'coUnfinishedAmount'},
+                        {
+                            header: 'ÂêàÂêåÂØπÂ∫ìÊ¨†‰∫§Êï∞',
+                            width: 80,
+                            dataIndex: 'coOwnedAmount',
+                            renderer: clsys.grid.columnrender.coOwnedAmount
+                        },
+                        {header: 'ËÆ°ÂàíÊ¨†‰∫§Êï∞', width: 60, dataIndex: 'ssRestAmount'},
+                        {header: 'Â∑ÆÈ¢ù', width: 50, dataIndex: 'varAmount', renderer: clsys.grid.columnrender.varStyle},
+                        {header: '‰∫ßÂìÅ‰ª£Âè∑', width: 50, dataIndex: 'productCode'},
+                        {header: '‰∫ßÂìÅÂìÅÁßç', width: 50, dataIndex: 'usageType'},
+                        {header: 'ÁîµÂéã', width: 40, dataIndex: 'voltage'},
+                        {header: 'ÂÆπÈáè', width: 40, dataIndex: 'capacity'},
+                        {header: 'ÊπøÂ∫¶', width: 40, dataIndex: 'humidity'},
+                        {header: 'ËØØÂ∑Æ', width: 40, dataIndex: 'errorLevel'},
+                        {header: 'Âçï‰Ωç', width: 40, dataIndex: 'unit'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            });
+
+            var SCSSummerySearchGrid = new Ext.grid.EditorGridPanel({
+                xtype: 'grid',
+                id: 'SCSSummerySearch-grid',
+                anchor: '100% 15%',
+                store: SCSSummerySearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                clicksToEdit: 1,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'SCSSummerySearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'Â∫ìÂ≠òÊï∞ÂêàËÆ°', width: 50, dataIndex: 'srTotalAmount'},
+                        {header: 'ËµÑÊ∫êÊï∞ÂêàËÆ°', width: 50, dataIndex: 'srAmount'},
+                        {header: 'ÂêàÂêåÂÆ°Ê†∏Êï∞ÂêàËÆ°', width: 60, dataIndex: 'coCheckingAmount'},
+                        {header: 'ÂêàÂêåÊ¨†‰∫§Êï∞ÂêàËÆ°', width: 60, dataIndex: 'coUnfinishedAmount'},
+                        {
+                            header: 'ÂêàÂêåÂØπÂ∫ìÊ¨†‰∫§Êï∞ÂêàËÆ°',
+                            width: 80,
+                            dataIndex: 'coOwnedAmount',
+                            renderer: clsys.grid.columnrender.coOwnedAmount
+                        },
+                        {header: 'ËÆ°ÂàíÊ¨†‰∫§Êï∞ÂêàËÆ°', width: 60, dataIndex: 'ssRestAmount'},
+                        {header: 'Â∑ÆÈ¢ùÂêàËÆ°', width: 50, dataIndex: 'varAmount', renderer: clsys.grid.columnrender.varStyle}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            });
+
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        varAmount: encodeURI(Ext.getCmp('cbVarAmount').getValue()),
+                        minAmount: encodeURI(Ext.getCmp('txtMinForSCSSummeryViewSearch').getValue()),
+                        maxAmount: encodeURI(Ext.getCmp('txtMaxForSCSSummeryViewSearch').getValue()),
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForSCSSummeryViewSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForSCSSummeryViewSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForSCSSummeryViewSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForSCSSummeryViewSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForSCSSummeryViewSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForSCSSummeryViewSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForSCSSummeryViewSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForSCSSummeryViewSearch').getValue()),
+                        srAmount: encodeURI(Ext.getCmp('srAmount1').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm10')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm10'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm10';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getSCSSummeryViewAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm10'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var SCSSummeryViewQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'SCSSummeryViewQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            varAmount: Ext.getCmp('cbVarAmount').getValue(),
+                            minAmount: Ext.getCmp('txtMinForSCSSummeryViewSearch').getValue(),
+                            maxAmount: Ext.getCmp('txtMaxForSCSSummeryViewSearch').getValue(),
+                            productCombination: Ext.getCmp('txtProductCombinationForSCSSummeryViewSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForSCSSummeryViewSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForSCSSummeryViewSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForSCSSummeryViewSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForSCSSummeryViewSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForSCSSummeryViewSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForSCSSummeryViewSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForSCSSummeryViewSearch').getValue(),
+                            srAmount: Ext.getCmp('srAmount1').getValue()
+                        };
+                        attributes.start = 0;
+                        SCSSummeryViewSearchStore.reload({params: attributes});
+                        SCSSummerySearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        SCSSummeryViewQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        SCSSummeryViewSearchStore.reload();
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var SCSSummeryViewSearchPanel = Ext.getCmp('SCSSummeryViewSearch-mainpanel');
+            SCSSummeryViewSearchPanel.add(SCSSummeryViewQueryConditionPanel, SCSSummerySearchGrid, SCSSummeryViewSearchGrid);
+            clsys.form.Util.PagingToolbar(SCSSummeryViewSearchStore, SCSSummeryViewSearchPanel.tbar, 'SCSSummeryViewSearch-paging');
+            SCSSummeryViewSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="SCSSummeryViewSearchPanel"></div>
