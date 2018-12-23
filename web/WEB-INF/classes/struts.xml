@@ -211,5 +211,15 @@
             </result>
         </action>
 
+        <!-- export excel 直接出入库excel -->
+        <action name="getinWarehouseAction" class="inWarehouseAction" method="getReport">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="contentDisposition">attachment;filename=${fileName}</param>
+                <param name="inputName">inputStream</param>
+                <param name="bufferSize">4096</param>
+            </result>
+        </action>
+
     </package>
 </struts>

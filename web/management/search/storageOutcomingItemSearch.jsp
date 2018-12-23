@@ -338,12 +338,12 @@
                     };
 
                     //如果不存在一个id为"downForm"的form表单，则执行下面的操作
-                    if (!Ext.fly('downForm6')) {
+                    if (!Ext.fly('downForm7')) {
 
                         //下面代码是在创建一个表单以及添加相应的一些属性
                         var downForm = document.createElement('form');  //创建一个form表单
-                        downForm.id = 'downForm6'; 　　//该表单的id为downForm
-                        downForm.name = 'downForm6';  //该表单的name属性为downForm
+                        downForm.id = 'downForm7'; 　　//该表单的id为downForm
+                        downForm.name = 'downForm7';  //该表单的name属性为downForm
                         downForm.className = 'x-hidden'; //该表单为隐藏的
 //                        downForm.action = 'getcontractAction.action'; //表单的提交地址
                         downForm.method = 'POST';  //表单的提交方法
@@ -356,7 +356,7 @@
                         url: 'getstorageOutcomingItemAction.action',
                         method: 'POST',
                         isUpload: true,
-                        form: Ext.fly('downForm6'),
+                        form: Ext.fly('downForm7'),
                         params: attributes
                     });
                 }

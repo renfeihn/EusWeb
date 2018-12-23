@@ -281,6 +281,25 @@ public class BusiUtil {
     }
 
     /**
+     * 获取有效状态
+     *
+     * @param value
+     * @return
+     */
+    public static String getInWarehouseFlag(Integer value) {
+        switch (value) {
+            case 0:
+                return "直接入库";
+            case 1:
+                return "直接出库";
+            case 2:
+                return "超计划入库";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
      * 日期格式化
      *
      * @param date

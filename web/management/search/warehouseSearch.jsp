@@ -1,343 +1,394 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>Ö±½Ó³öÈë¿â²éÑ¯</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ç›´æ¥å‡ºå…¥åº“æŸ¥è¯¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	var warehouseSearch_Store = new Ext.data.JsonStore({
-		autoDestroy:true,
-		baseParams:{status:['Using'],start:0,limit:25},
-	  	url:'queryInWarehouse.action',
-	  	totalProperty:'results',
-	  	root:'InWarehouseList',
-	  	idProperty:'id',
-	  	fields:['id','totalAmount','flag','createTime',
-	  	      	{name:'productCombination',mapping:'product.productCombination'},
-	  		  	{name:'productName',mapping:'product.productName'},
-	  		  	{name:'voltage',mapping:'product.voltage'},
-	  			{name:'capacity',mapping:'product.capacity'},
-		        {name:'productCode',mapping:'product.productCode.name'},	        		   
-		        {name:'humidity',mapping:'product.humidity.code'},
-		        {name:'errorLevel',mapping:'product.errorLevel.code'},   		  	
-	  		   	{name:'unit',mapping:'product.unit.name'},
-	  		   	{name:'usageType',mapping:'product.usageType.name'}  		   	
-	  	       	],
-		sortInfo: {field: 'createTime',direction: 'DESC'}	
-	  	       	
-  	});
+            Ext.QuickTips.init();
+            var warehouseSearch_Store = new Ext.data.JsonStore({
+                autoDestroy: true,
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                url: 'queryInWarehouse.action',
+                totalProperty: 'results',
+                root: 'InWarehouseList',
+                idProperty: 'id',
+                fields: ['id', 'totalAmount', 'flag', 'createTime',
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'productName', mapping: 'product.productName'},
+                    {name: 'voltage', mapping: 'product.voltage'},
+                    {name: 'capacity', mapping: 'product.capacity'},
+                    {name: 'productCode', mapping: 'product.productCode.name'},
+                    {name: 'humidity', mapping: 'product.humidity.code'},
+                    {name: 'errorLevel', mapping: 'product.errorLevel.code'},
+                    {name: 'unit', mapping: 'product.unit.name'},
+                    {name: 'usageType', mapping: 'product.usageType.name'}
+                ],
+                sortInfo: {field: 'createTime', direction: 'DESC'}
 
-	productCodeStoreForWarehouseSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findProductCode.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	humidityStoreForWarehouseSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:{status:'Using'},
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	errorLevelStoreForWarehouseSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findErrorLevel.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	usageTypeStoreForWarehouseSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findUsageType.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
+            });
 
-	productTypeStoreForWarehouseSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findProductType.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
-	
-	var txtProductCombinationForWarehouseSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForWarehouseSearch',
-		fieldLabel:'²úÆ·Ãû³Æ¼°ĞÍºÅ',
-		width:220,
-		name:'txtProductCombinationForWarehouseSearch'
-	};
-	
-	//2
-	var txtVoltageForWarehouseSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForWarehouseSearch',
-		fieldLabel:'²úÆ·µçÑ¹',
-		width:220,
-		name:'txtVoltageForWarehouseSearch'
-	};
-	//3
-	var txtCapacityForWarehouseSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForWarehouseSearch',
-		fieldLabel:'²úÆ·ÈİÁ¿',
-		width:220,
-		name:'txtCapacityForWarehouseSearch'
-	};
-	
-	//9 ²úÆ·´úºÅÏÂÀ­ÁĞ±í	
-	var cbProductCodeForWarehouseSearch = {
-		xtype:'combo',
-		store:productCodeStoreForWarehouseSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·´úºÅ',
-		fieldLabel:'²úÆ·´úºÅ',
-		selectOnFocus:true,
-		id:'cbProductCodeForWarehouseSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·´úºÅ',
-		valueField:'id'
-	};
-	
-	//10 Êª¶ÈÏµÊıÖ¸±ê	
-	var cbHumidityForWarehouseSearch = {
-		xtype:'combo',
-		store:humidityStoreForWarehouseSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡ÔñÊª¶ÈÏµÊıÖ¸±ê',
-		fieldLabel:'Êª¶ÈÏµÊıÖ¸±ê',
-		selectOnFocus:true,
-		id:'cbHumidityForWarehouseSearch',
-		width:220,
-		blankText:'ÇëÑ¡ÔñÊª¶ÈÏµÊıÖ¸±ê',
-		valueField:'id'
-	};
-	
-	//11 Îó²îµÈ¼¶
-	var cbErrorLevelForWarehouseSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForWarehouseSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡ÔñÎó²îµÈ¼¶',
-		fieldLabel:'Îó²îµÈ¼¶',
-		selectOnFocus:true,
-		id:'cbErrorLevelForWarehouseSearch',
-		width:220,
-		blankText:'ÇëÑ¡ÔñÎó²îµÈ¼¶',
-		valueField:'id'
-	};
-	
-	//13  ²úÆ·Æ·ÖÖ
-	var cbUsageTypeForWarehouseSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForWarehouseSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·Æ·ÖÖ',
-		fieldLabel:'²úÆ·Æ·ÖÖ',
-		selectOnFocus:true,
-		id:'cbUsageTypeForWarehouseSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·Æ·ÖÖ',
-		valueField:'id'
-	};
-	
-	//14  ²úÆ·Àà±ğ
-	var cbProductTypeForWarehouseSearch = {
-		xtype:'combo',
-		store:productTypeStoreForWarehouseSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'ÇëÑ¡Ôñ²úÆ·Àà±ğ',
-		fieldLabel:'²úÆ·Àà±ğ',
-		selectOnFocus:true,
-		id:'cbProductTypeForWarehouseSearch',
-		width:220,
-		blankText:'ÇëÑ¡Ôñ²úÆ·Àà±ğ',
-		valueField:'id'
-	};
+            productCodeStoreForWarehouseSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findProductCode.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var cbDirectionState = {
-			xtype: 'combo',
-			id: 'cbDirectionState',
-			fieldLabel:'³öÈë¿â×´Ì¬',
-			store: new Ext.data.ArrayStore({
-				fields: [ 'id', 'name' ],
-				data: [
-						[ '', 'È«²¿' ],
-						['0','Ö±½ÓÈë¿â'],
-						['2','³¬¼Æ»®Èë¿â'],
-						['1','Ö±½Ó³ö¿â']
-					]
-			}),
-			mode: 'local',
-			triggerAction: 'all',
-			displayField: 'name',
-			valueField: 'id',
-			width: 220,
-			selectOnFocus: true,
-			forceSelection: true,
-			editable: true
-		};
+            humidityStoreForWarehouseSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: {status: 'Using'},
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtIWSearchSavedDateStart = {
-		xtype:'datefield',
-		id:'txtIWSearchSavedDateStart',
-		fieldLabel:'±£´æÈÕÆÚ(¿ªÊ¼)',
-		width:220,
-		name:'txtIWSearchSavedDateStart'	
-	};
-	
-	var txtIWSearchSavedDateEnd = {
-		xtype:'datefield',
-		id:'txtIWSearchSavedDateEnd',
-		fieldLabel:'±£´æÈÕÆÚ(½áÊø)',
-		width:220,
-		name:'txtIWSearchSavedDateEnd'	
-	};	
-	
-	var col1 = {
-		columnWidth: .50,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[txtProductCombinationForWarehouseSearch,cbProductCodeForWarehouseSearch,cbUsageTypeForWarehouseSearch,txtVoltageForWarehouseSearch,txtIWSearchSavedDateStart,cbDirectionState]		
-	};
-	
-	var col2 = {
-		columnWidth: .50,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductTypeForWarehouseSearch,cbHumidityForWarehouseSearch,cbErrorLevelForWarehouseSearch,txtCapacityForWarehouseSearch,txtIWSearchSavedDateEnd]		
-	};
+            errorLevelStoreForWarehouseSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findErrorLevel.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	 var warehouseSearchStoreQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'²éÑ¯Ìõ¼ş',
-         labelWidth:150,
-         renderTo:'warehouseSearchStoregQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '²éÑ¯',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
- 		 			warehouseSearchSearch:1,
-					productCombination:Ext.getCmp('txtProductCombinationForWarehouseSearch').getValue(),
-					productCode:Ext.getCmp('cbProductCodeForWarehouseSearch').getValue(),
-					errorLevel:Ext.getCmp('cbErrorLevelForWarehouseSearch').getValue(),
-					voltage:Ext.getCmp('txtVoltageForWarehouseSearch').getValue(),
-					capacity:Ext.getCmp('txtCapacityForWarehouseSearch').getValue(),
-					productType:Ext.getCmp('cbProductTypeForWarehouseSearch').getValue(),
-					humidity:Ext.getCmp('cbHumidityForWarehouseSearch').getValue(),
-					usageType:Ext.getCmp('cbUsageTypeForWarehouseSearch').getValue(),
-					flag:Ext.getCmp('cbDirectionState').getValue(),
-					SavedDateStart:Ext.getCmp('txtIWSearchSavedDateStart').getValue(),
- 					SavedDateEnd:Ext.getCmp('txtIWSearchSavedDateEnd').getValue()
-					
- 		 	 	};
- 				attributes.start = 0;
- 				warehouseSearch_Store.reload({params:attributes});
-  			}
-		},{
-			text: 'Çå³ı',
-			iconCls: 'icon-remove',
-			handler: function() {warehouseSearchStoreQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'Ë¢ĞÂ',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				warehouseSearch_Store.reload();
-			},
-			scope:this
-		}]
-     });
-     
-	var warehouseSearchGrid = {
-		xtype:'grid',
-		id:'warehouseSearch-grid',
-		anchor:'100% 65%',
-		store:warehouseSearch_Store,
-		stripeRows:true,
-		autoScroll:true,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'warehouseSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'²úÆ·Ãû³Æ¼°ĞÍºÅ',width:150,dataIndex:'productCombination'},
-				{header:'²úÆ·´úºÅ',width:80,dataIndex:'productCode'},
-			    {header:'²úÆ·Æ·ÖÖ',width:40,dataIndex:'usageType'},
-			    {header:'µçÑ¹',width:40,dataIndex:'voltage'},
-			    {header:'ÈİÁ¿',width:40,dataIndex:'capacity'},
-			    {header:'Êª¶È',width:40,dataIndex:'humidity'},
-			    {header:'Îó²î',width:40,dataIndex:'errorLevel'}, 
-				{header:'ÊıÁ¿',width:50,dataIndex:'totalAmount'},
-				{header:'×´Ì¬',width:50,dataIndex:'flag',renderer:clsys.grid.columnrender.InWarehouseFlagRender},
-				{header:'Ê±¼ä',width:80,dataIndex:'createTime'}
-			]
-		}),
-		viewConfig:{ forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
-	
-	var warehouseSearchPanel = Ext.getCmp('WarehouseSearch-mainpanel');
-	warehouseSearchPanel.add(warehouseSearchStoreQueryConditionPanel,warehouseSearchGrid);
-	clsys.form.Util.PagingToolbar(warehouseSearch_Store, warehouseSearchPanel.tbar, 'warehouseSearch-paging');
-	warehouseSearchPanel.doLayout();
-	  	
-  });
-</script>
+            usageTypeStoreForWarehouseSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findUsageType.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+
+            productTypeStoreForWarehouseSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findProductType.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+
+            var txtProductCombinationForWarehouseSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForWarehouseSearch',
+                fieldLabel: 'äº§å“åç§°åŠå‹å·',
+                width: 220,
+                name: 'txtProductCombinationForWarehouseSearch'
+            };
+
+            //2
+            var txtVoltageForWarehouseSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForWarehouseSearch',
+                fieldLabel: 'äº§å“ç”µå‹',
+                width: 220,
+                name: 'txtVoltageForWarehouseSearch'
+            };
+            //3
+            var txtCapacityForWarehouseSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForWarehouseSearch',
+                fieldLabel: 'äº§å“å®¹é‡',
+                width: 220,
+                name: 'txtCapacityForWarehouseSearch'
+            };
+
+            //9 äº§å“ä»£å·ä¸‹æ‹‰åˆ—è¡¨
+            var cbProductCodeForWarehouseSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForWarehouseSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“ä»£å·',
+                fieldLabel: 'äº§å“ä»£å·',
+                selectOnFocus: true,
+                id: 'cbProductCodeForWarehouseSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“ä»£å·',
+                valueField: 'id'
+            };
+
+            //10 æ¹¿åº¦ç³»æ•°æŒ‡æ ‡
+            var cbHumidityForWarehouseSearch = {
+                xtype: 'combo',
+                store: humidityStoreForWarehouseSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                fieldLabel: 'æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                selectOnFocus: true,
+                id: 'cbHumidityForWarehouseSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©æ¹¿åº¦ç³»æ•°æŒ‡æ ‡',
+                valueField: 'id'
+            };
+
+            //11 è¯¯å·®ç­‰çº§
+            var cbErrorLevelForWarehouseSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForWarehouseSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©è¯¯å·®ç­‰çº§',
+                fieldLabel: 'è¯¯å·®ç­‰çº§',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForWarehouseSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©è¯¯å·®ç­‰çº§',
+                valueField: 'id'
+            };
+
+            //13  äº§å“å“ç§
+            var cbUsageTypeForWarehouseSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForWarehouseSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“å“ç§',
+                fieldLabel: 'äº§å“å“ç§',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForWarehouseSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“å“ç§',
+                valueField: 'id'
+            };
+
+            //14  äº§å“ç±»åˆ«
+            var cbProductTypeForWarehouseSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForWarehouseSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'è¯·é€‰æ‹©äº§å“ç±»åˆ«',
+                fieldLabel: 'äº§å“ç±»åˆ«',
+                selectOnFocus: true,
+                id: 'cbProductTypeForWarehouseSearch',
+                width: 220,
+                blankText: 'è¯·é€‰æ‹©äº§å“ç±»åˆ«',
+                valueField: 'id'
+            };
+
+            var cbDirectionState = {
+                xtype: 'combo',
+                id: 'cbDirectionState',
+                fieldLabel: 'å‡ºå…¥åº“çŠ¶æ€',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: [
+                        ['', 'å…¨éƒ¨'],
+                        ['0', 'ç›´æ¥å…¥åº“'],
+                        ['2', 'è¶…è®¡åˆ’å…¥åº“'],
+                        ['1', 'ç›´æ¥å‡ºåº“']
+                    ]
+                }),
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'name',
+                valueField: 'id',
+                width: 220,
+                selectOnFocus: true,
+                forceSelection: true,
+                editable: true
+            };
+
+            var txtIWSearchSavedDateStart = {
+                xtype: 'datefield',
+                id: 'txtIWSearchSavedDateStart',
+                fieldLabel: 'ä¿å­˜æ—¥æœŸ(å¼€å§‹)',
+                width: 220,
+                name: 'txtIWSearchSavedDateStart'
+            };
+
+            var txtIWSearchSavedDateEnd = {
+                xtype: 'datefield',
+                id: 'txtIWSearchSavedDateEnd',
+                fieldLabel: 'ä¿å­˜æ—¥æœŸ(ç»“æŸ)',
+                width: 220,
+                name: 'txtIWSearchSavedDateEnd'
+            };
+
+            var col1 = {
+                columnWidth: .50,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtProductCombinationForWarehouseSearch, cbProductCodeForWarehouseSearch, cbUsageTypeForWarehouseSearch, txtVoltageForWarehouseSearch, txtIWSearchSavedDateStart, cbDirectionState]
+            };
+
+            var col2 = {
+                columnWidth: .50,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForWarehouseSearch, cbHumidityForWarehouseSearch, cbErrorLevelForWarehouseSearch, txtCapacityForWarehouseSearch, txtIWSearchSavedDateEnd]
+            };
+
+            var btnDown = {
+                text: 'Excelå¯¼å‡º',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        warehouseSearchSearch: 1,
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForWarehouseSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForWarehouseSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForWarehouseSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForWarehouseSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForWarehouseSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForWarehouseSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForWarehouseSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForWarehouseSearch').getValue()),
+                        flag: encodeURI(Ext.getCmp('cbDirectionState').getValue()),
+                        SavedDateStart: encodeURI(Ext.getCmp('txtIWSearchSavedDateStart').getValue()),
+                        SavedDateEnd: encodeURI(Ext.getCmp('txtIWSearchSavedDateEnd').getValue())
+                    };
+
+                    //å¦‚æœä¸å­˜åœ¨ä¸€ä¸ªidä¸º"downForm"çš„formè¡¨å•ï¼Œåˆ™æ‰§è¡Œä¸‹é¢çš„æ“ä½œ
+                    if (!Ext.fly('downForm8')) {
+
+                        //ä¸‹é¢ä»£ç æ˜¯åœ¨åˆ›å»ºä¸€ä¸ªè¡¨å•ä»¥åŠæ·»åŠ ç›¸åº”çš„ä¸€äº›å±æ€§
+                        var downForm = document.createElement('form');  //åˆ›å»ºä¸€ä¸ªformè¡¨å•
+                        downForm.id = 'downForm8'; ã€€ã€€//è¯¥è¡¨å•çš„idä¸ºdownForm
+                        downForm.name = 'downForm8';  //è¯¥è¡¨å•çš„nameå±æ€§ä¸ºdownForm
+                        downForm.className = 'x-hidden'; //è¯¥è¡¨å•ä¸ºéšè—çš„
+//                        downForm.action = 'getcontractAction.action'; //è¡¨å•çš„æäº¤åœ°å€
+                        downForm.method = 'POST';  //è¡¨å•çš„æäº¤æ–¹æ³•
+
+                        document.body.appendChild(downForm); //å°†formè¡¨å•è¿½åŠ åˆ°bodyé‡Œé¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getinWarehouseAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm8'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var warehouseSearchStoreQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'æŸ¥è¯¢æ¡ä»¶',
+                labelWidth: 150,
+                renderTo: 'warehouseSearchStoregQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'æŸ¥è¯¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            warehouseSearchSearch: 1,
+                            productCombination: Ext.getCmp('txtProductCombinationForWarehouseSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForWarehouseSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForWarehouseSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForWarehouseSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForWarehouseSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForWarehouseSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForWarehouseSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForWarehouseSearch').getValue(),
+                            flag: Ext.getCmp('cbDirectionState').getValue(),
+                            SavedDateStart: Ext.getCmp('txtIWSearchSavedDateStart').getValue(),
+                            SavedDateEnd: Ext.getCmp('txtIWSearchSavedDateEnd').getValue()
+
+                        };
+                        attributes.start = 0;
+                        warehouseSearch_Store.reload({params: attributes});
+                    }
+                }, {
+                    text: 'æ¸…é™¤',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        warehouseSearchStoreQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'åˆ·æ–°',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        warehouseSearch_Store.reload();
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var warehouseSearchGrid = {
+                xtype: 'grid',
+                id: 'warehouseSearch-grid',
+                anchor: '100% 65%',
+                store: warehouseSearch_Store,
+                stripeRows: true,
+                autoScroll: true,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'warehouseSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: 'äº§å“åç§°åŠå‹å·', width: 150, dataIndex: 'productCombination'},
+                        {header: 'äº§å“ä»£å·', width: 80, dataIndex: 'productCode'},
+                        {header: 'äº§å“å“ç§', width: 40, dataIndex: 'usageType'},
+                        {header: 'ç”µå‹', width: 40, dataIndex: 'voltage'},
+                        {header: 'å®¹é‡', width: 40, dataIndex: 'capacity'},
+                        {header: 'æ¹¿åº¦', width: 40, dataIndex: 'humidity'},
+                        {header: 'è¯¯å·®', width: 40, dataIndex: 'errorLevel'},
+                        {header: 'æ•°é‡', width: 50, dataIndex: 'totalAmount'},
+                        {
+                            header: 'çŠ¶æ€',
+                            width: 50,
+                            dataIndex: 'flag',
+                            renderer: clsys.grid.columnrender.InWarehouseFlagRender
+                        },
+                        {header: 'æ—¶é—´', width: 80, dataIndex: 'createTime'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+            var warehouseSearchPanel = Ext.getCmp('WarehouseSearch-mainpanel');
+            warehouseSearchPanel.add(warehouseSearchStoreQueryConditionPanel, warehouseSearchGrid);
+            clsys.form.Util.PagingToolbar(warehouseSearch_Store, warehouseSearchPanel.tbar, 'warehouseSearch-paging');
+            warehouseSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="warehouseSearchGridPanel"></div>
