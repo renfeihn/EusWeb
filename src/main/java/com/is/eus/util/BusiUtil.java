@@ -67,6 +67,20 @@ public class BusiUtil {
     }
 
 
+    public static Integer addInteget(String o1, String o2) {
+        Integer i1 = 0;
+        Integer i2 = 0;
+        if (isNotNull(o1)) {
+            i1 = Integer.parseInt(o1);
+        }
+
+        if (isNotNull(o2)) {
+            i2 = Integer.parseInt(o2);
+        }
+
+        return i1 + i2;
+    }
+
     /**
      * 判断对象是否为Null，数组size = 0,字符串 length = 0
      *
@@ -398,25 +412,4 @@ public class BusiUtil {
     }
 
 
-    /**
-     * 核算
-     *
-     * @param tableName
-     * @param pkName
-     * @param models
-     * @return
-     */
-    public static boolean checkDataOperateParams(String tableName, String pkName, List<Map<String, Object>> models) {
-        return !(BusiUtil.isNull(tableName) || BusiUtil.isNull(pkName) || models == null);
-    }
-
-    /**
-     * 核算
-     *
-     * @param input
-     * @return
-     */
-    public static String getOperString(String input) {
-        return new StringBuffer().append(BEFORE_OPER).append(input).append(AFTER_OPER).toString();
-    }
 }

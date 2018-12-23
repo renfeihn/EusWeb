@@ -1,331 +1,374 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>ø‚¥Ê◊ ‘¥≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>Â∫ìÂ≠òËµÑÊ∫êÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	var storageResourceSearch_Store = new Ext.data.JsonStore({
-		autoDestroy:true,
-		baseParams:{status:['Using'],start:0,limit:25},
-	  	url:'queryStorageResourceView.action',
-	  	totalProperty:'results',
-	  	root:'StorageResourceViewList',
-	  	idProperty:'id',
-	  	fields:['id','amount','totalAmount','advancedAmount','restAmount','varAmount',
-	  	      	{name:'productCombination',mapping:'product.productCombination'},
-	  	      	{name:'memo',mapping:'product.memo'},
-	  		  	{name:'productName',mapping:'product.productName'},
-	  		  	{name:'voltage',mapping:'product.voltage'},
-	  			{name:'capacity',mapping:'product.capacity'},
-		        {name:'productCode',mapping:'product.productCode.name'},	        		   
-		        {name:'humidity',mapping:'product.humidity.code'},
-		        {name:'errorLevel',mapping:'product.errorLevel.code'},   		  	
-	  		   	{name:'unit',mapping:'product.unit.name'},
-	  		   	{name:'usageType',mapping:'product.usageType.name'}  		   	
-	  	       	],
-       	sortInfo: {field: 'productCombination',direction: 'ASC'}
-  	});
+            Ext.QuickTips.init();
+            var storageResourceSearch_Store = new Ext.data.JsonStore({
+                autoDestroy: true,
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                url: 'queryStorageResourceView.action',
+                totalProperty: 'results',
+                root: 'StorageResourceViewList',
+                idProperty: 'id',
+                fields: ['id', 'amount', 'totalAmount', 'advancedAmount', 'restAmount', 'varAmount',
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'memo', mapping: 'product.memo'},
+                    {name: 'productName', mapping: 'product.productName'},
+                    {name: 'voltage', mapping: 'product.voltage'},
+                    {name: 'capacity', mapping: 'product.capacity'},
+                    {name: 'productCode', mapping: 'product.productCode.name'},
+                    {name: 'humidity', mapping: 'product.humidity.code'},
+                    {name: 'errorLevel', mapping: 'product.errorLevel.code'},
+                    {name: 'unit', mapping: 'product.unit.name'},
+                    {name: 'usageType', mapping: 'product.usageType.name'}
+                ],
+                sortInfo: {field: 'productCombination', direction: 'ASC'}
+            });
 
-	productCodeStoreForStorageResourceSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findProductCode.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	humidityStoreForStorageResourceSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:{status:'Using'},
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	errorLevelStoreForStorageResourceSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findErrorLevel.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	usageTypeStoreForStorageResourceSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findUsageType.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
+            productCodeStoreForStorageResourceSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findProductCode.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	productTypeStoreForStorageResourceSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		url:'findProductType.action',
-		autoLoad:{status:'Using'},
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
-	
-	var txtProductCombinationForStorageResourceSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForStorageResourceSearch',
-		fieldLabel:'≤˙∆∑√˚≥∆º∞–Õ∫≈',
-		width:220,
-		name:'txtProductCombinationForStorageResourceSearch'
-	};
-	
-	//2
-	var txtVoltageForStorageResourceSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForStorageResourceSearch',
-		fieldLabel:'≤˙∆∑µÁ—π',
-		width:220,
-		name:'txtVoltageForStorageResourceSearch'
-	};
-	//3
-	var txtCapacityForStorageResourceSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForStorageResourceSearch',
-		fieldLabel:'≤˙∆∑»›¡ø',
-		width:220,
-		name:'txtCapacityForStorageResourceSearch'
-	};
-	
-	//9 ≤˙∆∑¥˙∫≈œ¬¿≠¡–±Ì	
-	var cbProductCodeForStorageResourceSearch = {
-		xtype:'combo',
-		store:productCodeStoreForStorageResourceSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		fieldLabel:'≤˙∆∑¥˙∫≈',
-		selectOnFocus:true,
-		id:'cbProductCodeForStorageResourceSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		valueField:'id'
-	};
-	
-	//10  ™∂»œµ ˝÷∏±Í	
-	var cbHumidityForStorageResourceSearch = {
-		xtype:'combo',
-		store:humidityStoreForStorageResourceSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		fieldLabel:' ™∂»œµ ˝÷∏±Í',
-		selectOnFocus:true,
-		id:'cbHumidityForStorageResourceSearch',
-		width:220,
-		blankText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		valueField:'id'
-	};
-	
-	//11 ŒÛ≤Óµ»º∂
-	var cbErrorLevelForStorageResourceSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForStorageResourceSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		fieldLabel:'ŒÛ≤Óµ»º∂',
-		selectOnFocus:true,
-		id:'cbErrorLevelForStorageResourceSearch',
-		width:220,
-		blankText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		valueField:'id'
-	};
-	
-	//13  ≤˙∆∑∆∑÷÷
-	var cbUsageTypeForStorageResourceSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForStorageResourceSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		fieldLabel:'≤˙∆∑∆∑÷÷',
-		selectOnFocus:true,
-		id:'cbUsageTypeForStorageResourceSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		valueField:'id'
-	};
-	
-	//14  ≤˙∆∑¿‡±
-	var cbProductTypeForStorageResourceSearch = {
-		xtype:'combo',
-		store:productTypeStoreForStorageResourceSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		fieldLabel:'≤˙∆∑¿‡±',
-		selectOnFocus:true,
-		id:'cbProductTypeForStorageResourceSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		valueField:'id'
-	};
+            humidityStoreForStorageResourceSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: {status: 'Using'},
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var col1 = {
-		columnWidth: .50,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[txtProductCombinationForStorageResourceSearch,cbProductCodeForStorageResourceSearch,cbUsageTypeForStorageResourceSearch,txtVoltageForStorageResourceSearch]		
-	};
-	
-	var col2 = {
-		columnWidth: .50,
-		layout: 'form',
-		frame: false,
-		border: false,
-		defaultType: 'textfield',
-		items:[cbProductTypeForStorageResourceSearch,cbHumidityForStorageResourceSearch,cbErrorLevelForStorageResourceSearch,txtCapacityForStorageResourceSearch]		
-	};
+            errorLevelStoreForStorageResourceSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findErrorLevel.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	 var storageResourceSearchStoreQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'storageResourceSearchStoregQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
- 		 			storageResourceSearchSearch:1,
-					productCombination:Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue(),
-					productCode:Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue(),
-					errorLevel:Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue(),
-					voltage:Ext.getCmp('txtVoltageForStorageResourceSearch').getValue(),
-					capacity:Ext.getCmp('txtCapacityForStorageResourceSearch').getValue(),
-					productType:Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue(),
-					humidity:Ext.getCmp('cbHumidityForStorageResourceSearch').getValue(),
-					usageType:Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				storageResourceSearch_Store.reload({params:attributes});
-  			}
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {storageResourceSearchStoreQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				storageResourceSearch_Store.reload();
-			},
-			scope:this
-		},{
-			text:'¥Ú”°',
-			hidden:true,
-			iconCls:'icon-printer',
-			handler:function(){
-	   			var url = 'printQueryStorageResource.action';
- 				var params = {
-					productCombination:Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue(),
-					productCode:Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue(),
-					errorLevel:Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue(),
-					voltage:Ext.getCmp('txtVoltageForStorageResourceSearch').getValue(),
-					capacity:Ext.getCmp('txtCapacityForStorageResourceSearch').getValue(),
-					productType:Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue(),
-					humidity:Ext.getCmp('cbHumidityForStorageResourceSearch').getValue(),
-					usageType:Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue()
- 		 	 	};
+            usageTypeStoreForStorageResourceSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findUsageType.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
 
- 		 	 	var strUrl = "";
- 		 	 	strUrl += 'productCombination='+Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'productCode='+Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'errorLevel='+Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'voltage='+Ext.getCmp('txtVoltageForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'capacity='+Ext.getCmp('txtCapacityForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'productType='+Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'humidity='+Ext.getCmp('cbHumidityForStorageResourceSearch').getValue() + "&";
- 		 	 	strUrl += 'usageType='+Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue();
- 		 	 	
- 				//window.open(url + '?' + strUrl);
-	   			params.start = 0;
-	   			storageResourceSearch_Store.reload({params:params});
-			},
-			scope:this	
-	    }]
-     });
-     
-	var storageResourceSearchGrid = {
-		xtype:'grid',
-		id:'storageResourceSearch-grid',
-		anchor:'100% 65%',
-		store:storageResourceSearch_Store,
-		stripeRows:true,
-		autoScroll:true,
-		border:false,
-		loadMask:true,
-		frame:true,
-		renderTo:'storageResourceSearchGridPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-				{header:'≤˙∆∑√˚≥∆º∞–Õ∫≈',width:150,dataIndex:'productCombination'},
-				{header:'ø‚¥Ê ˝¡ø',width:50,dataIndex:'totalAmount'},
-				{header:'¥˝∑¢ ˝¡ø',width:50,dataIndex:'advancedAmount'},
-				{header:'Ω·”‡ ˝¡ø',width:50,dataIndex:'restAmount'},
-				{header:'◊ ‘¥ ˝¡ø',width:50,dataIndex:'amount'},
-				{header:'◊ÓµÕ◊ ‘¥ ˝¡ø',width:60,dataIndex:'memo'},
-				{header:'≤˙∆∑¥˙∫≈',width:80,dataIndex:'productCode'},
-			    {header:'≤˙∆∑∆∑÷÷',width:40,dataIndex:'usageType'},
-			    {header:'ŒÛ≤Ó',width:40,dataIndex:'errorLevel'}
-			]
-		}),
-		viewConfig:{ forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
-	
-	var storageResourceSearchPanel = Ext.getCmp('StorageResourceSearch-mainpanel');
-	storageResourceSearchPanel.add(storageResourceSearchStoreQueryConditionPanel,storageResourceSearchGrid);
-	clsys.form.Util.PagingToolbar(storageResourceSearch_Store, storageResourceSearchPanel.tbar, 'storageResourceSearch-paging');
-	storageResourceSearchPanel.doLayout();
-	  	
-  });
-</script>
+            productTypeStoreForStorageResourceSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'findProductType.action',
+                autoLoad: {status: 'Using'},
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+
+            var txtProductCombinationForStorageResourceSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForStorageResourceSearch',
+                fieldLabel: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑',
+                width: 220,
+                name: 'txtProductCombinationForStorageResourceSearch'
+            };
+
+            //2
+            var txtVoltageForStorageResourceSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForStorageResourceSearch',
+                fieldLabel: '‰∫ßÂìÅÁîµÂéã',
+                width: 220,
+                name: 'txtVoltageForStorageResourceSearch'
+            };
+            //3
+            var txtCapacityForStorageResourceSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForStorageResourceSearch',
+                fieldLabel: '‰∫ßÂìÅÂÆπÈáè',
+                width: 220,
+                name: 'txtCapacityForStorageResourceSearch'
+            };
+
+            //9 ‰∫ßÂìÅ‰ª£Âè∑‰∏ãÊãâÂàóË°®
+            var cbProductCodeForStorageResourceSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForStorageResourceSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                fieldLabel: '‰∫ßÂìÅ‰ª£Âè∑',
+                selectOnFocus: true,
+                id: 'cbProductCodeForStorageResourceSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                valueField: 'id'
+            };
+
+            //10 ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á
+            var cbHumidityForStorageResourceSearch = {
+                xtype: 'combo',
+                store: humidityStoreForStorageResourceSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                fieldLabel: 'ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                selectOnFocus: true,
+                id: 'cbHumidityForStorageResourceSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                valueField: 'id'
+            };
+
+            //11 ËØØÂ∑ÆÁ≠âÁ∫ß
+            var cbErrorLevelForStorageResourceSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForStorageResourceSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                fieldLabel: 'ËØØÂ∑ÆÁ≠âÁ∫ß',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForStorageResourceSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                valueField: 'id'
+            };
+
+            //13  ‰∫ßÂìÅÂìÅÁßç
+            var cbUsageTypeForStorageResourceSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForStorageResourceSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                fieldLabel: '‰∫ßÂìÅÂìÅÁßç',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForStorageResourceSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                valueField: 'id'
+            };
+
+            //14  ‰∫ßÂìÅÁ±ªÂà´
+            var cbProductTypeForStorageResourceSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForStorageResourceSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                fieldLabel: '‰∫ßÂìÅÁ±ªÂà´',
+                selectOnFocus: true,
+                id: 'cbProductTypeForStorageResourceSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                valueField: 'id'
+            };
+
+            var col1 = {
+                columnWidth: .50,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtProductCombinationForStorageResourceSearch, cbProductCodeForStorageResourceSearch, cbUsageTypeForStorageResourceSearch, txtVoltageForStorageResourceSearch]
+            };
+
+            var col2 = {
+                columnWidth: .50,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForStorageResourceSearch, cbHumidityForStorageResourceSearch, cbErrorLevelForStorageResourceSearch, txtCapacityForStorageResourceSearch]
+            };
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        storageResourceSearchSearch: 1,
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForStorageResourceSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForStorageResourceSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForStorageResourceSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm8')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm8'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm8';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getstorageResourceViewAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm8'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var storageResourceSearchStoreQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'storageResourceSearchStoregQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            storageResourceSearchSearch: 1,
+                            productCombination: Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForStorageResourceSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForStorageResourceSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForStorageResourceSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue()
+                        };
+                        attributes.start = 0;
+                        storageResourceSearch_Store.reload({params: attributes});
+                    }
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        storageResourceSearchStoreQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        storageResourceSearch_Store.reload();
+                    },
+                    scope: this
+                }, {
+                    text: 'ÊâìÂç∞',
+                    hidden: true,
+                    iconCls: 'icon-printer',
+                    handler: function () {
+                        var url = 'printQueryStorageResource.action';
+                        var params = {
+                            productCombination: Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForStorageResourceSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForStorageResourceSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForStorageResourceSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue()
+                        };
+
+                        var strUrl = "";
+                        strUrl += 'productCombination=' + Ext.getCmp('txtProductCombinationForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'productCode=' + Ext.getCmp('cbProductCodeForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'errorLevel=' + Ext.getCmp('cbErrorLevelForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'voltage=' + Ext.getCmp('txtVoltageForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'capacity=' + Ext.getCmp('txtCapacityForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'productType=' + Ext.getCmp('cbProductTypeForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'humidity=' + Ext.getCmp('cbHumidityForStorageResourceSearch').getValue() + "&";
+                        strUrl += 'usageType=' + Ext.getCmp('cbUsageTypeForStorageResourceSearch').getValue();
+
+                        //window.open(url + '?' + strUrl);
+                        params.start = 0;
+                        storageResourceSearch_Store.reload({params: params});
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var storageResourceSearchGrid = {
+                xtype: 'grid',
+                id: 'storageResourceSearch-grid',
+                anchor: '100% 65%',
+                store: storageResourceSearch_Store,
+                stripeRows: true,
+                autoScroll: true,
+                border: false,
+                loadMask: true,
+                frame: true,
+                renderTo: 'storageResourceSearchGridPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', width: 150, dataIndex: 'productCombination'},
+                        {header: 'Â∫ìÂ≠òÊï∞Èáè', width: 50, dataIndex: 'totalAmount'},
+                        {header: 'ÂæÖÂèëÊï∞Èáè', width: 50, dataIndex: 'advancedAmount'},
+                        {header: 'Áªì‰ΩôÊï∞Èáè', width: 50, dataIndex: 'restAmount'},
+                        {header: 'ËµÑÊ∫êÊï∞Èáè', width: 50, dataIndex: 'amount'},
+                        {header: 'ÊúÄ‰ΩéËµÑÊ∫êÊï∞Èáè', width: 60, dataIndex: 'memo'},
+                        {header: '‰∫ßÂìÅ‰ª£Âè∑', width: 80, dataIndex: 'productCode'},
+                        {header: '‰∫ßÂìÅÂìÅÁßç', width: 40, dataIndex: 'usageType'},
+                        {header: 'ËØØÂ∑Æ', width: 40, dataIndex: 'errorLevel'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+            var storageResourceSearchPanel = Ext.getCmp('StorageResourceSearch-mainpanel');
+            storageResourceSearchPanel.add(storageResourceSearchStoreQueryConditionPanel, storageResourceSearchGrid);
+            clsys.form.Util.PagingToolbar(storageResourceSearch_Store, storageResourceSearchPanel.tbar, 'storageResourceSearch-paging');
+            storageResourceSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="storageResourceSearchGridPanel"></div>

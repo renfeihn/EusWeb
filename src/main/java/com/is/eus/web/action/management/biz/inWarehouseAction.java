@@ -326,7 +326,7 @@ public class inWarehouseAction extends EntityBaseAction {
     private File createExcel(List items) {
         String dir = FileUtil.tmpdir();
         String strDate = DateUtil.formatDate(new Date(), DateUtil.PATTERN_ISO_DATE);
-        String filename = dir + "\\" + "出库明细(" + strDate + ").xls";
+        String filename = dir + "\\" + "直接出入库查询(" + strDate + ").xls";
         File file = new File(filename);
         if (file.exists()) {
             file.delete();
@@ -342,7 +342,7 @@ public class inWarehouseAction extends EntityBaseAction {
 
         try {
             WritableWorkbook e = Workbook.createWorkbook(file);
-            WritableSheet ws = e.createSheet("出库明细", 0);
+            WritableSheet ws = e.createSheet("直接出入库查询", 0);
             ws.getSettings().setPaperSize(PaperSize.A4);
             ws.getSettings().setOrientation(PageOrientation.LANDSCAPE);
             ws.setRowView(0, 600);
@@ -351,7 +351,7 @@ public class inWarehouseAction extends EntityBaseAction {
             WritableCellFormat wcf = new WritableCellFormat(wFont);
             wcf.setAlignment(Alignment.CENTRE);
             wcf.setVerticalAlignment(VerticalAlignment.CENTRE);
-            ws.addCell(new Label(0, 0, "出库明细", wcf));
+            ws.addCell(new Label(0, 0, "直接出入库查询", wcf));
             WritableFont wFonti = new WritableFont(WritableFont.createFont("宋体"), 10);
             WritableCellFormat wcfi = new WritableCellFormat(wFonti);
             wcfi.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN, jxl.format.Colour.BLACK);
