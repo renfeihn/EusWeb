@@ -1,313 +1,357 @@
-<%@ page contentType="text/html; charset=GBK"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <html>
 <head>
-<title>»Îø‚≤È—Ø</title>
-<script language="javascript">
-  Ext.onReady(function(){
+    <title>ÂÖ•Â∫ìÊü•ËØ¢</title>
+    <script language="javascript">
+        Ext.onReady(function () {
 
-  	Ext.QuickTips.init();
-	  
-	var storageIncomingItemSearchStore = new Ext.data.JsonStore({
-		autoDestroy:true,
-	  	url:'queryStorageIncomingItem.action',
-	  	totalProperty:'results',
-	  	root:'StorageIncomingItemList',
-	  	baseParams:{status:['Using'],start:0,limit:25},
-	  	idProperty:'id',
-		fields: ['id','sicItemNo','amount','jobCmdNo','productionDate','createTime',
-		  	     {name:'schedule',mapping:'schedule.scheduleNo'},		         
-		  	   	 {name:'productCombination',mapping:'product.productCombination'},
-			     {name:'voltage',mapping:'product.voltage'},
-			     {name:'capacity',mapping:'product.capacity'},
-			     {name:'humidity',mapping:'product.humidity.code'},
-			     {name:'errorLevel',mapping:'product.errorLevel.code'}
-			    ],  	        
-	  	sortInfo: {field: 'createTime',direction: 'ASC'}	
-  	});
+            Ext.QuickTips.init();
 
-	var productCodeStoreForSicItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductCode.action',
-		baseParams:{status:'Using'},
-		root:'ProductCodeList',
-		fields:['id','code','name'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var humidityStoreForSicItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findHumidity.action',
-		baseParams:{status:'Using'},
-		root:'HumidityList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var errorLevelStoreForSicItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findErrorLevel.action',
-		baseParams:{status:'Using'},
-		root:'ErrorLevelList',
-		fields:['id','code'],
-		sortInfo: {field: 'code',direction: 'ASC'}
-	});
-	
-	var usageTypeStoreForSicItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findUsageType.action',
-		baseParams:{status:'Using'},
-		root:'UsageTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
+            var storageIncomingItemSearchStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                url: 'queryStorageIncomingItem.action',
+                totalProperty: 'results',
+                root: 'StorageIncomingItemList',
+                baseParams: {status: ['Using'], start: 0, limit: 25},
+                idProperty: 'id',
+                fields: ['id', 'sicItemNo', 'amount', 'jobCmdNo', 'productionDate', 'createTime',
+                    {name: 'schedule', mapping: 'schedule.scheduleNo'},
+                    {name: 'productCombination', mapping: 'product.productCombination'},
+                    {name: 'voltage', mapping: 'product.voltage'},
+                    {name: 'capacity', mapping: 'product.capacity'},
+                    {name: 'humidity', mapping: 'product.humidity.code'},
+                    {name: 'errorLevel', mapping: 'product.errorLevel.code'}
+                ],
+                sortInfo: {field: 'createTime', direction: 'ASC'}
+            });
 
-	var productTypeStoreForSicItemSearch = new Ext.data.JsonStore({
-		autoDestroy:true,
-		autoLoad:true,
-		url:'findProductType.action',
-		baseParams:{status:'Using'},
-		root:'ProductTypeList',
-		fields:['id','name'],
-		sortInfo: {field: 'name',direction: 'ASC'}
-	});
-	
-	var txtProductCombinationForSicItemSearch = {
-		xtype:'textfield',
-		id:'txtProductCombinationForSicItemSearch',
-		fieldLabel:'≤˙∆∑√˚≥∆º∞–Õ∫≈',
-		width:220,
-		name:'txtProductCombinationForSicItemSearch'
-	};
-	
-	var txtVoltageForSicItemSearch = {
-		xtype:'textfield',
-		id:'txtVoltageForSicItemSearch',
-		fieldLabel:'≤˙∆∑µÁ—π',
-		width:220,
-		name:'txtVoltageForSicItemSearch'
-	};
-	var txtCapacityForSicItemSearch = {
-		xtype:'textfield',
-		id:'txtCapacityForSicItemSearch',
-		fieldLabel:'≤˙∆∑»›¡ø',
-		width:220,
-		name:'txtCapacityForSicItemSearch'
-	};
+            var productCodeStoreForSicItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductCode.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductCodeList',
+                fields: ['id', 'code', 'name'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var cbProductCodeForSicItemSearch = {
-		xtype:'combo',
-		store:productCodeStoreForSicItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		fieldLabel:'≤˙∆∑¥˙∫≈',
-		selectOnFocus:true,
-		id:'cbProductCodeForSicItemSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¥˙∫≈',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbHumidityForSicItemSearch = {
-		xtype:'combo',
-		store:humidityStoreForSicItemSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		fieldLabel:' ™∂»œµ ˝÷∏±Í',
-		selectOnFocus:true,
-		id:'cbHumidityForSicItemSearch',
-		width:220,
-		blankText:'«Î—°‘Ò ™∂»œµ ˝÷∏±Í',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbErrorLevelForSicItemSearch = {
-		xtype:'combo',
-		store:errorLevelStoreForSicItemSearch,
-		displayField:'code',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		fieldLabel:'ŒÛ≤Óµ»º∂',
-		selectOnFocus:true,
-		id:'cbErrorLevelForSicItemSearch',
-		width:220,
-		blankText:'«Î—°‘ÒŒÛ≤Óµ»º∂',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbUsageTypeForSicItemSearch = {
-		xtype:'combo',
-		store:usageTypeStoreForSicItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		fieldLabel:'≤˙∆∑∆∑÷÷',
-		selectOnFocus:true,
-		id:'cbUsageTypeForSicItemSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑∆∑÷÷',
-		valueField:'id',
-		editable: true
-	};
-	
-	var cbProductTypeForSicItemSearch = {
-		xtype:'combo',
-		store:productTypeStoreForSicItemSearch,
-		displayField:'name',
-		typeAhead:true,
-		mode:'local',
-		forceSelection:true,
-		triggerAction:'all',
-		emptyText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		fieldLabel:'≤˙∆∑¿‡±',
-		selectOnFocus:true,
-		id:'cbProductTypeForSicItemSearch',
-		width:220,
-		blankText:'«Î—°‘Ò≤˙∆∑¿‡±',
-		valueField:'id',
-		editable: true
-	};
+            var humidityStoreForSicItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findHumidity.action',
+                baseParams: {status: 'Using'},
+                root: 'HumidityList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	var txtDateStartForSicItemSearch = {
-		xtype:'datefield',
-		id:'txtDateStartForSicItemSearch',
-		fieldLabel:'»Îø‚»’∆⁄(ø™ º)',
-		width:220,
-		name:'txtDateStartForSicItemSearch'	
-	};
-	
-	var txtDateEndForSicItemSearch = {
-		xtype:'datefield',
-		id:'txtDateEndForSicItemSearch',
-		fieldLabel:'»Îø‚»’∆⁄(Ω· ¯)',
-		width:220,
-		name:'txtDateEndForSicItemSearch'	
-	};
-	
-	var col1 = {
-			columnWidth: .5,
-			layout: 'form',
-			frame: false,
-			border: false,
-			defaultType: 'textfield',
-			items:[txtProductCombinationForSicItemSearch,cbProductCodeForSicItemSearch,cbErrorLevelForSicItemSearch,txtVoltageForSicItemSearch,txtDateStartForSicItemSearch]		
-		};
-		
-		var col2 = {
-			columnWidth: .5,
-			layout: 'form',
-			frame: false,
-			border: false,
-			defaultType: 'textfield',
-			items:[cbProductTypeForSicItemSearch,cbHumidityForSicItemSearch,cbUsageTypeForSicItemSearch,txtCapacityForSicItemSearch,txtDateEndForSicItemSearch]		
-		};
-	
-	var storageIncomingItemSearchGrid = {
-		xtype:'grid',
-		id:'storageIncomingItemSearch-grid',
-		anchor:'100% 90%',
-		store:storageIncomingItemSearchStore,
-		stripeRows:true,
-		autoScroll:true,
-		hidden:false,
-		loadMask:true,
-		border:false,
-		frame:true,
-		renderTo:'storageIncomingItemSearchItemsPanel',
-		colModel:new Ext.grid.ColumnModel({
-			defaults:{sortable:true},
-			columns:[
-	 			{header: '≤˙∆∑√˚≥∆º∞–Õ∫≈', width:150,dataIndex:'productCombination'},
-	 			{header: 'π§◊˜¡Ó∫≈', width:50, dataIndex: 'jobCmdNo'},
-	 			{header: 'µÁ—π(V)',width:50, dataIndex: 'voltage'},
-	 			{header: '»›¡ø(PF)',width:50, dataIndex: 'capacity'},
-	 			{header: '◊È±', width:30,dataIndex: 'humidity'},
-	 			{header: 'µ»º∂', width:30,dataIndex: 'productCode'},
-	 			{header: ' ˝¡ø', width:50,dataIndex: 'amount'},
-	 			{header: '…˙≤˙»’∆⁄', width:80,dataIndex: 'productionDate'},
-	 			{header: '»Îø‚ ±º‰', width:80,dataIndex:'createTime'},
-	 			{header: '±∏◊¢', width:80,dataIndex: 'schedule'}
-			]
-		}),
-		viewConfig:{forceFit:true},
-		sm:new Ext.grid.RowSelectionModel({singleSelect:true})
-	};
+            var errorLevelStoreForSicItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findErrorLevel.action',
+                baseParams: {status: 'Using'},
+                root: 'ErrorLevelList',
+                fields: ['id', 'code'],
+                sortInfo: {field: 'code', direction: 'ASC'}
+            });
 
-	 var storageIncomingQueryConditionPanel = new Ext.FormPanel({
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         collapsible:true,
-         collapsed:false,
-         title:'≤È—ØÃıº˛',
-         labelWidth:150,
-         renderTo:'storageIncomingQueryConditionPanel',
-         items: [{		
-			layout:'column',
-			frame:false,
-			border:false,
-			items:[col1,col2]
-		}],
-		 buttonAlign:'left',
-         buttons: [{
-			text: '≤È—Ø',
-			iconCls: 'icon-examine',
-			handler: function(){
- 				var attributes = {
-					productCombination:Ext.getCmp('txtProductCombinationForSicItemSearch').getValue(),
-					productCode:Ext.getCmp('cbProductCodeForSicItemSearch').getValue(),
-					errorLevel:Ext.getCmp('cbErrorLevelForSicItemSearch').getValue(),
-					voltage:Ext.getCmp('txtVoltageForSicItemSearch').getValue(),
-					capacity:Ext.getCmp('txtCapacityForSicItemSearch').getValue(),
-					productType:Ext.getCmp('cbProductTypeForSicItemSearch').getValue(),
-					humidity:Ext.getCmp('cbHumidityForSicItemSearch').getValue(),
-					usageType:Ext.getCmp('cbUsageTypeForSicItemSearch').getValue(),
-					dateStartForSicItemSearch:Ext.getCmp('txtDateStartForSicItemSearch').getValue(),
-					dateEndForSicItemSearch:Ext.getCmp('txtDateEndForSicItemSearch').getValue()
- 		 	 	};
- 				attributes.start = 0;
- 				storageIncomingItemSearchStore.reload({params:attributes});
-  			}
-		},{
-			text: '«Â≥˝',
-			iconCls: 'icon-remove',
-			handler: function() {storageIncomingQueryConditionPanel.getForm().reset();}
-		},{
-			text: 'À¢–¬',
-			iconCls: 'icon-refresh',
-			handler: function() {
-				storageIncomingItemSearchStore.reload();
-			},
-			scope:this
-		}]
-     });
-     		   
-	var storageIncomingItemSearchPanel = Ext.getCmp('StorageIncomingItemSearch-mainpanel');
-	storageIncomingItemSearchPanel.add(storageIncomingQueryConditionPanel,storageIncomingItemSearchGrid);
-	clsys.form.Util.PagingToolbar(storageIncomingItemSearchStore, storageIncomingItemSearchPanel.tbar, 'storageIncomingItemSearch-paging');
-	storageIncomingItemSearchPanel.doLayout();
-  	
-  });
-</script>
+            var usageTypeStoreForSicItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findUsageType.action',
+                baseParams: {status: 'Using'},
+                root: 'UsageTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+
+            var productTypeStoreForSicItemSearch = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad: true,
+                url: 'findProductType.action',
+                baseParams: {status: 'Using'},
+                root: 'ProductTypeList',
+                fields: ['id', 'name'],
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+
+            var txtProductCombinationForSicItemSearch = {
+                xtype: 'textfield',
+                id: 'txtProductCombinationForSicItemSearch',
+                fieldLabel: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑',
+                width: 220,
+                name: 'txtProductCombinationForSicItemSearch'
+            };
+
+            var txtVoltageForSicItemSearch = {
+                xtype: 'textfield',
+                id: 'txtVoltageForSicItemSearch',
+                fieldLabel: '‰∫ßÂìÅÁîµÂéã',
+                width: 220,
+                name: 'txtVoltageForSicItemSearch'
+            };
+            var txtCapacityForSicItemSearch = {
+                xtype: 'textfield',
+                id: 'txtCapacityForSicItemSearch',
+                fieldLabel: '‰∫ßÂìÅÂÆπÈáè',
+                width: 220,
+                name: 'txtCapacityForSicItemSearch'
+            };
+
+            var cbProductCodeForSicItemSearch = {
+                xtype: 'combo',
+                store: productCodeStoreForSicItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                fieldLabel: '‰∫ßÂìÅ‰ª£Âè∑',
+                selectOnFocus: true,
+                id: 'cbProductCodeForSicItemSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅ‰ª£Âè∑',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbHumidityForSicItemSearch = {
+                xtype: 'combo',
+                store: humidityStoreForSicItemSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                fieldLabel: 'ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                selectOnFocus: true,
+                id: 'cbHumidityForSicItemSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ÊπøÂ∫¶Á≥ªÊï∞ÊåáÊ†á',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbErrorLevelForSicItemSearch = {
+                xtype: 'combo',
+                store: errorLevelStoreForSicItemSearch,
+                displayField: 'code',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                fieldLabel: 'ËØØÂ∑ÆÁ≠âÁ∫ß',
+                selectOnFocus: true,
+                id: 'cbErrorLevelForSicItemSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©ËØØÂ∑ÆÁ≠âÁ∫ß',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbUsageTypeForSicItemSearch = {
+                xtype: 'combo',
+                store: usageTypeStoreForSicItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                fieldLabel: '‰∫ßÂìÅÂìÅÁßç',
+                selectOnFocus: true,
+                id: 'cbUsageTypeForSicItemSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÂìÅÁßç',
+                valueField: 'id',
+                editable: true
+            };
+
+            var cbProductTypeForSicItemSearch = {
+                xtype: 'combo',
+                store: productTypeStoreForSicItemSearch,
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                fieldLabel: '‰∫ßÂìÅÁ±ªÂà´',
+                selectOnFocus: true,
+                id: 'cbProductTypeForSicItemSearch',
+                width: 220,
+                blankText: 'ËØ∑ÈÄâÊã©‰∫ßÂìÅÁ±ªÂà´',
+                valueField: 'id',
+                editable: true
+            };
+
+            var txtDateStartForSicItemSearch = {
+                xtype: 'datefield',
+                id: 'txtDateStartForSicItemSearch',
+                fieldLabel: 'ÂÖ•Â∫ìÊó•Êúü(ÂºÄÂßã)',
+                width: 220,
+                name: 'txtDateStartForSicItemSearch'
+            };
+
+            var txtDateEndForSicItemSearch = {
+                xtype: 'datefield',
+                id: 'txtDateEndForSicItemSearch',
+                fieldLabel: 'ÂÖ•Â∫ìÊó•Êúü(ÁªìÊùü)',
+                width: 220,
+                name: 'txtDateEndForSicItemSearch'
+            };
+
+            var col1 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [txtProductCombinationForSicItemSearch, cbProductCodeForSicItemSearch, cbErrorLevelForSicItemSearch, txtVoltageForSicItemSearch, txtDateStartForSicItemSearch]
+            };
+
+            var col2 = {
+                columnWidth: .5,
+                layout: 'form',
+                frame: false,
+                border: false,
+                defaultType: 'textfield',
+                items: [cbProductTypeForSicItemSearch, cbHumidityForSicItemSearch, cbUsageTypeForSicItemSearch, txtCapacityForSicItemSearch, txtDateEndForSicItemSearch]
+            };
+
+            var storageIncomingItemSearchGrid = {
+                xtype: 'grid',
+                id: 'storageIncomingItemSearch-grid',
+                anchor: '100% 90%',
+                store: storageIncomingItemSearchStore,
+                stripeRows: true,
+                autoScroll: true,
+                hidden: false,
+                loadMask: true,
+                border: false,
+                frame: true,
+                renderTo: 'storageIncomingItemSearchItemsPanel',
+                colModel: new Ext.grid.ColumnModel({
+                    defaults: {sortable: true},
+                    columns: [
+                        {header: '‰∫ßÂìÅÂêçÁß∞ÂèäÂûãÂè∑', width: 150, dataIndex: 'productCombination'},
+                        {header: 'Â∑•‰Ωú‰ª§Âè∑', width: 50, dataIndex: 'jobCmdNo'},
+                        {header: 'ÁîµÂéã(V)', width: 50, dataIndex: 'voltage'},
+                        {header: 'ÂÆπÈáè(PF)', width: 50, dataIndex: 'capacity'},
+                        {header: 'ÁªÑÂà´', width: 30, dataIndex: 'humidity'},
+                        {header: 'Á≠âÁ∫ß', width: 30, dataIndex: 'productCode'},
+                        {header: 'Êï∞Èáè', width: 50, dataIndex: 'amount'},
+                        {header: 'Áîü‰∫ßÊó•Êúü', width: 80, dataIndex: 'productionDate'},
+                        {header: 'ÂÖ•Â∫ìÊó∂Èó¥', width: 80, dataIndex: 'createTime'},
+                        {header: 'Â§áÊ≥®', width: 80, dataIndex: 'schedule'}
+                    ]
+                }),
+                viewConfig: {forceFit: true},
+                sm: new Ext.grid.RowSelectionModel({singleSelect: true})
+            };
+
+            var btnDown = {
+                text: 'ExcelÂØºÂá∫',
+                iconCls: 'icon-down',
+                handler: function () {
+                    var attributes = {
+                        productCombination: encodeURI(Ext.getCmp('txtProductCombinationForSicItemSearch').getValue()),
+                        productCode: encodeURI(Ext.getCmp('cbProductCodeForSicItemSearch').getValue()),
+                        errorLevel: encodeURI(Ext.getCmp('cbErrorLevelForSicItemSearch').getValue()),
+                        voltage: encodeURI(Ext.getCmp('txtVoltageForSicItemSearch').getValue()),
+                        capacity: encodeURI(Ext.getCmp('txtCapacityForSicItemSearch').getValue()),
+                        productType: encodeURI(Ext.getCmp('cbProductTypeForSicItemSearch').getValue()),
+                        humidity: encodeURI(Ext.getCmp('cbHumidityForSicItemSearch').getValue()),
+                        usageType: encodeURI(Ext.getCmp('cbUsageTypeForSicItemSearch').getValue()),
+                        dateStartForSicItemSearch: encodeURI(Ext.getCmp('txtDateStartForSicItemSearch').getValue()),
+                        dateEndForSicItemSearch: encodeURI(Ext.getCmp('txtDateEndForSicItemSearch').getValue())
+                    };
+
+                    //Â¶ÇÊûú‰∏çÂ≠òÂú®‰∏Ä‰∏™id‰∏∫"downForm"ÁöÑformË°®ÂçïÔºåÂàôÊâßË°å‰∏ãÈù¢ÁöÑÊìç‰Ωú
+                    if (!Ext.fly('downForm6')) {
+
+                        //‰∏ãÈù¢‰ª£Á†ÅÊòØÂú®ÂàõÂª∫‰∏Ä‰∏™Ë°®Âçï‰ª•ÂèäÊ∑ªÂä†Áõ∏Â∫îÁöÑ‰∏Ä‰∫õÂ±ûÊÄß
+                        var downForm = document.createElement('form');  //ÂàõÂª∫‰∏Ä‰∏™formË°®Âçï
+                        downForm.id = 'downForm6'; „ÄÄ„ÄÄ//ËØ•Ë°®ÂçïÁöÑid‰∏∫downForm
+                        downForm.name = 'downForm6';  //ËØ•Ë°®ÂçïÁöÑnameÂ±ûÊÄß‰∏∫downForm
+                        downForm.className = 'x-hidden'; //ËØ•Ë°®Âçï‰∏∫ÈöêËóèÁöÑ
+//                        downForm.action = 'getcontractAction.action'; //Ë°®ÂçïÁöÑÊèê‰∫§Âú∞ÂùÄ
+                        downForm.method = 'POST';  //Ë°®ÂçïÁöÑÊèê‰∫§ÊñπÊ≥ï
+
+                        document.body.appendChild(downForm); //Â∞ÜformË°®ÂçïËøΩÂä†Âà∞bodyÈáåÈù¢
+                    }
+
+                    Ext.Ajax.request({
+                        disableCaching: true,
+                        url: 'getstorageIncomingItemAction.action',
+                        method: 'POST',
+                        isUpload: true,
+                        form: Ext.fly('downForm6'),
+                        params: attributes
+                    });
+                }
+            };
+
+            var storageIncomingQueryConditionPanel = new Ext.FormPanel({
+                frame: true,
+                bodyStyle: 'padding:5px 5px 0',
+                collapsible: true,
+                collapsed: false,
+                title: 'Êü•ËØ¢Êù°‰ª∂',
+                labelWidth: 150,
+                renderTo: 'storageIncomingQueryConditionPanel',
+                items: [{
+                    layout: 'column',
+                    frame: false,
+                    border: false,
+                    items: [col1, col2]
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: 'Êü•ËØ¢',
+                    iconCls: 'icon-examine',
+                    handler: function () {
+                        var attributes = {
+                            productCombination: Ext.getCmp('txtProductCombinationForSicItemSearch').getValue(),
+                            productCode: Ext.getCmp('cbProductCodeForSicItemSearch').getValue(),
+                            errorLevel: Ext.getCmp('cbErrorLevelForSicItemSearch').getValue(),
+                            voltage: Ext.getCmp('txtVoltageForSicItemSearch').getValue(),
+                            capacity: Ext.getCmp('txtCapacityForSicItemSearch').getValue(),
+                            productType: Ext.getCmp('cbProductTypeForSicItemSearch').getValue(),
+                            humidity: Ext.getCmp('cbHumidityForSicItemSearch').getValue(),
+                            usageType: Ext.getCmp('cbUsageTypeForSicItemSearch').getValue(),
+                            dateStartForSicItemSearch: Ext.getCmp('txtDateStartForSicItemSearch').getValue(),
+                            dateEndForSicItemSearch: Ext.getCmp('txtDateEndForSicItemSearch').getValue()
+                        };
+                        attributes.start = 0;
+                        storageIncomingItemSearchStore.reload({params: attributes});
+                    }
+                }, {
+                    text: 'Ê∏ÖÈô§',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        storageIncomingQueryConditionPanel.getForm().reset();
+                    }
+                }, {
+                    text: 'Âà∑Êñ∞',
+                    iconCls: 'icon-refresh',
+                    handler: function () {
+                        storageIncomingItemSearchStore.reload();
+                    },
+                    scope: this
+                }, btnDown]
+            });
+
+            var storageIncomingItemSearchPanel = Ext.getCmp('StorageIncomingItemSearch-mainpanel');
+            storageIncomingItemSearchPanel.add(storageIncomingQueryConditionPanel, storageIncomingItemSearchGrid);
+            clsys.form.Util.PagingToolbar(storageIncomingItemSearchStore, storageIncomingItemSearchPanel.tbar, 'storageIncomingItemSearch-paging');
+            storageIncomingItemSearchPanel.doLayout();
+
+        });
+    </script>
 </head>
 <body>
 <div id="storageIncomingItemSearchPanel"></div>
