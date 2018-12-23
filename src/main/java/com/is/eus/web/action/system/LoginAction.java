@@ -35,11 +35,10 @@ public class LoginAction extends AbstractSessionAwareAction {
             return "error";
         }
 
-        // TODO 注释验证码
-//        if (!this.validate_code.equals(this.session.get("validate_code"))) {
-//            addActionError("提示：验证码不正确");
-//            return "error";
-//        }
+        if (!this.validate_code.equals(this.session.get("validate_code"))) {
+            addActionError("提示：验证码不正确");
+            return "error";
+        }
 
         this.logger.info("Logging in with name:" + this.userName + " and password:" + this.password);
         User user = this.dataAccessControlService.fetchUserByName(this.userName);
@@ -66,5 +65,3 @@ public class LoginAction extends AbstractSessionAwareAction {
         return "success";
     }
 }
-
-
