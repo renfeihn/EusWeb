@@ -262,6 +262,25 @@ public class BusiUtil {
     }
 
     /**
+     * 获取有效状态
+     *
+     * @param value
+     * @return
+     */
+    public static String getOutcomingState(Integer value) {
+        switch (value) {
+            case 0:
+                return "待审核";
+            case 1:
+                return "审核失败";
+            case 2:
+                return "审核成功";
+            default:
+                return "未知";
+        }
+    }
+
+    /**
      * 日期格式化
      *
      * @param date
