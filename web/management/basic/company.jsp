@@ -145,7 +145,8 @@
                 iconCls: 'icon-down',
                 handler: function () {
                     window.open('getcompanyAction.action');
-                }
+                },
+                scope: this
             };
 
             var btnRefresh = {
@@ -169,7 +170,6 @@
                                 wnd.on('companySearching', function (attr) {
                                     /*更换查询条件的时候，需要指向第一页*/
                                     attr.start = 0;
-                                    Console(attr);
                                     companyStore.reload({params: attr});
                                 });
                             }
