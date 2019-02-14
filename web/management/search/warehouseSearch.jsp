@@ -265,8 +265,8 @@
                         humidity: encodeURI(Ext.getCmp('cbHumidityForWarehouseSearch').getValue()),
                         usageType: encodeURI(Ext.getCmp('cbUsageTypeForWarehouseSearch').getValue()),
                         flag: encodeURI(Ext.getCmp('cbDirectionState').getValue()),
-                        SavedDateStart: encodeURI(Ext.getCmp('txtIWSearchSavedDateStart').getValue()),
-                        SavedDateEnd: encodeURI(Ext.getCmp('txtIWSearchSavedDateEnd').getValue())
+                        SavedDateStart: Ext.getCmp('txtIWSearchSavedDateStart').getValue(),
+                        SavedDateEnd: Ext.getCmp('txtIWSearchSavedDateEnd').getValue()
                     };
 
                     //如果不存在一个id为"downForm"的form表单，则执行下面的操作

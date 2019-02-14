@@ -439,12 +439,12 @@
                         companyProvince: Ext.getCmp('cbProvinceForContractSearch').getValue(),
                         companyCity: Ext.getCmp('cbCityForContractSearch').getValue(),
                         contractNo: encodeURI(Ext.getCmp('txtContractForContractSearch').getValue()),
-                        contractDateStart: encodeURI(Ext.getCmp('txtContractForContractSearchDateStart').getValue()),
-                        contractDateEnd: encodeURI(Ext.getCmp('txtContractForContractSearchDateEnd').getValue()),
+                        contractDateStart: Ext.getCmp('txtContractForContractSearchDateStart').getValue(),
+                        contractDateEnd: Ext.getCmp('txtContractForContractSearchDateEnd').getValue(),
                         status: encodeURI(Ext.getCmp('cbContractStatus').getValue()),
                         states: encodeURI(Ext.getCmp('cbContractState').getValue()),
-                        contractSavedDateStart: encodeURI(Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue()),
-                        contractSavedDateEnd: encodeURI(Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue()),
+                        contractSavedDateStart: Ext.getCmp('txtContractForContractSearchSavedDateStart').getValue(),
+                        contractSavedDateEnd: Ext.getCmp('txtContractForContractSearchSavedDateEnd').getValue(),
                         min: encodeURI(Ext.getCmp('txtContractForContractSearchMin').getValue()),
                         max: encodeURI(Ext.getCmp('txtContractForContractSearchMax').getValue())
                     };

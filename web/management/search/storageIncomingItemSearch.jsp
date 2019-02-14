@@ -266,8 +266,8 @@
                         productType: encodeURI(Ext.getCmp('cbProductTypeForSicItemSearch').getValue()),
                         humidity: encodeURI(Ext.getCmp('cbHumidityForSicItemSearch').getValue()),
                         usageType: encodeURI(Ext.getCmp('cbUsageTypeForSicItemSearch').getValue()),
-                        dateStartForSicItemSearch: encodeURI(Ext.getCmp('txtDateStartForSicItemSearch').getValue()),
-                        dateEndForSicItemSearch: encodeURI(Ext.getCmp('txtDateEndForSicItemSearch').getValue())
+                        dateStartForSicItemSearch: Ext.getCmp('txtDateStartForSicItemSearch').getValue(),
+                        dateEndForSicItemSearch: Ext.getCmp('txtDateEndForSicItemSearch').getValue()
                     };
 
                     //如果不存在一个id为"downForm"的form表单，则执行下面的操作

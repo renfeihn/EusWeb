@@ -332,8 +332,8 @@
                         productType: encodeURI(Ext.getCmp('cbProductTypeForSocItemSearch').getValue()),
                         humidity: encodeURI(Ext.getCmp('cbHumidityForSocItemSearch').getValue()),
                         usageType: encodeURI(Ext.getCmp('cbUsageTypeForSocItemSearch').getValue()),
-                        dateStartForSocItemSearch: encodeURI(Ext.getCmp('txtDateStartForSocItemSearch').getValue()),
-                        dateEndForSocItemSearch: encodeURI(Ext.getCmp('txtDateEndForSocItemSearch').getValue()),
+                        dateStartForSocItemSearch: Ext.getCmp('txtDateStartForSocItemSearch').getValue(),
+                        dateEndForSocItemSearch: Ext.getCmp('txtDateEndForSocItemSearch').getValue(),
                         socState: encodeURI(Ext.getCmp('cbSocStateForSocItemSearch').getValue())
                     };
 

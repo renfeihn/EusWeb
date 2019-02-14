@@ -291,8 +291,8 @@
                         productType: encodeURI(Ext.getCmp('cbProductTypeForContractItemSearch').getValue()),
                         humidity: encodeURI(Ext.getCmp('cbHumidityForContractItemSearch').getValue()),
                         usageType: encodeURI(Ext.getCmp('cbUsageTypeForContractItemSearch').getValue()),
-                        dateStartForContractItemSearch: encodeURI(Ext.getCmp('txtDateStartForContractItemSearch').getValue()),
-                        dateEndForContractItemSearch: encodeURI(Ext.getCmp('txtDateEndForContractItemSearch').getValue())
+                        dateStartForContractItemSearch: Ext.getCmp('txtDateStartForContractItemSearch').getValue(),
+                        dateEndForContractItemSearch: Ext.getCmp('txtDateEndForContractItemSearch').getValue()
                     };
 
                     //如果不存在一个id为"downForm"的form表单，则执行下面的操作
